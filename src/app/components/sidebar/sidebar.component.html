@@ -1,0 +1,99 @@
+<div class="sidebar-container">
+    <!-- icon to extend sidebar -->
+    <div
+      *ngIf="sidebarColapse && screenWidth >= 768"
+      class="d-flex justify-content-center mx-2 mb-4"
+    >
+      <i
+        class="fas fa-angle-double-right icon-actionable text-muted"
+        (click)="setSidebarColapse(false)"
+      ></i>
+    </div>
+  
+    <div class="brand-container mb-3">
+      <div
+        class="d-inline-flex justify-content-between align-items-center"
+        [style.width.%]="100"
+      >
+        <div routerLink="/dashboard/home">
+          <picture class="logo-container" [ngClass]="{ 'mx-1': sidebarColapse }">
+            <source srcset="../../../assets/img/new-epa-logo.webp" />
+            <img
+              src="../../../assets/img/new-epa-logo.png"
+              alt="epa Digital"
+              [ngClass]="{ sm: sidebarColapse }"
+            />
+          </picture>
+        </div>
+  
+        <div *ngIf="!sidebarColapse" class="title-container mx-2">
+          <h3 class="m-0">EPA Newton</h3>
+        </div>
+  
+        <i
+          *ngIf="!sidebarColapse"
+          class="text-muted fas fa-angle-double-left ml-2 icon-actionable"
+          (click)="setSidebarColapse(true)"
+        ></i>
+      </div>
+    </div>
+  
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <!-- tree node template for leaf nodes -->
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodePadding
+        [routerLink]="node?.redirectPath"
+      >
+        <div
+          class="nav-item d-flex align-items-center"
+          [ngClass]="{ active: currentNavNode?.name === node.name }"
+        >
+          <button
+            mat-icon-button
+            #tooltip="matTooltip"
+            [matTooltip]="node.name"
+            matTooltipPosition="right"
+          >
+            <mat-icon matPrefix *ngIf="node?.icon">
+              <i [ngClass]="node.icon"></i>
+            </mat-icon>
+          </button>
+          <ng-container *ngIf="!sidebarColapse">
+            {{ node.name }}
+          </ng-container>
+        </div>
+      </mat-tree-node>
+  
+      <!-- tree node template for expandable nodes -->
+      <!-- deprectaed with current design -->
+      <mat-tree-node
+        *matTreeNodeDef="let node; when: hasChild"
+        matTreeNodePadding
+      >
+        <div
+          class="nav-item d-flex align-items-center"
+          [ngClass]="{ active: currentNavNode?.name === node.name }"
+        >
+          <button
+            mat-icon-button
+            matTreeNodeToggle
+            [attr.aria-label]="'Toggle ' + node.name"
+          >
+            <mat-icon matPrefix>
+              <i
+                [hidden]="treeControl.isExpanded(node)"
+                [ngClass]="node?.icon ? node.icon : 'fas fa-angle-right'"
+              ></i>
+              <i
+                [hidden]="!treeControl.isExpanded(node)"
+                class="fas fa-angle-down"
+              ></i>
+            </mat-icon>
+          </button>
+          {{ node.name }}
+        </div>
+      </mat-tree-node>
+    </mat-tree>
+  </div>
+  

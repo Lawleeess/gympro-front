@@ -1,0 +1,48 @@
+.navbar {
+  background-color: $blue;
+  display: flex;
+  height: 3.25rem;
+  justify-content: space-between;
+
+  .title-container {
+    color: $white;
+    cursor: default;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    text-align: center;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  ul.options-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 0;
+
+    li {
+      list-style-type: none;
+
+      a {
+        align-items: center;
+        color: $white !important;
+        cursor: default;
+        display: flex;
+        justify-content: center;
+        text-decoration: none !important;
+      }
+      i {
+        color: $white;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .brand-container .title-container {
+    display: none;
+  }
+}

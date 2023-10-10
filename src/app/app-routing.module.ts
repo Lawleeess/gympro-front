@@ -10,6 +10,5 @@ const routes: Routes = [];
 
 
 export class AppRoutingModule { 
-  asc: Routes = [];
 
 }

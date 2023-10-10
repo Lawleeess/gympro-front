@@ -1,0 +1,11 @@
+<div class="snack-bar-container">
+    <p>{{ message }}</p>
+
+    <button *ngIf="actionMessage" mat-button color="accent" (click)="onAction()">
+        {{ actionMessage }}
+    </button>
+
+    <button *ngIf="dismissMessage" mat-button color="accent" (click)="onDismiss()">
+        {{ dismissMessage }}
+    </button>
+</div>

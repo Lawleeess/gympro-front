@@ -1,0 +1,247 @@
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$my-blue: (
+  50: #7fdddd,
+  100: $seashell,
+  200: $blue,
+  300: $cyan,
+  400: $cyan,
+  500: $cyan,
+  600: $cyan,
+  700: $cyan,
+  800: $cyan,
+  900: $cyan,
+  A100: $cyan,
+  A200: $cyan,
+  A400: $cyan,
+  A700: $cyan,
+  A800: $red,
+  contrast: (
+    50: $white,
+    100: $white,
+    200: $white,
+    300: $white,
+    400: $white,
+    500: $white,
+    600: $white,
+    700: $white,
+    800: $white,
+    900: $white,
+    A100: $white,
+    A200: $white,
+    A400: $white,
+    A700: $white,
+  ),
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$dashboard-primary: mat-palette($my-blue);
+$dashboard-accent: mat-palette($my-blue, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$dashboard-warn: mat-palette($my-blue, A800);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$dashboard-theme: mat-light-theme(
+  (
+    color: (
+      primary: $dashboard-primary,
+      accent: $dashboard-accent,
+      warn: $dashboard-warn,
+    ),
+  )
+);
+
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+$custom-typography: mat-typography-config(
+  $font-family: "NotoSans, sans-serif",
+  $headline: mat-typography-level(32px, 48px, 700),
+  $body-1: mat-typography-level(14px, 20px, 500),
+);
+@include mat-core($custom-typography);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($dashboard-theme);
+
+// CUSTOM STYLES FOR ANGULAR MATERIAL COMPONENTS
+
+// SIDEBAR
+.mat-drawer-side {
+  border-right: none !important;
+  box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
+}
+
+.sidebar-container {
+  .mat-tree-node {
+    cursor: pointer;
+    min-height: 3.5rem;
+    opacity: 0.75;
+    &[aria-level="2"] {
+      min-height: 3.5rem;
+      padding-left: 1.2rem !important;
+    }
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// ICONS
+.mat-icon {
+  height: auto !important;
+  width: auto !important;
+}
+
+// BUTTONS
+button.fit-content {
+  width: fit-content !important;
+  min-width: unset !important;
+}
+
+button .mat-spinner,
+table .mat-spinner {
+  circle {
+    stroke: $iron;
+  }
+}
+
+// CARDS
+.mat-card.fluid {
+  height: 100%;
+}
+
+// FORMS
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.mat-form-field-outline {
+  background: $white;
+  border-radius: 0.3rem;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-prefix,
+.mat-form-field-appearance-outline .mat-form-field-suffix {
+  top: -0.2em !important;
+  color: rgba(0, 0, 0, 0.26);
+  margin-right: 0.75rem;
+  min-width: 1.35rem;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-invalid {
+  .mat-form-field-prefix,
+  .mat-form-field-suffix {
+    top: -0.06em !important;
+  }
+}
+
+.mat-form-field-prefix .mat-icon,
+.mat-form-field-suffix .mat-icon {
+  font-size: 1.2rem !important;
+}
+
+.date-picker {
+  .mat-form-field-appearance-outline .mat-form-field-prefix,
+  .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 0.35em !important;
+  }
+}
+
+.mat-form-field-appearance-outline .mat-form-field-suffix {
+  margin-right: 0;
+
+  .mat-icon-button {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+}
+
+// EXTENSION PANELS
+.mat-expansion-panel-header.mat-expanded {
+  min-height: 64px;
+}
+
+// TOOLTIPS
+.mat-tooltip {
+  font-size: 0.75rem;
+  max-width: 40vw !important;
+}
+
+// TABLES
+th.mat-header-cell,
+td.mat-footer-cell {
+  padding: 16px 16px 4px 16px !important;
+}
+
+th.mat-header-cell {
+  font-size: 12.5px;
+}
+
+td.mat-cell {
+  padding: 16px !important;
+}
+
+.mat-sort-header-content {
+  line-height: 16px;
+  font-weight: 600;
+}
+
+// PAGINATOR
+.mat-paginator {
+  border-bottom-left-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+}
+
+// TABS
+.mat-tab-body-content {
+  overflow-x: hidden !important;
+}
+
+// DIALOG
+.md-width-dialog .mat-dialog-container {
+  width: 35rem !important;
+  max-width: 35rem !important;
+}
+
+.mat-table.loading-state {
+  tfoot {
+    tr {
+      height: 0 !important;
+
+      td {
+        border-bottom: none;
+        padding: 0 !important;
+      }
+    }
+  }
+}
+
+.mat-drawer-content {
+  margin-left: 15rem !important;
+}
+
+.expanded {
+  .mat-drawer-content {
+    margin-left: 2.75rem !important;
+  }
+}
