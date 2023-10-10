@@ -1,0 +1,57 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Cloud Run Staging Deployment
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Auth
+        uses: "google-github-actions/auth@v0"
+        with:
+          workload_identity_provider: "projects/860723688167/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          service_account: "admin-tool-staging@staging-342817.iam.gserviceaccount.com"
+
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v0"
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: NPM Install
+        run: npm install
+
+      - name: NPM Build
+        run: npm run build
+
+      - name: Docker Build
+        run: |
+          docker build -t gcr.io/${{ secrets.GCP_STAGING_PROJECT_ID }}/epa-dashboard:latest .
+
+      - name: Docker Push
+        run: |
+          docker push gcr.io/${{ secrets.GCP_STAGING_PROJECT_ID }}/epa-dashboard:latest
+
+      - name: Deploy
+        run: |
+          gcloud run deploy epa-dashboard \
+          --region us-central1 \
+          --image gcr.io/${{ secrets.GCP_STAGING_PROJECT_ID }}/epa-dashboard \
+          --platform managed \
+          --allow-unauthenticated \
+          --set-env-vars=ENVIRONMENT='staging' \
+          --project ${{ secrets.GCP_STAGING_PROJECT_ID }}

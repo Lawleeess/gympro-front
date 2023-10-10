@@ -1,0 +1,19 @@
+<button mat-mini-fab color="primary" [matMenuTriggerFor]="menu">
+  <mat-icon>
+    <i [ngClass]="viewModeSelectedItem?.icon"></i>
+  </mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <div class="panel">
+    <span class="header text-muted">Modo de visualización</span>
+    <button
+      *ngFor="let item of viewModes"
+      mat-menu-item
+      (click)="selectViewMode(item.mode)"
+      [ngClass]="{ 'selected-item': item.mode === viewModeSelected }"
+    >
+      <mat-icon><i [ngClass]="item.icon"></i></mat-icon>
+      <span>{{ item.label }}</span>
+    </button>
+  </div>
+</mat-menu>

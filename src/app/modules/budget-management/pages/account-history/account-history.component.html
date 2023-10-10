@@ -1,0 +1,66 @@
+<div class="container mb-3">
+  <app-redirect-button redirectRoute="/dashboard/budgets"></app-redirect-button>
+</div>
+
+<div class="container">
+  <div class="row mt-4 mt-sm-0">
+    <div class="col-12">
+      <h2>Histórico de cambios de la cuenta</h2>
+    </div>
+    <ng-container *ngIf="!errorMsg">
+      <div class="col-12 mb-3">
+        <!-- tabs -->
+        <ng-container
+          *ngFor="let tab of budgetAndFeeTabs.options; let i = index"
+        >
+          <button
+            mat-flat-button
+            [ngClass]="
+              budgetAndFeeTabs.selectedIndex === i && 'mat-raised-button'
+            "
+            [color]="budgetAndFeeTabs.selectedIndex === i ? 'primary' : null"
+            (click)="
+              budgetAndFeeTabs.selectedIndex = i; filterChangesByType(tab.value)
+            "
+            [disabled]="changeListReqStatus === 1"
+          >
+            {{ tab.label }}
+          </button>
+        </ng-container>
+      </div>
+
+      <!-- timeline -->
+      <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+        <app-changes-timeline
+          [list]="changesList"
+          [status]="changeListReqStatus"
+        ></app-changes-timeline>
+      </div>
+
+      <!-- table -->
+      <div class="col-12 col-lg-8">
+        <mat-card>
+          <app-chart-line-ups-downs
+            name="history-1"
+            [data]="changesChart"
+            [dataStatus]="changeListReqStatus"
+            [tooltipSymbolBefore]="budgetAndFeeTabs.selectedIndex === 0 && '$'"
+            [tooltipSymbolAfter]="budgetAndFeeTabs.selectedIndex === 1 && '%'"
+            [decimalInValues]="2"
+          ></app-chart-line-ups-downs>
+        </mat-card>
+      </div>
+    </ng-container>
+
+    <!-- GENERAL ERROR MESSAGE -->
+    <ng-container *ngIf="changeListReqStatus === 3 && !!errorMsg">
+      <div class="col-12 mt-5">
+        <mat-card>
+          <p class="text-danger text-center p-4">
+            {{ errorMsg }}
+          </p>
+        </mat-card>
+      </div>
+    </ng-container>
+  </div>
+</div>

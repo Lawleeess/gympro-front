@@ -1,0 +1,38 @@
+<div class="container mb-3">
+  <app-redirect-button redirectRoute="/dashboard/home"></app-redirect-button>
+</div>
+
+<div class="container">
+  <app-filters-overview
+    (filterChange)="filterChange($event)"
+    [status]="accounts.reqStatus"
+  ></app-filters-overview>
+  <div class="row">
+    <div class="col-12 text-right">
+      <button
+        mat-stroked-button
+        (click)="exportDataToCSV()"
+        [disabled]="accounts.reqStatus === 1 || accounts?.data?.length < 1"
+        [ngClass]="accounts.reqStatus !== 1 && 'bg-white'"
+      >
+        <i class="fas fa-file-download mr-2"></i>
+        Exportar
+      </button>
+    </div>
+    <div class="col-12 mt-5 mt-lg-0">
+      <h3>Desglose por cuenta:</h3>
+      <app-generic-table
+        [displayedColumns]="accountsTableColumns"
+        [tableData]="accounts"
+        [tableDataChange]="accounts?.data"
+        [minHeightVh]="49"
+        editionMode="cell"
+        emptyDataMsg="No se encontró ninguna cuenta."
+        errorMsg="Error al consultar el desglose por cuentas."
+        (cellChange)="handleUpdate($event)"
+        (selectedRowChange)="handleSelection($event)"
+      >
+      </app-generic-table>
+    </div>
+  </div>
+</div>

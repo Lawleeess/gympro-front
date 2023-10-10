@@ -1,0 +1,109 @@
+.adaptable-container {
+  background-color: var(--white);
+  min-height: 60vh;
+  overflow: auto;
+
+  &.auto {
+    min-height: auto !important;
+  }
+
+  table {
+    border-collapse: collapse;
+    table-layout: auto;
+    width: 100%;
+    position: relative;
+  }
+
+  .lg-container {
+    span {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: inherit;
+      display: inline-block;
+    }
+  }
+
+  .value-container {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 40px 30px;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .icon-container {
+    display: flex;
+    justify-content: center;
+
+    &.right {
+      justify-content: flex-end;
+    }
+
+    &.left {
+      justify-content: flex-start;
+    }
+
+    i {
+      color: var(--regent-gray);
+      cursor: pointer;
+      font-size: 0.875rem;
+
+      &:not(.disabled):hover {
+        color: var(--cyan);
+      }
+
+      &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .loading-shade {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.03);
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    min-height: 60vh;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+}
+
+::ng-deep .custom-tooltip {
+  font-size: 12px !important;
+  margin-bottom: 0px !important;
+  margin-top: 0px !important;
+  max-width: unset !important;
+}
+
+.status-container {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.editable-field-container {
+  font-size: 12px;
+  max-width: 120px;
+}
+
+.mat-spinner {
+  ::ng-deep circle {
+    stroke: var(--iron);
+  }
+}
+
+.sign {
+  &.positive::after {
+    content: "+";
+  }
+  &.negative::after {
+    content: "-";
+  }
+}

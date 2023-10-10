@@ -1,0 +1,12 @@
+.dropdown-toggle {
+  align-items: center;
+  display: flex;
+
+  &::after {
+    display: none;
+  }
+}
+
+.expanded .container {
+  max-width: 100%;
+}

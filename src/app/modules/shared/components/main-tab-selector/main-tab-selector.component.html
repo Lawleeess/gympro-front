@@ -1,0 +1,15 @@
+<ng-container *ngIf="tabLinks?.length > 0">
+    <div class="main-tab-selector shadow-sm">
+        <div class="tabs-wrapper">
+            <div *ngFor="let tab of tabLinks; let i = index" [style.width.%]="(100 / tabLinks.length)">
+                <input type="radio" name="tabs" [id]="'tab' + (i + 1)" [checked]="path === tab.pagePath">
+                <div class="tab-label-content" [id]="'tab'+ (i + 1) + '-content' ">
+                    <label [for]="'tab' + (i + 1)" [routerLink]="'/' + modulePath + '/' + tab.pagePath">
+                        {{ tab.label }}
+                    </label>
+                </div>
+                <div class="slide" *ngIf="path === tab.pagePath"></div>
+            </div>
+        </div>
+    </div>
+</ng-container>

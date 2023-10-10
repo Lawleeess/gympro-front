@@ -1,0 +1,33 @@
+<div class="container mb-3">
+  <app-redirect-button redirectRoute="/dashboard/home"></app-redirect-button>
+</div>
+
+<div class="container">
+  <div class="row mb-3" *ngIf="loggedInUserRole === 'admin'">
+    <div class="col-12 text-right">
+      <button
+        mat-flat-button
+        color="primary"
+        class="fit-content"
+        routerLink="new"
+      >
+        <i class="fas fa-plus mr-2"></i>
+        Agregar cliente
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-4 mt-sm-0">
+    <div class="col-12">
+      <app-generic-table
+        [displayedColumns]="customersTableColumns"
+        [tableData]="customers"
+        [tableDataChange]="customers.data"
+        emptyDataMsg="No se encontraron clientes registrados"
+        errorMsg="Se generó un error al consultar los clientes"
+        (selectedRowChange)="selectCustomer($event)"
+      >
+      </app-generic-table>
+    </div>
+  </div>
+</div>

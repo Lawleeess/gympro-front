@@ -1,0 +1,16 @@
+.chart-container {
+  height: 20rem;
+  width: 100%;
+
+  .chart,
+  .complementary-container {
+    height: inherit;
+    width: inherit;
+  }
+
+  .complementary-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}

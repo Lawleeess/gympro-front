@@ -1,0 +1,36 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass mixins.
+// -----------------------------------------------------------------------------
+
+// ANIMATIONS
+@keyframes indeterm-shimmer {
+  0% {
+    background-position: -368px 0;
+  }
+  100% {
+    background-position: 368px 0;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-20px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+
+@mixin basic-loader {
+  animation-duration: 1s !important;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: indeterm-shimmer;
+  animation-timing-function: linear;
+  background: #f6f7f8;
+  background: $loader-gradient;
+  background-size: 800px 104px;
+}

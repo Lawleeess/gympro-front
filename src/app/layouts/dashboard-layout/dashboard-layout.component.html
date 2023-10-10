@@ -1,0 +1,14 @@
+<mat-drawer-container
+  class="layout-container"
+  [ngClass]="{ expanded: isSidebarColapsed }"
+>
+  <mat-drawer mode="side" opened class="sidebar-container">
+    <app-sidebar></app-sidebar>
+  </mat-drawer>
+  <mat-drawer-content>
+    <app-navbar></app-navbar>
+    <div class="main-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

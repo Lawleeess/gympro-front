@@ -1,0 +1,27 @@
+<div class="d-flex align-items-center justify-content-cener">
+  <!-- chart -->
+  <canvas
+    [hidden]="!data || data.length === 0 || dataStatus !== 2"
+    baseChart
+    [chartType]="lineChartType"
+    [datasets]="lineChartData.datasets"
+    [labels]="lineChartData.labels"
+    [options]="lineChartOptions"
+    [height]="heightPx"
+    [width]="widthPx"
+  ></canvas>
+
+  <!-- empty data -->
+  <div *ngIf="(!data || data?.length === 0) && dataStatus === 2">
+    <p class="text-muted text-center my-0">{{ emptyDataMsg }}</p>
+  </div>
+
+  <!-- error getting data -->
+  <div
+    *ngIf="dataStatus === 3"
+    class="d-flex align-items-center text-danger text-center"
+  >
+    <i class="fas fa-exclamation mr-2"></i>
+    <span>Error</span>
+  </div>
+</div>

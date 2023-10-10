@@ -1,0 +1,29 @@
+.select-label-container {
+  align-content: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mat-spinner {
+  margin-right: 8px;
+  ::ng-deep circle {
+    stroke: var(--iron);
+  }
+}
+
+.input-container {
+  margin: 0.5em 0.75em 0.5em 0.75em;
+
+  input {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 0.3rem;
+    color: rgba(0, 0, 0, 0.54);
+    outline: none;
+    padding: 1em 0.75em 1em 0.75em;
+    width: 100%;
+  }
+}
+
+.filtered-results-container {
+  margin: 0.5em 0.75em 0.5em 0.75em;
+}

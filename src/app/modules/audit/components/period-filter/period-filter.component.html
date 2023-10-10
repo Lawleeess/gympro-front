@@ -1,0 +1,48 @@
+<form role="form" [formGroup]="form">
+  <div class="row">
+    <div
+      class="col-12 col-md-4 col-lg-3 offset-md-4 offset-lg-6 mb-3 mt-md-3 mt-lg-0"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Fechas preseleccionadas</mat-label>
+        <mat-select formControlName="presetDate">
+          <mat-option
+            *ngFor="let presetDate of PRESET_DATES"
+            [value]="presetDate.value"
+          >
+            {{ presetDate.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-4 col-lg-3 mb-3 mt-md-3 mt-lg-0">
+      <div class="date-picker">
+        <mat-form-field appearance="outline">
+          <mat-label>Periodo</mat-label>
+          <mat-date-range-input
+            [rangePicker]="picker"
+            [disabled]="presetDate.value !== 'custom'"
+          >
+            <input
+              matStartDate
+              formControlName="startDate"
+              placeholder="Fecha inicio"
+              autocomplete="off"
+            />
+            <input
+              matEndDate
+              formControlName="endDate"
+              placeholder="Fecha fin"
+              autocomplete="off"
+            />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,206 @@
+<div class="container my-5" *ngIf="!!user.id">
+  <ng-container *ngIf="user?.modulesWithPermission?.length > 0">
+    <div class="row">
+      <!-- user info -->
+      <div class="col-12 col-lg-6 mb-3">
+        <mat-card class="fluid">
+          <div class="d-flex">
+            <div>
+              <div class="avatar-container mr-4">
+                <mat-icon>
+                  <i class="fas fa-user-alt blue"></i>
+                </mat-icon>
+              </div>
+            </div>
+            <div>
+              <h2 class="mb-0">Bienvenido</h2>
+              <mat-card-subtitle>
+                {{
+                  !!user?.name ? user?.name + " " + user?.lastname : user?.email
+                }}
+              </mat-card-subtitle>
+              <mat-card-content class="mb-0">
+                <p>
+                  En esta plataforma encontrarás distintas herramientas
+                  dependiendo de tu área. <br />
+                  Puedes acceder a ellas por medio de los accesos directos que
+                  se muestran a continuación, o bien, a través del sidebar.
+                </p>
+              </mat-card-content>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- work calendar -->
+      <div class="col-12 col-lg-6 mb-3">
+        <mat-card>
+          <div class="d-flex flex-column">
+            <div class="d-flex align-items-center mb-3">
+              <div class="icon-container mr-2">
+                <mat-icon>
+                  <i class="fas fa-calendar-alt sm purple"></i>
+                </mat-icon>
+              </div>
+              <h3 class="mb-0">Calendario</h3>
+            </div>
+
+            <div class="placeholder-container">
+              <div class="placeholder-box mt-2">
+                <span class="text-muted">Sección en construcción</span>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-12 col-lg-9">
+        <div class="mb-5">
+          <h3>Clientes</h3>
+          <!-- CLIENT CARDS -->
+          <ng-container *ngIf="customersReqStatus == 2">
+            <ng-container *ngIf="customers?.length > 0">
+              <div class="items-container">
+                <mat-card
+                  *ngFor="let customer of customers | slice : 0 : 5"
+                  class="item-card fluid actionable"
+                  matTooltip="Actualizar"
+                  routerLink="/dashboard/customers/edit"
+                  [queryParams]="{ id: customer.id }"
+                >
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="mr-3">
+                      <i class="fas fa-store"></i>
+                    </mat-icon>
+                    <div>
+                      <h3 class="mb-0">{{ customer.alias | uppercase }}</h3>
+                    </div>
+                  </div>
+                  <div class="item-name right text-muted mt-2">
+                    {{ customer.name }}
+                  </div>
+                </mat-card>
+              </div>
+              <div class="more-container mt-2">
+                <a class="cyan" routerLink="/dashboard/customers"
+                  >Ver todos...</a
+                >
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="customers?.length === 0">
+              <div class="text-muted text-center my-4">
+                Aún no tienes clientes asignados
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <!-- LOADER -->
+          <ng-container *ngIf="customersReqStatus < 2">
+            <div class="items-container">
+              <mat-card
+                *ngFor="let loader of [0, 1, 2, 3, 4]"
+                class="item-card"
+              >
+                <div class="d-flex align-items-center">
+                  <mat-icon class="mr-3">
+                    <i class="fas fa-store"></i>
+                  </mat-icon>
+                  <div class="bar-loader title"></div>
+                </div>
+                <div class="bar-loader"></div>
+              </mat-card>
+            </div>
+          </ng-container>
+
+          <!-- ERROR MSG -->
+          <ng-container *ngIf="customersReqStatus === 3">
+            <div class="text-danger text-center my-4">
+              Se generó un error al consultar los clientes. Por favor, intenta
+              más tarde.
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="mb-3" *ngIf="campaigns?.length > 0">
+          <h3>Campañas</h3>
+          <div class="items-container">
+            <mat-card
+              *ngFor="let campaign of campaigns | slice : 0 : 5"
+              class="item-card"
+            >
+              <div class="d-flex justify-content-center mb-1">
+                <ng-container [ngSwitch]="campaign.provider">
+                  <span
+                    *ngSwitchCase="'ads'"
+                    class="iconify"
+                    data-width="24"
+                    data-icon="logos:google-ads"
+                  >
+                  </span>
+                  <span
+                    *ngSwitchCase="'ga'"
+                    class="iconify"
+                    data-width="24"
+                    data-icon="logos:google-analytics"
+                  >
+                  </span>
+                  <span
+                    *ngSwitchCase="'ga4'"
+                    class="iconify"
+                    data-width="24"
+                    data-icon="logos:google-analytics"
+                  >
+                  </span>
+                  <span
+                    *ngSwitchCase="'fb'"
+                    class="iconify"
+                    data-width="24"
+                    data-icon="logos:facebook"
+                  >
+                  </span>
+                </ng-container>
+              </div>
+              <div class="item-name center">
+                {{ campaign.name }}
+              </div>
+            </mat-card>
+          </div>
+          <div class="more-container mt-2">
+            <a class="cyan">Ver todas...</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-3 mb-3">
+        <mat-card>
+          <div class="d-flex flex-column">
+            <div class="d-flex align-items-center mb-3">
+              <div class="icon-container mr-2">
+                <mat-icon>
+                  <i class="fas fa-newspaper sm orange"></i>
+                </mat-icon>
+              </div>
+              <h3 class="mb-0">Anuncios</h3>
+            </div>
+
+            <div class="placeholder-container large">
+              <div class="placeholder-box large mt-2">
+                <span class="text-muted">Sección en construcción</span>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container
+    *ngIf="
+      !user?.modulesWithPermission || user?.modulesWithPermission?.length === 0
+    "
+  >
+    <app-standby-access-modules></app-standby-access-modules>
+  </ng-container>
+</div>

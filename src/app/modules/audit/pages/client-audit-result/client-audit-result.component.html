@@ -1,0 +1,162 @@
+<div class="container mb-3">
+  <app-redirect-button
+    redirectRoute="/dashboard/audit/history"
+    [queryParams]="{ clientId: clientID, accountId: accountID }"
+  ></app-redirect-button>
+
+  <!-- AUDIT RESULTS -->
+  <div [hidden]="overviewReqStatus !== 2">
+    <div class="row mt-4 mb-2">
+      <div class="col-12 d-flex align-items-end">
+        <ng-container *ngIf="!!overview">
+          <span
+            class="iconify mr-3"
+            data-width="32"
+            [attr.data-icon]="
+              overview.provider === 'adwords'
+                ? 'logos:google-ads'
+                : 'logos:facebook'
+            "
+          >
+          </span>
+          <h2 class="m-0">{{ overview.accountName }}</h2>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 mt-3">
+        <h2 class="text-muted">Resultados de la auditoría</h2>
+      </div>
+      <div class="col-12 col-lg-3 mt-3">
+        <!-- score chart -->
+        <mat-card>
+          <div class="score-container">
+            <h4 class="mb-n1">Calificación</h4>
+            <app-chart-gauge
+              *ngIf="overviewReqStatus === 2"
+              [name]="'audit-overview-' + overview.id + '-good-practices'"
+              [value]="overview.globalScore"
+            ></app-chart-gauge>
+          </div>
+        </mat-card>
+
+        <!-- audit points - menu -->
+        <div class="nav-audit-scores mt-4">
+          <div class="ul" *ngIf="!!overview">
+            <div
+              *ngFor="let item of overview.results; let i = index"
+              class="item-list-container mt-3"
+              (click)="goToAuditPoint(i)"
+            >
+              <div
+                class="item-dot"
+                [ngClass]="{
+                  success: item.score === 100,
+                  danger: item.score > 0 && item.score < 100
+                }"
+              ></div>
+
+              <p class="mb-0 text-muted">
+                <span>
+                  {{ item.group }}
+                </span>
+              </p>
+              <span class="text-muted item-result">
+                {{ item.score | number : "1.0-0" }}%
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-9 mt-5 mt-lg-0">
+        <div class="scrollabe-container">
+          <div
+            *ngFor="let item of overview?.results; let i = index"
+            [ngClass]="{ 'mt-5': i > 0 }"
+            [id]="'audit-point-' + (i + 1)"
+            #auditPoints
+          >
+            <section>
+              <h3 class="audit-point-title" tabindex="1">
+                {{ item.group }}
+              </h3>
+              <mat-accordion class="example-headers-align" multi>
+                <ng-container *ngFor="let evaluation of item.evaluations">
+                  <app-panel-result
+                    [clientID]="clientID"
+                    [accountID]="accountID"
+                    [auditID]="auditID"
+                    [result]="evaluation"
+                  ></app-panel-result>
+                </ng-container>
+              </mat-accordion>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADER -->
+  <div class="loader-container" *ngIf="overviewReqStatus <= 1">
+    <div class="row mt-4 mb-5">
+      <div class="col-12 d-flex align-items-end">
+        <div class="bar-loader logo mr-3"></div>
+        <div class="bar-loader title account-name"></div>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col-12 col-lg-3">
+        <!-- SCORE CHAT -->
+        <mat-card>
+          <div class="score-container">
+            <div class="d-flex flex-column align-items-center">
+              <div class="bar-loader mb-3"></div>
+              <app-chart-loader></app-chart-loader>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- AUDIT POINTS -->
+        <div class="nav-audit-scores mt-4">
+          <div class="ul">
+            <div
+              *ngFor="let item of [1, 2, 3]"
+              class="item-list-container mt-3"
+            >
+              <div class="item-dot"></div>
+              <div class="bar-loader"></div>
+              <div class="bar-loader"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-9">
+        <div class="scrollabe-container">
+          <div class="bar-loader title"></div>
+          <div
+            *ngFor="let panel of [1, 2, 3, 4, 5, 6, 7]"
+            class="panel-loader mt-5"
+          >
+            <div class="bar-loader point-title"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR MESSAGE -->
+  <mat-card *ngIf="overviewReqStatus === 3" class="mt-5">
+    <p class="text-danger text-center p-4">
+      <ng-container *ngIf="!errorMsg">
+        Error al consultar los resultados de la auditoría.
+        <br />
+        Por favor, intenta más tarde.
+      </ng-container>
+      <ng-container *ngIf="!!errorMsg">
+        {{ errorMsg }}
+      </ng-container>
+    </p>
+  </mat-card>
+</div>

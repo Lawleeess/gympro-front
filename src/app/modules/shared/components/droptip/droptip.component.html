@@ -1,0 +1,10 @@
+<button mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-icon>
+    <i class="actionable" [ngClass]="icon"></i>
+  </mat-icon>
+</button>
+<mat-menu #menu="matMenu" class="mt-n2">
+  <div class="droptip-container p-2">
+    <ng-content></ng-content>
+  </div>
+</mat-menu>

@@ -1,0 +1,75 @@
+<mat-expansion-panel class="mt-2" (opened)="openPanel()">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="header-container">
+        <div class="title-container">
+          <div class="title">
+            <h3 class="mb-0 text-trim" [matTooltip]="result.name">
+              {{ result.name }}
+            </h3>
+            <span class="text-muted">
+              {{ result.items }}/{{ result.totalItems }}
+            </span>
+          </div>
+        </div>
+        <div class="badge-container">
+          <div
+            class="badge"
+            [ngClass]="{
+              success: result.totalItems > 0 && result.items === 0,
+              danger: result.totalItems > 0 && result.items > 0
+            }"
+          >
+            <i
+              class="fas fa-check"
+              *ngIf="result.totalItems > 0 && result.items === 0"
+            >
+            </i>
+
+            <span *ngIf="result.totalItems > 0 && result.items > 0">
+              {{ result.items }}
+            </span>
+
+            <span *ngIf="result.totalItems === 0"> N/A </span>
+          </div>
+        </div>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="panel-container">
+    <p class="text-muted">
+      {{ result.description }}
+    </p>
+
+    <div class="mt-3">
+      <div
+        [hidden]="
+          result.totalItems > 0 &&
+          result.items === 0 &&
+          tableResults.data.length === 0
+        "
+      >
+        <app-generic-table
+          [displayedColumns]="tableColumns"
+          [tableData]="tableResults"
+          [tableDataChange]="tableResults.data"
+          emptyDataMsg="No se encontraron resultados"
+          errorMsg="Error al consultar resultados"
+        >
+        </app-generic-table>
+      </div>
+      <ng-container
+        *ngIf="
+          result.totalItems > 0 &&
+          result.items === 0 &&
+          tableResults.data.length === 0 &&
+          tableResults.reqStatus > 1
+        "
+      >
+        <p class="text-center text-muted my-5">
+          Todos los casos cumplen con los parámetros establecidos.
+        </p>
+      </ng-container>
+    </div>
+  </div>
+</mat-expansion-panel>

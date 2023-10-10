@@ -1,0 +1,33 @@
+<div class="chart-container" [style.height]="height">
+  <!-- loader -->
+  <div *ngIf="dataStatus < 2" class="complementary-container">
+    <app-chart-loader></app-chart-loader>
+  </div>
+
+  <!-- chart -->
+  <div
+    [hidden]="!data || data.length === 0 || dataStatus !== 2"
+    [id]="chartID"
+    style="height: 100%"
+  ></div>
+
+  <!-- empty data -->
+  <div
+    *ngIf="data?.length === 0 && dataStatus === 2"
+    class="complementary-container"
+  >
+    <p class="text-muted text-center my-0">{{ emptyDataMsg }}</p>
+  </div>
+
+  <!-- error getting data -->
+  <div *ngIf="dataStatus === 3" class="complementary-container">
+    <p class="text-danger text-center my-0">
+      <ng-container *ngIf="!errorMsg">
+        Se generó un error al consultar los resultados.
+        <br />
+        Por favor, intenta más tarde.
+      </ng-container>
+      <ng-container *ngIf="!!errorMsg">{{ errorMsg }}</ng-container>
+    </p>
+  </div>
+</div>

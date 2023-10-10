@@ -1,0 +1,28 @@
+.card {
+  .store-icon-container {
+    align-items: flex-end;
+    display: flex;
+    justify-content: center;
+
+    i {
+      color: var(--alto);
+      font-size: 4.5rem;
+    }
+  }
+}
+
+.info-container * {
+  text-align: center;
+}
+
+.chart-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .bar-loader {
+    width: 70%;
+    margin-bottom: 2.6rem;
+  }
+}

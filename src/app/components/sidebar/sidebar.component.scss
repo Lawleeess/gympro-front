@@ -1,0 +1,26 @@
+.brand-container {
+  cursor: pointer;
+
+  .logo-container img {
+    height: 2.5rem;
+    width: 2.5rem;
+
+    &.sm {
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+
+  .title-container {
+    color: var(--blue);
+  }
+}
+
+.nav-item.active {
+  color: var(--cyan);
+}
+
+.icon-actionable {
+  cursor: pointer;
+  font-size: 1.25rem;
+}

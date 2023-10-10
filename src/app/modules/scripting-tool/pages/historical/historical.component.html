@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-12 col-sm-6">
+        <app-generic-select [optionList]="accountList" label="Selecciona una cuenta" extraPropName="external_id"
+            (selectedOptionChange)="getHistory($event, true)" [searchFilter]="true" [status]="accountsReqStatus"
+            errorMsg="Error al consultar cuentas" emptyMsg="No se encontraron cuentas"
+            [standaloneOption]="standaloneOption" [selectedOption]="standaloneOption">
+        </app-generic-select>
+    </div>
+</div>
+
+<div class="row mt-4 mt-sm-0">
+    <div class="col-12">
+        <app-generic-table [displayedColumns]="historicalTableColumns" [tableData]="historical"
+            [tableDataChange]="historical.data" [colSortedByDefault]="{name: 'executed_at', sortDirection: 'desc'}">
+        </app-generic-table>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="container mb-3">
+  <app-redirect-button redirectRoute="/dashboard/audit"></app-redirect-button>
+
+  <div class="container">
+    <!-- CLIENT NAME -->
+    <div class="mt-4 mb-4 mb-lg-1" *ngIf="!errorMsg">
+      <div class="col-12 d-flex align-items-end">
+        <i class="fas fa-store client-icon mr-3"></i>
+        <!-- name -->
+        <h2 *ngIf="accountsReqStatus > 1 || !!client" class="m-0">
+          {{ client?.name }}
+        </h2>
+        <!-- loader -->
+        <div
+          *ngIf="accountsReqStatus <= 1 && !client"
+          class="bar-loader h2"
+          [style.width.rem]="14"
+        ></div>
+      </div>
+    </div>
+
+    <!-- ACCOUNTS -->
+    <ng-container *ngIf="!errorMsg">
+      <div class="overlap-container mb-4">
+        <div class="row" class="row-overlap">
+          <div
+            class="col-12 col-md-4 col-lg-3 offset-lg-3 mb-3 mb-3 mt-md-3 mt-lg-0 col-overlap-front"
+          >
+            <mat-form-field appearance="outline">
+              <mat-label>Proveedor</mat-label>
+              <mat-select
+                [(value)]="selectedProvider"
+                (selectionChange)="providerChange()"
+                [disabled]="accountsReqStatus <= 1"
+              >
+                <mat-option
+                  *ngFor="let provider of providers"
+                  [value]="provider.value"
+                >
+                  {{ provider.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-12 col-overlap-back">
+            <app-period-filter
+              [disabled]="accountsReqStatus <= 1"
+              (periodChange)="periodChange($event)"
+            ></app-period-filter>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-lg-0">
+        <div class="col-12">
+          <app-generic-table
+            [displayedColumns]="accountsTableColumns"
+            [colSortedByDefault]="{ name: 'investment', sortDirection: 'desc' }"
+            [tableData]="{ data: accounts, reqStatus: accountsReqStatus }"
+            [tableDataChange]="accounts"
+            emptyDataMsg="No se encontró ninguna cuenta."
+            errorMsg="Error al consultar las cuentas del cliente."
+            (selectedRowChange)="redirectToHistory($event)"
+          >
+          </app-generic-table>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ERROR MESSAGE -->
+    <mat-card *ngIf="!!errorMsg" class="mt-5">
+      <p class="text-danger text-center p-4">
+        {{ errorMsg }}
+      </p>
+    </mat-card>
+  </div>
+</div>

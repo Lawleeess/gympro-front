@@ -1,0 +1,107 @@
+$dot: var(--alto);
+$line: var(--albaster);
+
+.chart-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 7rem;
+  height: 5rem;
+  position: relative;
+}
+
+.container {
+  height: 5rem;
+  width: 7rem;
+  margin: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  right: 0;
+
+  .dot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 52.5%;
+    height: 20px;
+    width: 20px;
+    background-color: $dot;
+    border-radius: 5rem;
+    transition: all 0.15s ease-in-out;
+
+    &:nth-child(1) {
+      right: 0;
+      animation: waveUp 2s, smallExtend 2s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    &:nth-child(2) {
+      left: 50%;
+      animation: waveUp 2s, largeExtend 2s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-delay: 0.15s;
+    }
+
+    &:nth-child(3) {
+      left: 15%;
+      animation: waveUp 2s, smallExtend 2s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-delay: 0.3s;
+    }
+
+    @keyframes waveUp {
+      0%,
+      15% {
+        top: 50%;
+      }
+      45%,
+      65% {
+        top: 42.5%;
+      }
+      85%,
+      100% {
+        top: 50%;
+      }
+    }
+
+    @keyframes smallExtend {
+      0%,
+      8% {
+        background-color: $dot;
+        height: 20px;
+      }
+      14%,
+      34% {
+        background-color: $line;
+        height: 47.5px;
+      }
+      46%,
+      100% {
+        background-color: $dot;
+        height: 20px;
+      }
+    }
+
+    @keyframes largeExtend {
+      0%,
+      8% {
+        background-color: $dot;
+        height: 20px;
+      }
+      14%,
+      34% {
+        background-color: $line;
+        height: 82.5px;
+      }
+      46%,
+      100% {
+        background-color: $dot;
+        height: 20px;
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+<mat-form-field appearance="outline">
+  <mat-label *ngIf="status > 1">
+    {{ label }}
+  </mat-label>
+
+  <mat-label *ngIf="status < 2">
+    <div class="select-label-container">
+      <span> {{ label }} </span>
+      <mat-spinner diameter="20"></mat-spinner>
+    </div>
+  </mat-label>
+
+  <mat-select
+    [formControl]="option"
+    name="option"
+    (selectionChange)="selectOption()"
+    (openedChange)="openedChange($event)"
+    disableOptionCentering
+  >
+    <div
+      class="input-container"
+      *ngIf="searchFilter && initOptionList?.length > 3"
+    >
+      <input
+        placeholder="Buscar"
+        type="text"
+        autocomplete="off"
+        [(ngModel)]="searchedWord"
+        (keyup)="search()"
+        (keydown.space)="$event.stopPropagation()"
+      />
+    </div>
+
+    <mat-select-trigger>
+      <!-- option.value is selectItem type  -->
+      <ng-container *ngIf="option.value?.id">
+        <!-- show only value -->
+        <ng-container *ngIf="!extraPropName">
+          {{ option.value ? option.value.name : "" }}
+        </ng-container>
+
+        <!-- show value + extra property -->
+        <ng-container *ngIf="extraPropName">
+          {{
+            option.value
+              ? option.value.name + " - " + option.value[extraPropName]
+              : ""
+          }}
+        </ng-container>
+      </ng-container>
+
+      <!-- option.value is string | integer type  -->
+      <ng-container *ngIf="!option.value?.id && !option.value?.standalone">
+        {{ option.value ? option.value : "" }}
+      </ng-container>
+
+      <!-- option is standalone option   -->
+      <ng-container *ngIf="!option.value?.id && option.value?.standalone">
+        {{ option.value.name }}
+      </ng-container>
+    </mat-select-trigger>
+
+    <!-- standalone option -->
+    <mat-option *ngIf="standaloneOption" [value]="standaloneOption">
+      {{ standaloneOption.name }}
+    </mat-option>
+    <!-- options -->
+    <mat-option *ngFor="let item of optionList" [value]="item">
+      <!-- item is selectItem type  -->
+      <ng-container *ngIf="item.id">
+        <!-- show only value -->
+        <ng-container *ngIf="!extraPropName">
+          {{ item.name }}
+        </ng-container>
+
+        <!-- show value + extra property -->
+        <ng-container *ngIf="extraPropName">
+          {{ item.name }} - {{ item[extraPropName] }}
+        </ng-container>
+      </ng-container>
+
+      <!-- item is string | integer type  -->
+      <ng-container *ngIf="!item.id">
+        {{ item }}
+      </ng-container>
+    </mat-option>
+
+    <!-- without results in search -->
+    <div
+      *ngIf="searchedWord && optionList.length < 1"
+      class="filtered-results-container"
+    >
+      <span class="text-muted">{{
+        emptyMsg ? emptyMsg : "No se encontraron resultados"
+      }}</span>
+    </div>
+  </mat-select>
+</mat-form-field>
+
+<ng-container *ngIf="!disabled">
+  <!-- without data message -->
+  <div
+    *ngIf="emptyMsg && status === 2 && optionList?.length < 1"
+    class="text-left"
+  >
+    <small class="text-muted">{{ emptyMsg }}</small>
+  </div>
+
+  <!-- error message -->
+  <div *ngIf="errorMsg && status === 3" class="text-left">
+    <small class="text-danger">{{ errorMsg }}</small>
+  </div>
+</ng-container>

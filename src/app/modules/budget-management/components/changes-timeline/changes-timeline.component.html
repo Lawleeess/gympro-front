@@ -1,0 +1,104 @@
+<mat-card class="container-overflow-y" [style.height.vh]="70">
+  <!-- loader -->
+  <ng-container *ngIf="status < 2">
+    <ng-container *ngFor="let i of [0, 1, 2]">
+      <div class="change-container loader d-flex mb-3">
+        <div class="change mr-2 d-flex flex-column align-items-center">
+          <i class="fas fa-caret-down"></i>
+          <div class="line"></div>
+        </div>
+
+        <div class="info" [style.width.%]="100">
+          <div class="bar-loader mb-2 dark" [style.width.rem]="11.5"></div>
+          <div class="bar-loader mb-2" [style.width.rem]="8"></div>
+          <div class="bar-loader my-4" [style.width.rem]="10"></div>
+          <div class="bar-loader mb-2" [style.width.rem]="10"></div>
+          <div class="bar-loader mb-2" [style.width.rem]="10"></div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <!-- list of changes -->
+  <ng-container *ngIf="list?.length > 0 && status === 2">
+    <div *ngFor="let change of list" class="change-container d-flex mb-3">
+      <!-- caret and line -->
+      <div class="change mr-2 d-flex flex-column align-items-center">
+        <div *ngIf="change.newValue > change.previousValue">
+          <i class="text-success fas fa-caret-up"></i>
+        </div>
+        <div *ngIf="change.newValue < change.previousValue">
+          <i class="text-danger fas fa-caret-down"></i>
+        </div>
+        <div *ngIf="change.newValue === change.previousValue">
+          <i class="text-muted sm fas fa-equals"></i>
+        </div>
+        <div class="line"></div>
+      </div>
+      <div class="info d-flex flex-column">
+        <!-- title -->
+        <strong *ngIf="change.action === 'update' || !change.action">
+          {{
+            change.newValue > change.previousValue ? "Incremento" : "Decremento"
+          }}
+          de {{ change.field === "budget" ? "Presupuesto" : "Fee" }}
+        </strong>
+        <strong *ngIf="change.action === 'create'">
+          Nuevo {{ change.field === "budget" ? "Presupuesto" : "Fee" }}
+        </strong>
+
+        <!-- date -->
+        <small class="text-muted">
+          {{ change.date | date: "yyyy-MM-dd HH:mm:ss aa" }}
+        </small>
+
+        <!-- author -->
+        <small class="my-2">
+          <strong> Autor: {{ change.author.authorName }} </strong>
+        </small>
+
+        <!-- previous value -->
+        <p class="my-0 d-flex align-items-start">
+          <small class="text-muted mr-1">Valor anterior:</small>
+          <span *ngIf="change.valueFormat === 'currency'">
+            {{ change.previousValue | currency: "USD":"symbol-narrow" }}
+          </span>
+          <span *ngIf="change.valueFormat === 'percentage'">
+            {{ change.previousValue }}%
+          </span>
+        </p>
+
+        <!-- new value -->
+
+        <p class="my-0 d-flex align-items-start mb-1">
+          <small class="text-muted mr-1">Nuevo valor:</small>
+          <span *ngIf="change.valueFormat === 'currency'">
+            {{ change.newValue | currency: "USD":"symbol-narrow" }}
+          </span>
+          <span *ngIf="change.valueFormat === 'percentage'">
+            {{ change.newValue }}%
+          </span>
+        </p>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- messages -->
+  <ng-container *ngIf="(list?.length === 0 && status === 2) || status === 3">
+    <div
+      class="d-flex align-items-center justify-content-center text-center"
+      [style.height.%]="100"
+    >
+      <!-- when list of changes is empty -->
+      <span *ngIf="list?.length === 0 && status === 2" class="text-muted">
+        No se encontraron cambios de presupuesto registrados.
+      </span>
+
+      <!-- error message -->
+      <p *ngIf="status === 3" class="my-0 text-danger">
+        Error al consultar los cambios de presupuesto. <br />
+        Por favor, intenta más tarde.
+      </p>
+    </div>
+  </ng-container>
+</mat-card>
