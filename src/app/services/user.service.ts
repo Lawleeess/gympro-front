@@ -58,14 +58,10 @@ export class UserService {
       ? JSON.parse(window.localStorage.getItem('user_lastname'))
       : null;
 
-    this.user.modulesWithPermission = !!window.localStorage.getItem('modules')
+    if (window.localStorage.getItem('modules')) {
+      this.user.modulesWithPermission = !!window.localStorage.getItem('modules')
       ? JSON.parse(window.localStorage.getItem('modules'))
       : null;
-
-    if (window.localStorage.getItem('clientsRole')) {
-      this.user.clientsRole = !!window.localStorage.getItem('clientsRole')
-        ? JSON.parse(window.localStorage.getItem('clientsRole'))
-        : null;
     }
 
     this.baseUrl = this.config.endpoint;
@@ -128,6 +124,22 @@ export class UserService {
             window.localStorage.setItem(
               'clientsRole',
               JSON.stringify(this.user.clientsRole)
+            );
+            window.localStorage.setItem(
+              'birthday',
+              JSON.stringify(this.user.birthday)
+            );
+            window.localStorage.setItem(
+              'phone_number',
+              JSON.stringify(this.user.phone_number)
+            );
+            window.localStorage.setItem(
+              'subscription',
+              JSON.stringify(this.user.subscription)
+            );
+            window.localStorage.setItem(
+              'role',
+              JSON.stringify(this.user.role)
             );
             this._loggedIn = true;
           }
