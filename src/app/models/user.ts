@@ -4,12 +4,11 @@ export class User {
   lastname: string;
   email: string;
   modulesWithPermission?: Module[];
-  clientsRole?: string;
 
   phone_number: string;
   birthday: string;
   subscription: string;
-  role: string;
+  url_image: string;
 
 }
 

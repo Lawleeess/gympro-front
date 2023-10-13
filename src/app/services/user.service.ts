@@ -122,10 +122,6 @@ export class UserService {
               JSON.stringify(auth.refreshToken)
             );
             window.localStorage.setItem(
-              'clientsRole',
-              JSON.stringify(this.user.clientsRole)
-            );
-            window.localStorage.setItem(
               'birthday',
               JSON.stringify(this.user.birthday)
             );
@@ -137,9 +133,10 @@ export class UserService {
               'subscription',
               JSON.stringify(this.user.subscription)
             );
+
             window.localStorage.setItem(
-              'role',
-              JSON.stringify(this.user.role)
+              'url_image',
+              JSON.stringify(this.user.url_image)
             );
             this._loggedIn = true;
           }
