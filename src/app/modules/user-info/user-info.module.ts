@@ -5,17 +5,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 
-import { CustomerManagementComponent } from './customer-management.component';
+import { UserInfoComponent } from './user-info.component';
 import { CustomersComponent } from './pages/customers/customers.component';
 import { NewCustomerComponent } from './pages/new-customer/new-customer.component';
-import { CustomerManagementRoutes } from './customer-management.routing';
+import { CustomerManagementRoutes } from './user-info.routing';
 import { FormNewCustomerDataComponent } from './components/form-new-client-data/form-new-customer-data.component';
 import { FormNewCustomerAccountsComponent } from './components/form-new-customer-accounts/form-new-customer-accounts.component';
 import { CustomerReviewComponent } from './components/customer-review/customer-review.component';
 
 @NgModule({
   declarations: [
-    CustomerManagementComponent,
+    UserInfoComponent,
     CustomersComponent,
     NewCustomerComponent,
     FormNewCustomerDataComponent,
@@ -30,4 +30,4 @@ import { CustomerReviewComponent } from './components/customer-review/customer-r
     RouterModule.forChild(CustomerManagementRoutes),
   ],
 })
-export class CustomerManagementModule {}
+export class UserInfoModule {}

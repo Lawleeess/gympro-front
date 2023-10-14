@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { isEmpty } from 'lodash-es';
 import { ModuleData } from '../modules-list/modules-list.component';
 import { ROLES } from 'src/app/constants/modules';
-import { CustomerManagementService } from 'src/app/modules/customer-management/services/customer-management.service';
+import { UserInfoService } from 'src/app/modules/user-info/services/user-info.service';
 import { UserService } from 'src/app/services/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { REQ_STATUS } from 'src/app/constants/general';
@@ -36,7 +36,7 @@ export class CustomersFormComponent implements OnInit {
     reqStatus: REQ_STATUS.INITIAL,
   };
   constructor(
-    private customerMgmtService: CustomerManagementService,
+    private userInfoService: UserInfoService,
     private formBuilder: FormBuilder
   ) {
     this.form = this.formBuilder.group({
@@ -79,7 +79,7 @@ export class CustomersFormComponent implements OnInit {
   // getting all customers to make them an option to be selected when changing clients with permissions
   getCustomers(): void {
     this.customers.reqStatus = REQ_STATUS.LOADING;
-    this.customerMgmtService.getCustomers().subscribe(
+    this.userInfoService.getCustomers().subscribe(
       (resp: Customer[]) => {
         this.customers.data = resp.map((i) => {
           return { id: i.id, name: i.name };

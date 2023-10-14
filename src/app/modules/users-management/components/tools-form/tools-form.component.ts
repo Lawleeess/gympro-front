@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { isEmpty } from 'lodash-es';
 import { ModuleData } from '../modules-list/modules-list.component';
 import { MODULES, MODULES_TYPES, ROLES } from 'src/app/constants/modules';
-import { CustomerManagementService } from 'src/app/modules/customer-management/services/customer-management.service';
+import { UserInfoService } from 'src/app/modules/user-info/services/user-info.service';
 import { UserService } from 'src/app/services/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { REQ_STATUS } from 'src/app/constants/general';
@@ -56,7 +56,7 @@ export class ToolsFormComponent implements OnInit {
     reqStatus: REQ_STATUS.INITIAL,
   };
   constructor(
-    private customerMgmtService: CustomerManagementService,
+    private customerMgmtService: UserInfoService,
     private userService: UserService,
     private formBuilder: FormBuilder
   ) {

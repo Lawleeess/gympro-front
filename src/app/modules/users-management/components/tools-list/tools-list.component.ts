@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash-es';
 import { Module } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 import { ModuleData } from '../modules-list/modules-list.component';
-import { CustomerTable } from 'src/app/modules/customer-management/pages/customers/customers.component';
+import { CustomerTable } from 'src/app/modules/user-info/pages/customers/customers.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from 'src/app/modules/shared/components/modal/modal.component';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';

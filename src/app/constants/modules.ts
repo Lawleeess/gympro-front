@@ -1,10 +1,17 @@
 export const MODULES = {
-  clientManagement: {
-    id: 'clientManagement',
-    name: 'Administración de clientes',
+  userInfo: {
+    id: 'userInfo',
+    name: 'Perfil',
     type: 'module',
-    icon: 'fas fa-user-tie',
-    redirectPath: '/dashboard/customers',
+    icon: 'fas fa-user-circle',
+    redirectPath: '/dashboard/profile',
+  },
+  personalProgress: {
+    id: 'personalProgress',
+    name: 'Progreso personal',
+    type: 'module',
+    icon: 'fas fa-tasks',
+    redirectPath: '/dashboard/users',
   },
   userManagement: {
     id: 'userManagement',
@@ -32,13 +39,6 @@ export const MODULES = {
     name: 'Scripting tool',
     type: 'module',
     icon: 'fas fa-terminal',
-    redirectPath: '/dashboard/scripting-tool',
-  },
-  pitagoras: {
-    id: 'pitagoras',
-    name: 'Pitágoras Add On',
-    type: 'tool',
-    icon: 'fas fa-cloud-download-alt',
     redirectPath: '/dashboard/scripting-tool',
   },
 };

@@ -81,9 +81,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (!this.NAV_DATA.find((i) => i.id === MODULES.scriptingTool.id)) {
-      this.NAV_DATA.push(MODULES.scriptingTool);
-    }
+  
 
     this.dataSource.data = this.NAV_DATA;
     this.user = this.userService.user;

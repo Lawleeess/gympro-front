@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { REQ_STATUS } from 'src/app/constants/general';
-import { CustomerManagementService } from '../../services/customer-management.service';
+import { UserInfoService } from '../../services/user-info.service';
 import {
   AdwordsAccount,
   AnalyticsAccount,
@@ -37,12 +37,12 @@ export class NewCustomerComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private customerMgmtService: CustomerManagementService,
+    private customerMgmtService: UserInfoService,
     private userService: UserService
   ) {
     this.loggedInUserRole = this.userService.getUserRole(
       this.userService.user,
-      MODULES.clientManagement.id
+      MODULES.userInfo.id
     );
   }
 

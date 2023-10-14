@@ -14,15 +14,12 @@ import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 import { ConfigurationProvider } from 'src/app/app.constants';
 import { Providers, ProvidersShort } from 'src/app/enums/general';
-import { AdwordsAccount, TikTokAccount } from 'src/app/models/customer';
-import { Account, TableAction } from './form-new-customer-accounts.component';
+import { AdwordsAccount, TikTokAccount } from 'src/app/m./form-new-customer-accounts.component';
 import {
   CUSTOMER_CREDENTIAL_EMAIL,
   CUSTOMER_CURRENCY_CODES,
   CUSTOMER_TIME_ZONES,
-} from 'src/app/constants/custumers';
-
-import { FormNewCustomerAccountsComponent } from './form-new-customer-accounts.component';
+} from 'src/app/constants/custumer./form-new-customer-accounts.component';
 
 const ANGULAR_MATERIAL_MODULES = [
   MatFormFieldModule,

@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { isEmpty } from 'lodash-es';
 import { REQ_STATUS } from 'src/app/constants/general';
 import { Customer } from 'src/app/models/customer';
-import { CustomerTable } from 'src/app/modules/customer-management/pages/customers/customers.component';
-import { CustomerManagementService } from 'src/app/modules/customer-management/services/customer-management.service';
+import { CustomerTable } from 'src/app/modules/user-info/pages/customers/customers.component';
+import { UserInfoService } from 'src/app/modules/user-info/services/user-info.service';
 
 @Component({
   selector: 'app-customers-list',
@@ -33,7 +33,7 @@ export class CustomersListComponent implements OnInit {
 
 
   constructor(
-    private customerMgmtService: CustomerManagementService,
+    private customerMgmtService: UserInfoService,
     ) { }
 
   ngOnInit(): void {}

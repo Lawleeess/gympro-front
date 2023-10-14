@@ -5,7 +5,7 @@ import { Configuration } from 'src/app/app.constants';
 @Injectable({
   providedIn: 'root',
 })
-export class CustomerManagementService {
+export class UserInfoService {
   private baseUrl: string;
 
   constructor(private config: Configuration, private http: HttpClient) {
@@ -18,7 +18,7 @@ export class CustomerManagementService {
 
   getCustomer(customerID) {
     if (!customerID) {
-      throw new Error('[customer-management.service]: not customerID provided');
+      throw new Error('[user-info.service]: not customerID provided');
     }
     return this.http.get(
       `${this.baseUrl}/modules/client-management/clients/${customerID}`
@@ -27,7 +27,7 @@ export class CustomerManagementService {
 
   createCustomer(customer) {
     if (!customer) {
-      throw new Error('[customer-management.service]: not customer provided');
+      throw new Error('[user-info.service]: not customer provided');
     }
     return this.http.post(
       `${this.baseUrl}/modules/client-management/clients`,
@@ -37,7 +37,7 @@ export class CustomerManagementService {
 
   updateCustomer(customer) {
     if (!customer) {
-      throw new Error('[customer-management.service]: not customer provided');
+      throw new Error('[user-info.service]: not customer provided');
     }
     return this.http.put(
       `${this.baseUrl}/modules/client-management/clients/${customer.id}`,

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { REQ_STATUS } from 'src/app/constants/general';
 import { User } from 'src/app/models/user';
-import { CustomerManagementService } from 'src/app/modules/customer-management/services/customer-management.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -26,7 +25,6 @@ export class HomeComponent implements OnInit {
   // ];
 
   constructor(
-    private customerMgmtService: CustomerManagementService,
     private userService: UserService
   ) {
     this.user = this.userService.user;
@@ -34,22 +32,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCustomers();
-  }
+  } 
 
   getCustomers(): void {
     this.customersReqStatus = REQ_STATUS.LOADING;
-    this.customerMgmtService.getCustomers().subscribe(
-      (customers: any[]) => {
-        this.customers = customers.map((i) => {
-          const alias = i.name.replaceAll(' ', '').slice(0, 3);
-          return { ...i, alias };
-        });
-        this.customersReqStatus = REQ_STATUS.SUCCESS;
-      },
-      (error) => {
-        this.customers = [];
-        this.customersReqStatus = REQ_STATUS.ERROR;
-      }
-    );
   }
 }
