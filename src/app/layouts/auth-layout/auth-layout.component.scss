@@ -15,8 +15,8 @@
 
   .card {
     height: fit-content;
-    max-width: 440px;
-    width: 100%;
+    max-width: fit-content;
+    width: fit-content;
 
     .card-body {
       padding: 2rem 4rem;

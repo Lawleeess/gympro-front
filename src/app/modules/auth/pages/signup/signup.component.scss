@@ -1,3 +1,16 @@
-.form-item:not(:last-child) {
+.form-item {
   margin-bottom: 1.5rem;
+  width: 115%;
+}
+
+.signup_card{
+  width: 120%;
+}
+
+.mat-form-field{
+  width: 100%;
+}
+
+.padeo{
+  padding-right: 30px;
 }
