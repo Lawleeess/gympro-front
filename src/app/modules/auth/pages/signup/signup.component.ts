@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
 import { SignupInfo, UserService } from 'src/app/services/user.service';
-import { DEPARTMENTS } from 'src/app/constants/users';
-import { Department } from 'src/app/models/user';
 import { DatePipe } from '@angular/common';
 
 @Component({

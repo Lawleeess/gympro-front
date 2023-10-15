@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { registerLocaleData } from '@angular/common';
+import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { FormGroup} from '@angular/forms';
 import { Router } from '@angular/router';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
 import { SignupInfo, UserService } from 'src/app/services/user.service';
-import { DatePipe } from '@angular/common';
+import localeEs from '@angular/common/locales/es'
+registerLocaleData(localeEs,'es');
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
-  styleUrls: ['./user-info.component.scss']
+  styleUrls: ['./user-info.component.scss'],
+  providers: [{provide: LOCALE_ID, useValue:'es'}]
 })
 export class UserInfoComponent implements OnInit {
 
@@ -17,39 +20,54 @@ export class UserInfoComponent implements OnInit {
   reqStatus = 0;
   showPassword: boolean = false;
   showValidatePassword: boolean = false;
-
+  isDisabled: boolean = true;
+  imagePath: string;
+  userName: string;
+  userLastName: string;
+  birthday: string;
+  phoneNumber: string;
+  subscription: string;
+  userEmail: string;
   constructor(
-    private fb: FormBuilder,
     private userService: UserService,
     private router: Router,
     private snackService: SnackBarService
   ) {
-    if (!!this.userService.user.id) {
-      this.userService.logout(false);
-    }
   }
+
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      lastname: ['', Validators.required],
-      phone_number: ['', Validators.required],
-      birthday: ['', Validators.required],
-      email: ['', Validators.compose([Validators.email, Validators.required])],
-      password: [
-        '',
-        Validators.compose([Validators.minLength(3), Validators.required]),
-      ],
-      validatePassword: [
-        '',
-        Validators.compose([Validators.minLength(3), Validators.required]),
-      ],
-    });
+    this.setUserValues();
   }
 
-  formatDate(): string {
-    const date = new DatePipe('en-US').transform(this.form.controls['birthday'].value, 'yyyy-MM-dd')
-    return date
+  
+
+  setUserValues():void{
+    this.imagePath = !!window.localStorage.getItem('url_image')
+    ? JSON.parse(window.localStorage.getItem('url_image'))
+    : null;
+    this.userName = !!window.localStorage.getItem('user_name')
+    ? JSON.parse(window.localStorage.getItem('user_name'))
+    : null;
+    this.userLastName = !!window.localStorage.getItem('user_lastname')
+    ? JSON.parse(window.localStorage.getItem('user_lastname'))
+    : null;
+    this.userEmail = !!window.localStorage.getItem('user_email')
+    ? JSON.parse(window.localStorage.getItem('user_email'))
+    : null;
+    this.birthday = !!window.localStorage.getItem('birthday')
+    ? JSON.parse(window.localStorage.getItem('birthday'))
+    : null;
+    this.phoneNumber = !!window.localStorage.getItem('phone_number')
+    ? JSON.parse(window.localStorage.getItem('phone_number'))
+    : null;
+    this.subscription = !!window.localStorage.getItem('subscription')
+    ? JSON.parse(window.localStorage.getItem('subscription'))
+    : null;
+
+    document.getElementById("userName").textContent = this.userName + " " + this.userLastName;
+    document.getElementById("userEmail").textContent = this.userEmail;
+    document.getElementById("userPhone").textContent = this.phoneNumber;
   }
 
   signup(): void {
@@ -59,7 +77,7 @@ export class UserInfoComponent implements OnInit {
         name: this.form.controls['name'].value,
         lastname: this.form.controls['lastname'].value,
         phone_number: this.form.controls['phone_number'].value,
-        birthday: this.formatDate(),
+        birthday: this.form.controls['phone_number'].value,
         email: this.form.controls['email'].value,
         password: this.form.controls['password'].value,
       };
