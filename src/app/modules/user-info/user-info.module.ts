@@ -12,6 +12,7 @@ import { CustomerManagementRoutes } from './user-info.routing';
 import { FormNewCustomerDataComponent } from './components/form-new-client-data/form-new-customer-data.component';
 import { FormNewCustomerAccountsComponent } from './components/form-new-customer-accounts/form-new-customer-accounts.component';
 import { CustomerReviewComponent } from './components/customer-review/customer-review.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { CustomerReviewComponent } from './components/customer-review/customer-r
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    MatProgressBarModule,
     RouterModule.forChild(CustomerManagementRoutes),
   ],
 })

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
 import { SignupInfo, UserService } from 'src/app/services/user.service';
 import localeEs from '@angular/common/locales/es'
+
 registerLocaleData(localeEs,'es');
 
 @Component({
@@ -23,14 +24,18 @@ export class UserInfoComponent implements OnInit {
   isDisabled: boolean = true;
   imagePath: string;
   userName: string;
+  userID: string;
   userLastName: string;
   birthday: string;
   phoneNumber: string;
   subscription: string;
   userEmail: string;
+
+  loading: boolean = false; // Flag variable 
+  selectedFile: File = null; // Variable to store file 
+
   constructor(
     private userService: UserService,
-    private router: Router,
     private snackService: SnackBarService
   ) {
   }
@@ -40,9 +45,50 @@ export class UserInfoComponent implements OnInit {
     this.setUserValues();
   }
 
+
+  onFileChanged(event: any) {
+    this.selectedFile = event.target.files[0]
+  }
+
+  onUpload() {
+    this.loading = !this.loading; 
+    const uploadData = new FormData();
+    uploadData.append('image', this.selectedFile, this.selectedFile.name);
+
+      this.reqStatus = 1;
+
+        this.userService.uploadUserImage(uploadData, this.userID).subscribe(
+          () => {
+            this.reqStatus = 2;
+            this.snackService.loadSnackBar(
+              'Foto de perfil cargada con exito.',
+              null,
+              null,
+              7000
+            );
+            this.loading = false; // Flag variable  
+            window.location.reload();
+          },
+          (error) => {
+            const errorRef = error?.error?.message ? error.error.message : error;
+            const errorMsg = this.parseSignUpError(errorRef);
+            this.snackService.loadSnackBar(
+              `Error al subir imagen. ${
+                !!errorMsg ? errorMsg : 'Intente más tarde.'
+              }`,
+              'Cerrar'
+            );
   
+            console.error(`[user-info.component]: ${errorRef}`);
+            this.reqStatus = 3;
+          }
+        );
+  }
 
   setUserValues():void{
+    this.userID = !!window.localStorage.getItem('user_id')
+    ? JSON.parse(window.localStorage.getItem('user_id'))
+    : null;
     this.imagePath = !!window.localStorage.getItem('url_image')
     ? JSON.parse(window.localStorage.getItem('url_image'))
     : null;
@@ -70,44 +116,6 @@ export class UserInfoComponent implements OnInit {
     document.getElementById("userPhone").textContent = this.phoneNumber;
   }
 
-  signup(): void {
-    this.reqStatus = 1;
-    if (this.form.valid) {
-      const register: SignupInfo = {
-        name: this.form.controls['name'].value,
-        lastname: this.form.controls['lastname'].value,
-        phone_number: this.form.controls['phone_number'].value,
-        birthday: this.form.controls['phone_number'].value,
-        email: this.form.controls['email'].value,
-        password: this.form.controls['password'].value,
-      };
-      this.userService.signup(register).subscribe(
-        () => {
-          this.reqStatus = 2;
-          this.snackService.loadSnackBar(
-            'Registro exitoso. Espera a que un administrador te de acceso a algún módulo.',
-            null,
-            null,
-            7000
-          );
-          this.router.navigate(['/login']);
-        },
-        (error) => {
-          const errorRef = error?.error?.message ? error.error.message : error;
-          const errorMsg = this.parseSignUpError(errorRef);
-          this.snackService.loadSnackBar(
-            `Error al registrar. ${
-              !!errorMsg ? errorMsg : 'Intente más tarde.'
-            }`,
-            'Cerrar'
-          );
-
-          console.error(`[signup.component]: ${errorRef}`);
-          this.reqStatus = 3;
-        }
-      );
-    }
-  }
 
   parseSignUpError(error: any): string {
     if (typeof error !== 'string') {

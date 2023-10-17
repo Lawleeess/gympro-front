@@ -151,6 +151,13 @@ export class UserService {
     return this.http.post(`${this.baseUrl}/auth/signup`, signupInfo);
   }
 
+  uploadUserImage(uploadData: FormData, userID: string): Observable<object> {
+    if (!uploadData) {
+      return throwError('[user.service]: not uploadData provided');
+    }
+    return this.http.put(`${this.baseUrl}/users/image/${userID}`, uploadData);
+  }
+
   forgotPassword(recovery: ForgottPasword): Observable<object> {
     if (!recovery.email) {
       return throwError('[user.service]: not email provided');
