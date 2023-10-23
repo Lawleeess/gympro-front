@@ -1,0 +1,108 @@
+<div class="container">
+
+    <h1 class="mtop">Calcula tus metas</h1>
+
+    <form [formGroup]="form" (ngSubmit)="registerGoals()">
+
+          <!-- edad -->
+          <div class="form-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Edad</mat-label>
+              <mat-icon matPrefix><i class="fas fa-user"></i></mat-icon>
+              <input
+                matInput
+                type="number"
+                placeholder="Edad"
+                formControlName="age"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- genero -->
+          <div class="form-item mtop">
+            <mat-radio-group formControlName="gender">
+              <mat-radio-button value="hombre">Hombre</mat-radio-button>
+              <mat-radio-button  value="mujer" class="padding">Mujer</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!-- altura -->
+          <div class="form-item mtop" >
+            <mat-form-field appearance="outline">
+              <mat-label>Altura (cm)</mat-label>
+              <mat-icon matPrefix><i class="fas fa-user"></i></mat-icon>
+              <input
+                matInput
+                type="number"
+                placeholder="180 cm"
+                formControlName="height"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- peso -->
+          <div class="form-item mtop" >
+            <mat-form-field appearance="outline">
+              <mat-label>Peso (kg)</mat-label>
+              <mat-icon matPrefix><i class="fas fa-user"></i></mat-icon>
+              <input
+                matInput
+                type="number"
+                placeholder="80 kg"
+                formControlName="weight"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </div>
+
+
+          <!-- actividad -->
+          <div class="form-item mtop" >
+            <mat-form-field appearance="outline">
+              <mat-label >Actividad</mat-label>
+              <mat-icon matPrefix><i class="fas fa-user"></i></mat-icon>
+              <mat-select formControlName="activity">
+                <mat-option value="1.2">Sedentario: poco o ningún ejercicio</mat-option>
+                <mat-option value="1.375">Ligero: ejercicio 1-3 veces/semana</mat-option>
+                <mat-option value="1.55">Activo: ejercicio diario o ejercicio intenso 3-4 veces/semana</mat-option>
+                <mat-option value="1.725">Muy activo: ejercicio intenso 6-7 veces/semana</mat-option>
+                <mat-option value="1.9">Extra Activo: ejercicio muy intenso diario, o trabajo físico</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- meta -->
+          <div class="form-item mtop" >
+            <mat-form-field appearance="outline">
+              <mat-label >Tu meta</mat-label>
+              <mat-icon matPrefix><i class="fas fa-user"></i></mat-icon>
+              <mat-select formControlName="goal">
+                <mat-option value="1">Mantener el peso</mat-option>
+                <mat-option value="0.9">Pérdida de peso leve (0,25 kg por semana)</mat-option>
+                <mat-option value="0.79">Pérdida de peso (0,5 kg por semana)</mat-option>
+                <mat-option value="1.10">Aumento de peso leve (0,25 kg por semana)</mat-option>
+                <mat-option value="1.21">Aumento de peso (0,5 kg por semana)</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+      <!-- Button -->
+      <div class="text-right mtop">
+        <button
+          mat-flat-button
+          id="register-button-signup"
+          type="submit"
+          color="primary"
+          class="fit-content"
+          [disabled]="!form.valid"
+        >
+          Calcular
+        </button>
+      </div>
+  
+    </form>
+  
+  </div>
+  

@@ -13,20 +13,20 @@ export class UsersManagementService {
   private baseUrl: string;
 
   constructor(private config: Configuration, private http: HttpClient) {
-    this.baseUrl = `${this.config.endpoint}/modules/user-management/users`;
+    this.baseUrl = `${this.config.endpoint}/user-management/users`;
   }
 
   getUsers(
     offset: number = 0,
     limit: number = 50,
-    department?: string,
+    roles?: string,
     filter?: string
   ): Observable<Object> {
     let queryParams = `offset=${offset}&limit=${limit}`;
 
-    if (!!department) {
-      queryParams = `${queryParams}&department=${encodeURIComponent(
-        department
+    if (!!roles) {
+      queryParams = `${queryParams}&user_role=${encodeURIComponent(
+        roles
       )}`;
     }
 

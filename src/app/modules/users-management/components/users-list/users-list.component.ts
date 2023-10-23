@@ -5,9 +5,9 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { REQ_STATUS } from 'src/app/constants/general';
 import { MODULES } from 'src/app/constants/modules';
-import { DEPARTMENTS } from 'src/app/constants/users';
+import { USER_ROLE } from 'src/app/constants/users';
 import { PaginationEvent, PaginationParams } from 'src/app/models/general';
-import { Department, User } from 'src/app/models/user';
+import { Roles, User } from 'src/app/models/user';
 import { ModalComponent } from 'src/app/modules/shared/components/modal/modal.component';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
 import { UserService } from 'src/app/services/user.service';
@@ -54,11 +54,11 @@ export class UsersListComponent implements OnInit {
   @Output() refreshUsers = new EventEmitter<UsersParams | void>();
 
   initUsers: any[];
-  departments: Department[] = [
+  roles: Roles[] = [
     { value: 'all', label: 'Todos' },
-    ...Object.values(DEPARTMENTS),
+    ...Object.values(USER_ROLE),
   ];
-  selectedDepartment: string = this.departments[0].value;
+  selectedDepartment: string = this.roles[0].value;
   filter = new FormControl({ value: null, disabled: true });
 
   usersParams: UsersParams;
@@ -164,7 +164,7 @@ export class UsersListComponent implements OnInit {
 
     this.usersParams = {
       ...this.usersParams,
-      department:
+      roles:
         !!this.selectedDepartment && this.selectedDepartment !== 'all'
           ? this.selectedDepartment
           : null,
@@ -181,6 +181,6 @@ export class UsersListComponent implements OnInit {
 }
 
 export class UsersParams extends PaginationParams {
-  department?: string;
+  roles?: string;
   filter?: string;
 }

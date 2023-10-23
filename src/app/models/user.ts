@@ -9,8 +9,32 @@ export class User {
   birthday: string;
   subscription: string;
   url_image: string;
+  user_role: string;
+
+  userProgress?: UserProgress; 
+  userGoals?: UserGoals; 
 
 }
+
+export class UserGoals{
+  imc:     string;
+  bmr:     string;
+	tdee:    string;
+	goal:    string;
+	protein: string;
+	carbs:   string;
+	fat:     string;
+}
+
+export class UserProgress{
+  age:      number;     
+	gender:   string; 
+	height:   number;     
+	weight:   number;
+	activity: string; 
+	goal:     string; 
+}
+
 
 export class Module {
   name: string;
@@ -25,7 +49,7 @@ export class Customers {
 interface ModuleClient {
   id: string;
 }
-export interface Department {
+export interface Roles {
   value: string;
   label: string;
 }

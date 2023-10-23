@@ -1,30 +1,11 @@
-export const DEPARTMENTS = {
-  administration: {
-    value: 'administración',
-    label: 'Administración',
+export const USER_ROLE = {
+  user: {
+    value: 'user',
+    label: 'Usuario',
   },
-  accounts: {
-    value: 'cuentas',
-    label: 'Cuentas',
+  admin: {
+    value: 'admin',
+    label: 'Administrador',
   },
-  data: {
-    value: 'datos',
-    label: 'Datos',
-  },
-  finance: {
-    value: 'finanzas',
-    label: 'Finanzas',
-  },
-  operations: {
-    value: 'operaciones',
-    label: 'Operaciones',
-  },
-  humanResources: {
-    value: 'recursos humanos',
-    label: 'Recursos humanos',
-  },
-  external: {
-    value: 'external',
-    label: 'Externo',
-  },
+
 };

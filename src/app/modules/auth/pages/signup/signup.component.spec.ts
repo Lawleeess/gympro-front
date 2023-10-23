@@ -27,7 +27,7 @@ import { SignupComponent } from './signup.component';
 import { LoginComponent } from '../login/login.component';
 
 import { ConfigurationProvider } from 'src/app/app.constants';
-import { DEPARTMENTS } from 'src/app/constants/users';
+import { USER_ROLE } from 'src/app/constants/users';
 
 const ANGULAR_MATERIAL_MODULES = [
   MatSnackBarModule,
@@ -78,7 +78,7 @@ describe('SignupComponent', () => {
   it('should require a valid email', () => {
     const name = 'John';
     const lastname = 'Doe';
-    const department = DEPARTMENTS.accounts.value;
+    const department = USER_ROLE.user.value;
     const email = 'invalid-email123';
     const password = '123456';
 
@@ -95,7 +95,7 @@ describe('SignupComponent', () => {
   it('should require a valid password', () => {
     const name = 'John';
     const lastname = 'Doe';
-    const department = DEPARTMENTS.accounts.value;
+    const department = USER_ROLE.user.value;
     const email = 'johndoe@epa.digital';
     const password = '';
 
@@ -112,7 +112,7 @@ describe('SignupComponent', () => {
   it(`should show error message with invalid password`, () => {
     const name = 'John';
     const lastname = 'Doe';
-    const department = DEPARTMENTS.data.value;
+    const department = USER_ROLE.user.value;
     const email = 'johndoe@epa.digital';
     const password = '1';
     const validatePassword = '123456';
@@ -139,7 +139,7 @@ describe('SignupComponent', () => {
   it(`should show error message with invalid validate password`, () => {
     const name = 'John';
     const lastname = 'Doe';
-    const department = DEPARTMENTS.data.value;
+    const department = USER_ROLE.user.value;
     const email = 'johndoe@epa.digital';
     const password = '123456';
     const validatePassword = '1';
@@ -166,7 +166,7 @@ describe('SignupComponent', () => {
   it('should handle a valid form', () => {
     const name = 'John';
     const lastname = 'Doe';
-    const department = DEPARTMENTS.accounts.value;
+    const department = USER_ROLE.user.value;
     const email = 'johndoe@epa.digital';
     const password = '123456abc.';
     const validatePassword = '123456abc.';
@@ -184,7 +184,7 @@ describe('SignupComponent', () => {
   it('should match password and validate password', () => {
     const name = 'John';
     const lastname = 'Doe';
-    const department = DEPARTMENTS.data.value;
+    const department = USER_ROLE.user.value;
     const email = 'johndoe@epa.digital';
     const password = '123456';
     const validatePassword = 'abcde';
@@ -210,7 +210,7 @@ describe('SignupComponent', () => {
   it(`should show error message when passwords don't match`, () => {
     const name = 'John';
     const lastname = 'Doe';
-    const department = DEPARTMENTS.data.value;
+    const department = USER_ROLE.user.value;
     const email = 'johndoe@epa.digital';
     const password = '123456';
     const validatePassword = 'aaa';

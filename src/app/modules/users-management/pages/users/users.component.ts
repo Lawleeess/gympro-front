@@ -28,7 +28,7 @@ export class UsersComponent implements OnInit {
       .getUsers(
         requestParams?.offset,
         requestParams?.limit,
-        requestParams?.department,
+        requestParams?.roles,
         requestParams?.filter
       )
       .subscribe(

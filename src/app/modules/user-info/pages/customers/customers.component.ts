@@ -5,7 +5,7 @@ import { MODULES, ROLES } from 'src/app/constants/modules';
 import { Customer } from 'src/app/models/customer';
 import { TableColumn } from 'src/app/modules/shared/components/generic-table/generic-table.component';
 import { UserService } from 'src/app/services/user.service';
-import { UserInfoService } from '../../services/user-info.service';
+import { UsersManagementService } from 'src/app/modules/users-management/services/users-management.service';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -49,6 +49,7 @@ export class CustomersComponent implements OnInit {
   loggedInUserRole: string;
 
   constructor(
+    private customerMgmtService: UsersManagementService,
     private userService: UserService,
     private router: Router
   ) {
@@ -66,9 +67,22 @@ export class CustomersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCustomers();
   }
 
-
+  getCustomers(): void {
+    this.customers.reqStatus = REQ_STATUS.LOADING;
+    this.customerMgmtService.getUsers().subscribe(
+      (resp: Customer[]) => {
+        this.customers.data = resp;
+        this.customers.reqStatus = REQ_STATUS.SUCCESS;
+      },
+      (error) => {
+        this.customers.data = [];
+        this.customers.reqStatus = REQ_STATUS.ERROR;
+      }
+    );
+  }
 
   selectCustomer(selection): void {
     const customer = selection.row;

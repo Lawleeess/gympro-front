@@ -1,11 +1,9 @@
 import { Routes } from '@angular/router';
 
 import { DashboardComponent } from 'src/app/modules/dashboard/dashboard.component';
-import { ScriptingToolComponent } from 'src/app/modules/scripting-tool/scripting-tool.component';
 import { UserInfoComponent } from 'src/app/modules/user-info/user-info.component';
-import { AuditComponent } from 'src/app/modules/audit/audit.component';
 import { UsersManagementComponent } from 'src/app/modules/users-management/users-management.component';
-import { BudgetManagementComponent } from 'src/app/modules/budget-management/budget-management.component';
+import { GoalsComponent } from 'src/app/modules/goals/goals.component';
 
 export const DashboardLayoutRoutes: Routes = [
   {
@@ -25,20 +23,6 @@ export const DashboardLayoutRoutes: Routes = [
       ).then((m) => m.UserInfoModule),
   },
   {
-    path: 'scripting-tool',
-    component: ScriptingToolComponent,
-    loadChildren: () =>
-      import('src/app/modules/scripting-tool/scripting-tool.module').then(
-        (m) => m.ScriptingToolModule
-      ),
-  },
-  {
-    path: 'audit',
-    component: AuditComponent,
-    loadChildren: () =>
-      import('src/app/modules/audit/audit.module').then((m) => m.AuditModule),
-  },
-  {
     path: 'users',
     component: UsersManagementComponent,
     loadChildren: () =>
@@ -47,11 +31,9 @@ export const DashboardLayoutRoutes: Routes = [
       ),
   },
   {
-    path: 'budgets',
-    component: BudgetManagementComponent,
+    path: 'goals',
+    component: GoalsComponent,
     loadChildren: () =>
-      import('src/app/modules/budget-management/budget-management.module').then(
-        (m) => m.BudgetManagementModule
-      ),
+      import('src/app/modules/goals/goals.module').then((m) => m.GoalsModule),
   },
 ];

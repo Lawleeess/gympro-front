@@ -63,7 +63,7 @@ export class UserInfoComponent implements OnInit {
             this.snackService.loadSnackBar(
               'Foto de perfil cargada con exito.',
               null,
-              null,
+              null, 
               7000
             );
             this.loading = false; // Flag variable  

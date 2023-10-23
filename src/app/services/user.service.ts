@@ -138,6 +138,18 @@ export class UserService {
               'url_image',
               JSON.stringify(this.user.url_image)
             );
+            window.localStorage.setItem(
+              'user_role',
+              JSON.stringify(this.user.user_role)
+            );
+            window.localStorage.setItem(
+              'userProgress',
+              JSON.stringify(this.user.userProgress)
+            );
+            window.localStorage.setItem(
+              'userGoals',
+              JSON.stringify(this.user.userGoals)
+            );
             this._loggedIn = true;
           }
         })
@@ -149,6 +161,13 @@ export class UserService {
       return throwError('[user.service]: not signupInfo provided');
     }
     return this.http.post(`${this.baseUrl}/auth/signup`, signupInfo);
+  }
+
+  registerGoals(goalsInfo: GoalsInfo, userID: string): Observable<object> {
+    if (!goalsInfo) {
+      return throwError('[user.service]: not goalsInfo provided');
+    }
+    return this.http.post(`${this.baseUrl}/users/goals/${userID}`, goalsInfo);
   }
 
   uploadUserImage(uploadData: FormData, userID: string): Observable<object> {
@@ -214,6 +233,15 @@ export interface SignupInfo {
   birthday: string;
   email: string;
   password: string;
+}
+
+export interface GoalsInfo {
+  age: string;
+  gender: string;
+  height: string;
+  weight: string;
+  activity: string;
+  goal: string;
 }
 
 export interface ForgottPasword {

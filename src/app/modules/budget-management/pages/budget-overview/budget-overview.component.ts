@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { REQ_STATUS } from 'src/app/constants/general';
 import { MODULES, ROLES } from 'src/app/constants/modules';
-import { DEPARTMENTS } from 'src/app/constants/users';
+import { USER_ROLE } from 'src/app/constants/users';
 import {
   IconifySettings,
   selectedCell,
