@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
 import { GoalsInfo, SignupInfo, UserService } from 'src/app/services/user.service';
 import { DatePipe } from '@angular/common';
+import { UserGoals,UserProgress } from 'src/app/models/user';
 
 @Component({
   selector: 'app-goals',
@@ -20,7 +21,8 @@ export class GoalsComponent implements OnInit {
   showPassword: boolean = false;
   showValidatePassword: boolean = false;
   userID: string;
-
+  userGoal : UserGoals;
+  userProgress : UserProgress;
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +45,7 @@ export class GoalsComponent implements OnInit {
     this.userID = !!window.localStorage.getItem('user_id')
     ? JSON.parse(window.localStorage.getItem('user_id'))
     : null;
+    this.initGoals();
   }
 
   formatDate(): string {
@@ -62,7 +65,7 @@ export class GoalsComponent implements OnInit {
         goal: this.form.controls['goal'].value,
       };
       this.userService.registerGoals(goals, this.userID).subscribe(
-        () => {
+        (userGoal: UserGoals) => {
           this.reqStatus = 2;
           this.snackService.loadSnackBar(
             'Metas obtenidas con exito',
@@ -70,6 +73,7 @@ export class GoalsComponent implements OnInit {
             null,
             7000
           );
+          this.setGoals(userGoal, goals);
           // window.location.reload();
         },
         (error) => {
@@ -87,6 +91,54 @@ export class GoalsComponent implements OnInit {
         }
       );
     }
+  }
+
+  setGoals(userGoal: UserGoals, goalsInfo: GoalsInfo){
+    document.getElementById("imc").setAttribute("value", userGoal.imc + " kg/m²");
+    document.getElementById("bmr").setAttribute("value", userGoal.bmr + " kcal/día");
+    document.getElementById("tdee").setAttribute("value", userGoal.tdee + " kcal/día");
+    document.getElementById("goal").setAttribute("value", userGoal.goal + " kcal/día");
+    document.getElementById("protein").setAttribute("value", userGoal.protein + " g/día");
+    document.getElementById("carbs").setAttribute("value", userGoal.carbs + " g/día");
+    document.getElementById("fat").setAttribute("value", userGoal.fat + " g/día");
+
+
+    window.localStorage.setItem(
+      'userProgress',
+      JSON.stringify(goalsInfo)
+    );
+  }
+
+  initGoals(){
+    this.userProgress = !!window.localStorage.getItem('userProgress')
+    ? JSON.parse(window.localStorage.getItem('userProgress'))
+    : null;
+
+    if (this.userProgress.age != null && this.userProgress.goal != null) {
+      this.form.controls['age'].setValue(this.userProgress.age)
+      this.form.controls['gender'].setValue(this.userProgress.gender)
+      this.form.controls['height'].setValue(this.userProgress.height)
+      this.form.controls['weight'].setValue(this.userProgress.weight)
+      this.form.controls['activity'].setValue(this.userProgress.activity)
+      this.form.controls['goal'].setValue(this.userProgress.goal)
+    }
+
+ 
+    this.userGoal = !!window.localStorage.getItem('userGoals')
+    ? JSON.parse(window.localStorage.getItem('userGoals'))
+    : null;
+    
+    if (this.userGoal.imc != null && this.userGoal.protein != null) {
+      document.getElementById("imc").setAttribute("value", this.userGoal.imc + " kg/m²");
+      document.getElementById("bmr").setAttribute("value", this.userGoal.bmr + " kcal/día");
+      document.getElementById("tdee").setAttribute("value", this.userGoal.tdee + " kcal/día");
+      document.getElementById("goal").setAttribute("value", this.userGoal.goal + " kcal/día");
+      document.getElementById("protein").setAttribute("value", this.userGoal.protein + " g/día");
+      document.getElementById("carbs").setAttribute("value", this.userGoal.carbs + " g/día");
+      document.getElementById("fat").setAttribute("value", this.userGoal.fat + " g/día");
+    }
+
+
   }
 
   parseSignUpError(error: any): string {

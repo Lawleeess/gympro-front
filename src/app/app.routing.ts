@@ -6,9 +6,25 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { DashboardLayoutComponent } from './layouts/dashboard-layout/dashboard-layout.component';
 import { LoginGuard } from './login.guard';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'auth', redirectTo: 'auth/login', pathMatch: 'full' },
+  {
+    path: 'home',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: 'main',
+        loadChildren: () =>
+          import('./layouts/main-layout/main-layout.module').then(
+            (m) => m.MainLayoutModule
+          ),
+        canActivate: [LoginGuard],
+      },
+    ],
+  },
   {
     path: 'dashboard',
     component: DashboardLayoutComponent,
@@ -28,7 +44,7 @@ const routes: Routes = [
     component: AuthLayoutComponent,
     children: [
       {
-        path: '',
+        path: 'auth',
         loadChildren: () =>
           import('./layouts/auth-layout/auth-layout.module').then(
             (m) => m.AuthLayoutModule

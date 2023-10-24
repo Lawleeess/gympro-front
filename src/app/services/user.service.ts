@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, throwError } from 'rxjs';
 import { Configuration } from 'src/app/app.constants';
-import { Preference, PreferenceDetails, User } from 'src/app/models/user';
+import { Preference, PreferenceDetails, User, UserGoals } from 'src/app/models/user';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MODULES, PAGES } from '../constants/modules';
@@ -14,7 +14,10 @@ export class UserService {
   private baseUrl: string;
 
   private _user: User = new User();
+  // private _userGoal: UserGoals = new UserGoals();
+
   private userSource = new Subject<User>();
+  // private userGoalSource = new Subject<UserGoals>();
   user$ = this.userSource.asObservable();
 
   private _loggedIn = false;
@@ -30,6 +33,18 @@ export class UserService {
     this._user = user;
     this.userSource.next(this._user);
   }
+
+  // get userGoal(): UserGoals {
+  //   return this._userGoal;
+  // }
+
+  // set userGoal(userGoal: UserGoals) {
+  //   if (!userGoal) {
+  //     return;
+  //   }
+  //   this._userGoal = userGoal;
+  //   this.userGoalSource.next(this._userGoal);
+  // }
 
   get loggedIn(): boolean {
     return !!JSON.parse(window.localStorage.getItem('auth_token'));
@@ -166,8 +181,19 @@ export class UserService {
   registerGoals(goalsInfo: GoalsInfo, userID: string): Observable<object> {
     if (!goalsInfo) {
       return throwError('[user.service]: not goalsInfo provided');
-    }
-    return this.http.post(`${this.baseUrl}/users/goals/${userID}`, goalsInfo);
+    }    
+    return this.http
+      .post(`${this.baseUrl}/users/goals/${userID}`, goalsInfo)
+      .pipe(
+        tap((userGoal: UserGoals) => {
+          if (userGoal) {
+            window.localStorage.setItem(
+              'userGoals',
+              JSON.stringify(userGoal)
+            );
+          }
+        })
+      );
   }
 
   uploadUserImage(uploadData: FormData, userID: string): Observable<object> {
@@ -189,7 +215,7 @@ export class UserService {
     this._user = new User();
 
     if (redirectToLogin) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
     }
     window.localStorage.clear();
   }

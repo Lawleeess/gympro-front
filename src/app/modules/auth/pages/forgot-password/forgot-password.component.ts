@@ -46,7 +46,7 @@ export class ForgotPasswordComponent implements OnInit {
             null,
             7000
           );
-          this.router.navigate(['/login']);
+          this.router.navigate(['/auth/login']);
         },
         (error) => {
           const errorRef = error?.message ? error.message : error;

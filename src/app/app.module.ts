@@ -15,6 +15,7 @@ import { ComponentsModule } from './components/components.module';
 import { LoginGuard } from './login.guard';
 import { SessionInterceptor } from './services/interceptor.service';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     AppComponent,
     DashboardLayoutComponent,
     AuthLayoutComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    MainLayoutComponent
   ],
   imports: [
     NgbModule,

@@ -20,7 +20,7 @@ export class LoginGuard implements CanActivate {
             return true;
         } else {
             // Store the attempted URL for redirecting
-            this.router.navigate(['/login']);
+            this.router.navigate(['/auth/login']);
         }
         return false;
     }
