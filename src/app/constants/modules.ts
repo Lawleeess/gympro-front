@@ -1,13 +1,7 @@
 export const MODULES = {
-  userInfo: {
-    id: 'userInfo',
-    name: 'Perfil',
-    type: 'module',
-    icon: 'fas fa-user-circle',
-    redirectPath: '/dashboard/profile',
-  },
+
   userManagement: {
-    id: 'userManagement',
+    id: 'userManagement', 
     name: 'Administración de usuarios',
     type: 'module',
     icon: 'fas fa-users',
@@ -20,12 +14,12 @@ export const MODULES = {
     icon: 'fas fa-tasks',
     redirectPath: '/dashboard/goals',
   },
-  budgetManagement: {
-    id: 'routines',
-    name: 'Administración de presupuestos',
+  routinesCalendar: {
+    id: 'routinesCalendar',
+    name: 'Rutina',
     type: 'module',
-    icon: 'fas fa-hand-holding-usd',
-    redirectPath: '/dashboard/budgets',
+    icon: 'fas fa-calendar',
+    redirectPath: '/dashboard/routine',
   },
   audit: {
     id: 'audit',

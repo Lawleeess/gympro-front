@@ -54,11 +54,7 @@ export class CustomersComponent implements OnInit {
     private router: Router
   ) {
     const editIcon = 'fas fa-edit';
-
-    this.loggedInUserRole = this.userService.getUserRole(
-      this.userService.user,
-      MODULES.userInfo.id
-    );
+;
 
     if (this.loggedInUserRole === ROLES.admin.id) {
       this.customersTableColumns[this.customersTableColumns.length - 1].icon =

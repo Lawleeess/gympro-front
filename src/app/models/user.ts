@@ -13,7 +13,26 @@ export class User {
 
   userProgress?: UserProgress; 
   userGoals?: UserGoals; 
+  userRoutine?: UserRoutine; 
 
+}
+
+export class UserRoutine{
+	monday    : Routine[] | []
+	tuesday   : Routine[] | []
+	wednesday : Routine[] | []
+	thursday  : Routine[] | []
+	friday    : Routine[] | []
+	saturday  : Routine[] | []
+}
+
+export class Routine{
+  id       :   string 
+  muscle_group: string
+  name        :string 
+  description :string 
+  video_url    :string 
+  url_image: string
 }
 
 export class UserGoals{

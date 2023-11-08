@@ -165,10 +165,36 @@ export class UserService {
               'userGoals',
               JSON.stringify(this.user.userGoals)
             );
+            this.setUserRoutineNull();
+            window.localStorage.setItem(
+              'userRoutine',
+              JSON.stringify(this.user.userRoutine)
+            );
             this._loggedIn = true;
           }
         })
       );
+  }
+
+  setUserRoutineNull(): void{
+    if (this.user.userRoutine.monday == null){
+      this.user.userRoutine.monday = []
+    }
+    if (this.user.userRoutine.tuesday == null){
+      this.user.userRoutine.tuesday = []
+    }
+    if (this.user.userRoutine.wednesday == null){
+      this.user.userRoutine.wednesday = []
+    }
+    if (this.user.userRoutine.thursday == null){
+      this.user.userRoutine.thursday = []
+    }
+    if (this.user.userRoutine.friday == null){
+      this.user.userRoutine.friday = []
+    }
+    if (this.user.userRoutine.saturday == null){
+      this.user.userRoutine.saturday = []
+    }
   }
 
   signup(signupInfo: SignupInfo): Observable<object> {
@@ -176,6 +202,13 @@ export class UserService {
       return throwError('[user.service]: not signupInfo provided');
     }
     return this.http.post(`${this.baseUrl}/auth/signup`, signupInfo);
+  }
+
+  getRoutines(muscleGroup: string): Observable<object> {
+    if (!muscleGroup) {
+      return throwError('[user.service]: not muscleGroup provided');
+    }
+    return this.http.get(`${this.baseUrl}/routines?muscle_group=${muscleGroup}`);
   }
 
   registerGoals(goalsInfo: GoalsInfo, userID: string): Observable<object> {

@@ -4,6 +4,7 @@ import { DashboardComponent } from 'src/app/modules/dashboard/dashboard.componen
 import { UserInfoComponent } from 'src/app/modules/user-info/user-info.component';
 import { UsersManagementComponent } from 'src/app/modules/users-management/users-management.component';
 import { GoalsComponent } from 'src/app/modules/goals/goals.component';
+import { RoutinesComponent } from 'src/app/modules/routines/routines.component';
 
 export const DashboardLayoutRoutes: Routes = [
   {
@@ -35,5 +36,11 @@ export const DashboardLayoutRoutes: Routes = [
     component: GoalsComponent,
     loadChildren: () =>
       import('src/app/modules/goals/goals.module').then((m) => m.GoalsModule),
+  },
+  {
+    path: 'routine',
+    component: RoutinesComponent,
+    loadChildren: () =>
+      import('src/app/modules/routines/routines.module').then((m) => m.RoutinesModule),
   },
 ];

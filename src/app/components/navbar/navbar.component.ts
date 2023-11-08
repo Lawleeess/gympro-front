@@ -53,6 +53,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.userService.logout();
   }
 
+  profile(): void {
+    this.router.navigate(['/dashboard/profile'])
+  }
+
   ngOnDestroy(): void {
     this.routeSub?.unsubscribe();
     this.userSubs?.unsubscribe();
