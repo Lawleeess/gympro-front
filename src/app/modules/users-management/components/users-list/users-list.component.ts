@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { getPaginationParams } from 'src/app/tools/functions/general';
 import { UsersManagementService } from '../../services/users-management.service';
 import { isEmpty } from 'lodash-es';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-list',
@@ -22,13 +23,13 @@ import { isEmpty } from 'lodash-es';
 })
 export class UsersListComponent implements OnInit {
   // @Input() users
-  private _users: any[];
-  @Input() set users(value: any[]) {
+  private _users: User[];
+  @Input() set users(value: User[]) {
     this._users = value;
     this.initUsers = this.users;
   }
 
-  get users(): any[] {
+  get users(): User[] {
     return this._users;
   }
 
@@ -53,6 +54,8 @@ export class UsersListComponent implements OnInit {
   @Input() usersTotal: number = 20;
   @Output() refreshUsers = new EventEmitter<UsersParams | void>();
 
+  imagePath: string;
+
   initUsers: any[];
   roles: Roles[] = [
     { value: 'all', label: 'Todos' },
@@ -72,7 +75,8 @@ export class UsersListComponent implements OnInit {
     private dialog: MatDialog,
     private snackService: SnackBarService,
     private usersManagementService: UsersManagementService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
   ) {
     this.loggedInUser = this.userService.user;
     this.loggedInUserRole = this.userService.getUserRole(
@@ -102,6 +106,9 @@ export class UsersListComponent implements OnInit {
 
   applyFilter() {
     this.setRequestParams();
+  }
+  toAddAdmin(): void{
+    this.router.navigate(['/dashboard/register']);
   }
 
   confirmDeletetion(user): void {

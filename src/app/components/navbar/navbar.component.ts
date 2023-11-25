@@ -41,6 +41,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     if (route.includes('/dashboard/home')) {
       return 'Inicio';
+    }else if (route.includes('/dashboard/register')) {
+      return 'Nuevo administrador';
     }
 
     const module = Object.values(MODULES).find((i) =>

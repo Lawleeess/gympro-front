@@ -5,9 +5,10 @@ import { MODULES, MODULES_TYPES, ROLES } from 'src/app/constants/modules';
 import { ModalComponent } from 'src/app/modules/shared/components/modal/modal.component';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
 import { isEmpty } from 'lodash-es';
-import { Module } from 'src/app/models/user';
+import { Module, User } from 'src/app/models/user';
 import { UsersManagementService } from '../../services/users-management.service';
 import { UserService } from 'src/app/services/user.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-modules-list',
@@ -15,9 +16,9 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./modules-list.component.scss'],
 })
 export class ModulesListComponent implements OnInit {
-  private _user: any;
+  private _user: User;
 
-  @Input() set user(value: any) {
+  @Input() set user(value: User) {
     this._user = value;
 
     // clear filter
@@ -29,13 +30,16 @@ export class ModulesListComponent implements OnInit {
     }
   }
 
-  get user(): any {
+  get user(): User {
     return this._user;
   }
   @Input() status = REQ_STATUS.INITIAL;
   @Input() disableActions: boolean = false;
   @Input() allowActions: boolean = false;
   @Output() refreshUser = new EventEmitter<boolean>();
+
+  userID: string;
+  errorMsg: string;
 
   modules: ModuleData[];
   initModules: ModuleData[];
@@ -50,10 +54,23 @@ export class ModulesListComponent implements OnInit {
     private dialog: MatDialog,
     private snackService: SnackBarService,
     private usersManagementService: UsersManagementService,
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      if (!!params.id) {
+        this.userID = params.id;
+        this.errorMsg && delete this.errorMsg;
+      } else {
+        console.error(
+          '[user-details.component]: not user id provided as query param in the route'
+        );
+        this.errorMsg = 'No fue posible encontrar el id del usuario.';
+      }
+    });
+  }
 
   parseUserModules(): ModuleData[] {
     const allowModulesForActiveUser: Module[] =
@@ -203,8 +220,10 @@ export class ModulesListComponent implements OnInit {
     );
     updatedModuleList.splice(moduleIndex, 1);
 
+    this.user.modulesWithPermission = updatedModuleList;
+
     this.usersManagementService
-      .updateUserModules(this.user.id, updatedModuleList)
+      .updateUserData(this.user, this.userID)
       .subscribe(
         () => {
           this.snackService.loadSnackBar(

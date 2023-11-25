@@ -5,6 +5,9 @@ import { UserInfoComponent } from 'src/app/modules/user-info/user-info.component
 import { UsersManagementComponent } from 'src/app/modules/users-management/users-management.component';
 import { GoalsComponent } from 'src/app/modules/goals/goals.component';
 import { RoutinesComponent } from 'src/app/modules/routines/routines.component';
+import { AddAdminComponent } from 'src/app/modules/add-admin/add-admin.component';
+import { AddAdminModule } from '../../modules/add-admin/add-admin.module';
+import { ExercisesComponent } from 'src/app/modules/exercises/exercises.component';
 
 export const DashboardLayoutRoutes: Routes = [
   {
@@ -42,5 +45,17 @@ export const DashboardLayoutRoutes: Routes = [
     component: RoutinesComponent,
     loadChildren: () =>
       import('src/app/modules/routines/routines.module').then((m) => m.RoutinesModule),
+  },
+  {
+    path: 'register',
+    component: AddAdminComponent,
+    loadChildren: () =>
+      import('src/app/modules/add-admin/add-admin.module').then((m) => m.AddAdminModule),
+  },
+  {
+    path: 'exercises',
+    component: ExercisesComponent,
+    loadChildren: () =>
+      import('src/app/modules/exercises/exercises.module').then((m) => m.ExercisesModule),
   },
 ];

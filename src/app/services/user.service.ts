@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, throwError } from 'rxjs';
 import { Configuration } from 'src/app/app.constants';
-import { Preference, PreferenceDetails, User, UserGoals } from 'src/app/models/user';
+import { Preference, PreferenceDetails, User, UserGoals, UserRoutine } from 'src/app/models/user';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MODULES, PAGES } from '../constants/modules';
@@ -58,20 +58,32 @@ export class UserService {
     this._loggedIn = !!JSON.parse(window.localStorage.getItem('auth_token'));
 
     this.user.id = !!window.localStorage.getItem('user_id')
-      ? JSON.parse(window.localStorage.getItem('user_id'))
-      : null;
-
-    this.user.email = !!window.localStorage.getItem('user_email')
-      ? JSON.parse(window.localStorage.getItem('user_email'))
-      : null;
-
+    ? JSON.parse(window.localStorage.getItem('user_id'))
+    : null;
+    this.user.url_image = !!window.localStorage.getItem('url_image')
+    ? JSON.parse(window.localStorage.getItem('url_image'))
+    : null;
     this.user.name = !!window.localStorage.getItem('user_name')
-      ? JSON.parse(window.localStorage.getItem('user_name'))
-      : null;
-
+    ? JSON.parse(window.localStorage.getItem('user_name'))
+    : null;
     this.user.lastname = !!window.localStorage.getItem('user_lastname')
-      ? JSON.parse(window.localStorage.getItem('user_lastname'))
-      : null;
+    ? JSON.parse(window.localStorage.getItem('user_lastname'))
+    : null;
+    this.user.email = !!window.localStorage.getItem('user_email')
+    ? JSON.parse(window.localStorage.getItem('user_email'))
+    : null;
+    this.user.birthday = !!window.localStorage.getItem('birthday')
+    ? JSON.parse(window.localStorage.getItem('birthday'))
+    : null;
+    this.user.phone_number = !!window.localStorage.getItem('phone_number')
+    ? JSON.parse(window.localStorage.getItem('phone_number'))
+    : null;
+    this.user.subscription = !!window.localStorage.getItem('subscription')
+    ? JSON.parse(window.localStorage.getItem('subscription'))
+    : null;
+    this.user.userRoutine = !!window.localStorage.getItem('userRoutine')
+    ? JSON.parse(window.localStorage.getItem('userRoutine'))
+    : null;
 
     if (window.localStorage.getItem('modules')) {
       this.user.modulesWithPermission = !!window.localStorage.getItem('modules')
@@ -211,6 +223,24 @@ export class UserService {
     return this.http.get(`${this.baseUrl}/routines?muscle_group=${muscleGroup}`);
   }
 
+  saveRoutinesUser(userID: string, routine: UserRoutine): Observable<object> {
+    if (!routine) {
+      return throwError('[user.service]: not routine provided');
+    }    
+    return this.http
+      .post(`${this.baseUrl}/users/routines/${userID}`, routine)
+      .pipe(
+        tap((userGoal: UserGoals) => {
+          if (userGoal) {
+            window.localStorage.setItem(
+              'userGoals',
+              JSON.stringify(userGoal)
+            );
+          }
+        })
+      );
+  }
+
   registerGoals(goalsInfo: GoalsInfo, userID: string): Observable<object> {
     if (!goalsInfo) {
       return throwError('[user.service]: not goalsInfo provided');
@@ -292,6 +322,7 @@ export interface SignupInfo {
   birthday: string;
   email: string;
   password: string;
+  user_role?: string;
 }
 
 export interface GoalsInfo {

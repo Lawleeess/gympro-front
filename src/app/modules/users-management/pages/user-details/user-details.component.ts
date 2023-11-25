@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, LOCALE_ID, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { REQ_STATUS } from 'src/app/constants/general';
@@ -10,15 +10,20 @@ import { UsersManagementService } from '../../services/users-management.service'
 import { isEmpty } from 'lodash-es';
 import { UserService } from 'src/app/services/user.service';
 import { Customers } from '../../../../models/user';
+import * as moment from 'moment';
+import localeEs from '@angular/common/locales/es'
+import { formatDate, registerLocaleData } from '@angular/common';
+registerLocaleData(localeEs,'es');
 
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss'],
+  providers: [{provide: LOCALE_ID, useValue:'es'}],
 })
 export class UserDetailsComponent implements OnInit {
   userID: string;
-  user;
+  user: User;
   userReqStatus: number = REQ_STATUS.INITIAL;
   updateReqStatus: number = REQ_STATUS.INITIAL;
   deleteReqStatus: number = REQ_STATUS.INITIAL;
@@ -26,13 +31,15 @@ export class UserDetailsComponent implements OnInit {
   modulesToAdd: Module[];
   toolsToAdd: Module[];
   showNewModuleForm: boolean = false;
+  showEditUser: boolean = false;
   showNewToolForm: boolean = false;
   errorMsg: string;
   toolUpdating: Module;
   toolModuleVisible: boolean = false;
   loggedInUser: User = new User();
   loggedInUserRole: string;
-
+  difDate: number;
+  currentDate: string;
   clientsModuleVisible: boolean = false;
 
   constructor(
@@ -48,6 +55,7 @@ export class UserDetailsComponent implements OnInit {
       this.userService.user,
       MODULES.userManagement.id
     );
+    this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'es');
   }
 
   ngOnInit(): void {
@@ -69,8 +77,15 @@ export class UserDetailsComponent implements OnInit {
     this.userReqStatus = REQ_STATUS.LOADING;
 
     this.usersManagementService.getUser(this.userID).subscribe(
-      (resp) => {
+      (resp: User) => {
         this.user = resp;
+        console.log(this.currentDate)
+
+        console.log(this.user.subscription)
+        this.difDate =  moment(new Date(this.user.subscription)).diff(moment(new Date(this.currentDate)), 'days');
+        if (this.difDate < 0){
+
+        }
         this.modulesToAdd = this.getEnableModulesToAdd(
           this.user.modulesWithPermission
         );
@@ -144,8 +159,10 @@ export class UserDetailsComponent implements OnInit {
       actionMessage = 'agregó';
     }
 
+    this.user.modulesWithPermission = updatedModuleList
+
     this.usersManagementService
-      .updateUserModules(this.userID, updatedModuleList)
+      .updateUserData(this.user, this.userID)
       .subscribe(
         () => {
           this.snackService.loadSnackBar(
@@ -198,6 +215,40 @@ export class UserDetailsComponent implements OnInit {
           console.error(error);
         }
       );
+  }
+
+  editUser(userEdit: User): void {
+
+    userEdit.email = this.user.email;
+    userEdit.modulesWithPermission = this.user.modulesWithPermission;
+    userEdit.birthday = this.user.birthday;
+    userEdit.url_image = this.user.url_image;
+    userEdit.user_role = this.user.user_role;
+    userEdit.userProgress = this.user.userProgress;
+    userEdit.userGoals = this.user.userGoals;
+    userEdit.userRoutine = this.user.userRoutine;
+
+    this.usersManagementService
+      .updateUserData(userEdit, this.userID)
+      .subscribe(
+        () => {
+          this.snackService.loadSnackBar(
+            `Se actualizó
+            correctamente el usuario.`          );
+          this.showEditUser = false;
+          this.userReqStatus = REQ_STATUS.SUCCESS;
+          this.getUser()
+        },
+        (error) => {
+          this.userReqStatus = REQ_STATUS.ERROR;
+          this.snackService.loadSnackBar(
+            `Ocurrió un error al actualizar el usuario. Por favor, intente nuevamente.`,
+            'Cerrar'
+          );
+          console.error(error);
+        }
+      );
+
   }
 
   confirmUserDeletetion(): void {

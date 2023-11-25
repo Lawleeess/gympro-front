@@ -12,6 +12,55 @@
   width: 5.5rem;
 }
 
+.imgList{
+  width: 260px;
+  height: 260px;
+}
+
+.plus5 {
+  color: #339900;
+  margin: auto;
+  text-align: center;
+}
+.green{
+  color: #339900;
+  align-items: center;
+}
+
+.red{
+  color: #cc3300;
+  align-items: center;
+}
+.less5 {
+  color: #cc3300;
+  align-items: center;
+  text-align: center;
+}
+
+.around6 {
+  color: #ffa202;
+  align-items: center;
+  text-align: center;
+}
+
+.orange{
+  color: #ffa202;
+  align-items: center;
+}
+
+.restanVerde{
+  font-size: .8rem;
+  color: #339900;
+}
+.restanNaranja {
+  font-size: .8rem;
+  color: #ffa202;
+}
+.restanRojo {
+  font-size: .8rem;
+  color: #cc3300;
+}
+
 .icon-container {
   @extend .icon-background;
   height: 2.75rem;
@@ -119,4 +168,8 @@ i {
 .bar-loader.title {
   width: 1.85rem;
   height: 1.5rem;
+}
+
+.margenes{
+  margin-left: 10px;
 }

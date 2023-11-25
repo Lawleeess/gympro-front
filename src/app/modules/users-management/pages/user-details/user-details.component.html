@@ -25,13 +25,13 @@
             <div class="bar-loader form-button mt-4"></div>
           </ng-container>
 
+          <i class="user-avatar-container bg-muted">
+            <img class="center2" [src]="user.url_image" alt="user.name">
+          </i>
+          
           <!-- user data -->
           <ng-container *ngIf="userReqStatus === 2">
             <div class="user-info-container">
-              <i class="user-avatar-container bg-muted">
-                <i class="fas fa-user user-avatar white"></i>
-              </i>
-
               <div class="user-info" *ngIf="user">
                 <span class="user-name blue">
                   {{
@@ -45,6 +45,50 @@
             </div>
             <ul class="mt-4">
               <li class="text-muted mt-3">
+                <i class="fas fa-phone mr-2"></i>
+                <span>
+                  {{ user.phone_number }}
+                </span>
+              </li>
+              <li class="text-muted mt-3">
+                <!-- Subscription active -->
+                <i *ngIf="difDate > 6"  class="fas fa-calendar mr-2 verde"></i>
+                <span *ngIf="difDate > 6" class="verde">
+                  {{user.subscription | date:'longDate' }}
+                </span>
+                <h4 *ngIf="difDate > 6" class="restanVerde">
+                  Restan {{difDate}}
+                  <ng-container [ngPlural]="difDate">
+                    <ng-template ngPluralCase="=1">día</ng-template>
+                    <ng-template ngPluralCase="other">días</ng-template>
+                  </ng-container>
+                </h4>
+
+                <!-- Subscription about to expire -->
+                <i *ngIf="difDate >= 0 && difDate <= 5" class="fas fa-calendar mr-2 naranja"></i>
+                <span *ngIf="difDate >= 0 && difDate <= 5" class="naranja">
+                  {{user.subscription | date:'longDate' }}
+                </span>
+                <h4 *ngIf="difDate > 0 && difDate <= 5" class="restanNaranja">
+                  Restan {{difDate}}
+                  <ng-container [ngPlural]="difDate">
+                    <ng-template ngPluralCase="=1">día</ng-template>
+                    <ng-template ngPluralCase="other">días</ng-template>
+                  </ng-container>
+                </h4>
+                <h4 *ngIf="difDate === 0" class="restanNaranja">
+                  Vence hoy
+                </h4>
+
+                <!-- Expired Subscription -->
+                <i *ngIf="difDate < 0" class="fas fa-calendar mr-2 rojo"></i>
+                <span *ngIf="difDate < 0" class="rojo">
+                  Venció el {{user.subscription | date:'longDate' }}
+                </span>
+
+              </li>
+
+              <!-- <li class="text-muted mt-3">
                 <i class="fas fa-list mr-2"></i>
                 <span>
                   {{
@@ -58,19 +102,10 @@
                       : "módulos"
                   }}
                 </span>
-              </li>
-              <li class="text-muted mt-3">
-                <i class="fas fa-user-cog mr-2"></i>
-                <span *ngIf="user.department != 'external'"
-                  >Colaborador interno</span
-                >
-                <span *ngIf="user.department == 'external'"
-                  >Usuario externo</span
-                >
-              </li>
+              </li> -->
               <li
                 class="text-muted mt-3 text-primary"
-                *ngIf="user['clientsRole'] != ''"
+                *ngIf="user['clientsRole'] == 'admin'"
               >
                 <i class="fas fa-certificate mr-2"></i>
                 <span>Admin Global</span>
@@ -85,6 +120,23 @@
               mat-stroked-button
               *ngIf="loggedInUserRole === 'admin' && loggedInUser.id !== userID"
               class="mt-3"
+              color="accent"
+              [disabled]="deleteReqStatus === 1 || updateReqStatus === 1"
+              (click)="showEditUser = true"
+            >
+              <div class="d-flex align-items-center">
+                <mat-spinner
+                  diameter="18"
+                  class="mr-2"
+                  *ngIf="deleteReqStatus === 1"
+                ></mat-spinner>
+                <span>Editar usuario</span>
+              </div>
+            </button>
+            <button
+              mat-stroked-button
+              *ngIf="loggedInUserRole === 'admin' && loggedInUser.id !== userID"
+              class="mt-3"
               color="warn"
               [disabled]="deleteReqStatus === 1 || updateReqStatus === 1"
               (click)="confirmUserDeletetion()"
@@ -94,7 +146,7 @@
                   diameter="18"
                   class="mr-2"
                   *ngIf="deleteReqStatus === 1"
-                ></mat-spinner>
+                  ></mat-spinner>
                 <span>Eliminar usuario</span>
               </div>
             </button>
@@ -146,71 +198,6 @@
           </div>
         </ng-container>
       </div>
-      <!-- Tools List -->
-      <div class="col-12 col-lg-9 mt-3 offset-lg-3">
-        <app-tools-list
-          [user]="user"
-          [status]="userReqStatus"
-          (emittUpdateRequest)="emittUpdateRequest($event)"
-          (toolToUpdate)="updateTool($event)"
-          [allowActionsTools]="
-            loggedInUserRole === 'admin' && loggedInUser.id !== userID
-          "
-          [disableActions]="deleteReqStatus === 1 || updateReqStatus === 1"
-          (refreshUser)="getUser()"
-        ></app-tools-list>
-        <ng-container
-          *ngIf="loggedInUserRole === 'admin' && loggedInUser.id !== userID"
-        >
-          <div
-            class="mt-4 text-right"
-            *ngIf="
-              userReqStatus === 2 && toolsToAdd?.length > 0 && showNewToolForm
-            "
-          >
-            <button
-              *ngIf="!toolModuleVisible"
-              mat-stroked-button
-              color="primary"
-              (click)="toolModuleVisible = true"
-            >
-              Dar acceso a una nueva herramienta
-            </button>
-          </div>
-        </ng-container>
-      </div>
-      <!-- Tools form -->
-      <div class="col-12 col-lg-9 mb-4 offset-lg-3">
-        <app-tools-form
-          *ngIf="toolModuleVisible"
-          [clientsRole]="loggedInUser.clientsRole"
-          [user]="user"
-          (formModuleChange)="addNewModule($event)"
-          [toolToUpdate]="toolUpdating"
-          (emittUpdateRequest)="emittUpdateRequest($event)"
-          [status]="userReqStatus"
-          [allowActionsTools]="
-            loggedInUserRole === 'admin' && loggedInUser.id !== userID
-          "
-          [disableActions]="deleteReqStatus === 1 || updateReqStatus === 1"
-          (refreshUser)="getUser()"
-          (closeFormTool)="toolModuleVisible = false"
-        ></app-tools-form>
-      </div>
-      <!-- Customers list -->
-      <div class="col-12 col-lg-9 mb-4 offset-lg-3">
-        <app-customers-list
-          [user]="user"
-          [status]="userReqStatus"
-          [allowActions]="
-            loggedInUserRole === 'admin' &&
-            loggedInUser.id !== userID &&
-            loggedInUser.clientsRole === 'admin'
-          "
-          [disableActions]="deleteReqStatus === 1 || updateReqStatus === 1"
-          (emittUpdateRequest)="emittUpdateRequest($event)"
-        ></app-customers-list>
-      </div>
       <!-- Customers form -->
       <div class="col-12 col-lg-9 mb-4 offset-lg-3">
         <app-customers-form
@@ -240,5 +227,13 @@
         </mat-card>
       </div>
     </ng-container>
+  </div>
+  <div *ngIf="showEditUser" class="mb-3">
+    <app-user-edit
+      [isLoading]="updateReqStatus === 1"
+      [user]="user"
+      (formModuleChange)="editUser($event)"
+      (closeFormModule)="showEditUser = false"
+    ></app-user-edit>
   </div>
 </div>

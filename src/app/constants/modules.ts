@@ -21,20 +21,6 @@ export const MODULES = {
     icon: 'fas fa-calendar',
     redirectPath: '/dashboard/routine',
   },
-  audit: {
-    id: 'audit',
-    name: 'Auditoría',
-    type: 'module',
-    icon: 'fas fa-star',
-    redirectPath: '/dashboard/audit',
-  },
-  scriptingTool: {
-    id: 'scriptingTool',
-    name: 'Scripting tool',
-    type: 'module',
-    icon: 'fas fa-terminal',
-    redirectPath: '/dashboard/scripting-tool',
-  },
 };
 
 export const ROLES = {

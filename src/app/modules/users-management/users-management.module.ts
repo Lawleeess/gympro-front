@@ -16,6 +16,7 @@ import { ToolsListComponent } from './components/tools-list/tools-list.component
 import { ToolsFormComponent } from './components/tools-form/tools-form.component';
 import { CustomersListComponent } from './components/customers-list/customers-list.component';
 import { CustomersFormComponent } from './components/customers-form/customers-form.component';
+import { UserEditComponent } from './components/user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CustomersFormComponent } from './components/customers-form/customers-fo
     ToolsFormComponent,
     CustomersListComponent,
     CustomersFormComponent,
+    UserEditComponent,
   ],
   imports: [
     CommonModule,

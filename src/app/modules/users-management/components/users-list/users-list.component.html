@@ -1,7 +1,23 @@
 <ng-container>
   <div class="row">
+    <!-- add admin -->
+    <div class="col-12 col-lg-4 col-lg-4 mb-3">
+      <div class="center d-flex justify-content-end">
+      <button
+      mat-flat-button
+      id="edit-button"
+      type="submit"
+      (click)="toAddAdmin()"
+      color="primary"
+      class="fit-content"
+    >
+      Agregar admin
+    </button>
+    </div>
+    </div>
+  
     <!-- filters -->
-    <div class="col-12 col-lg-4 offset-lg-4 mb-3">
+    <div class="col-12 col-lg-4 col-lg-4 mb-3">
       <mat-form-field appearance="outline">
         <mat-label>Rol</mat-label>
         <mat-select
@@ -74,7 +90,7 @@
               <td>
                 <div class="user-info-container">
                   <i class="user-avatar-container bg-muted">
-                    <i class="fas fa-user user-avatar white"></i>
+                    <img class="center2" [src]="user.url_image">
                   </i>
 
                   <div class="user-info">

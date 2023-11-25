@@ -48,14 +48,7 @@ export class ModuleFormComponent implements OnInit {
 
   getModuleOptions(): void {
     const modulesOptions: ModuleData[] = Object.values({ ...MODULES });
-
-    if (this.allowedModules === undefined) {
-      this.modules = modulesOptions;
-    } else {
-      this.modules = this.allowedModules.map((i) => {
-        return MODULES[i.name];
-      });
-    }
+    this.modules = modulesOptions;
   }
 
   formChange(): void {

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Configuration } from 'src/app/app.constants';
-import { Module } from 'src/app/models/user';
+import { Module, User } from 'src/app/models/user';
 import { isEmpty } from 'lodash-es';
 import { Customers } from '../../../models/user';
 
@@ -11,9 +11,11 @@ import { Customers } from '../../../models/user';
 })
 export class UsersManagementService {
   private baseUrl: string;
+  private baseUrlUsers: string;
 
   constructor(private config: Configuration, private http: HttpClient) {
     this.baseUrl = `${this.config.endpoint}/user-management/users`;
+    this.baseUrlUsers = `${this.config.endpoint}/users`;
   }
 
   getUsers(
@@ -49,6 +51,13 @@ export class UsersManagementService {
       throw new Error('[users-management.service]: not userID provided');
     }
     return this.http.delete(`${this.baseUrl}/${userID}`);
+  }
+
+  updateUserData(user: User, userID: string): Observable<object> {
+    if (!user) {
+      return throwError('[user.service]: not user data provided');
+    }
+    return this.http.put(`${this.baseUrlUsers}/${userID}`, user);
   }
 
   updateUserModules(userID: string, modules: Module[]): Observable<Object> {

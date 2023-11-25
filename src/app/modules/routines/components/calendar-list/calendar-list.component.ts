@@ -8,22 +8,35 @@ import { UserRoutine } from 'src/app/models/user';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
 import { UserService } from 'src/app/services/user.service';
 import { Routine } from '../../../../models/user';
+import { element } from 'protractor';
+import { Router } from '@angular/router';
+import { REQ_STATUS } from 'src/app/constants/general';
 
 @Component({
   selector: 'app-calendar-list',
   templateUrl: './calendar-list.component.html',
   styleUrls: ['./calendar-list.component.scss'],
 })
+
 export class CalendarListComponent implements OnInit {
 
   userID: string;
   userRoutine: UserRoutine;
-  routineMonday = [];
-  routineTuesday = [];
-  routineWednesday = [];
-  routineThursday = [];
-  routineFriday = [];
-  routineSaturday= [];
+  userRoutineSave: UserRoutine;
+  routineMonday:Item[] = [];
+  routineTuesday:Item[]= [];
+  routineWednesday :Item[]= [];
+  routineThursday:Item[]= [];
+  routineFriday:Item[]= [];
+  routineSaturday:Item[]= [];
+  status: number = REQ_STATUS.INITIAL;
+
+  monday: Routine[] = [];
+  tuesday : Routine[] = [];
+  wednesday : Routine[] = [];
+  thursday : Routine[] = [];
+  friday : Routine[] = [];
+  saturday: Routine[] = [];
 
   oGroutineMonday = [];
   oGroutineTuesday = [];
@@ -34,13 +47,18 @@ export class CalendarListComponent implements OnInit {
 
   isClear: boolean = false;
 
-  routine: Routine[];
+  showListExercises: boolean = false;
+
+  routines: Routine[];
   muscleGroup: string;
   routineByMuscle= [];
   selectedMuscle: string;
-  muscleGroups = [{value: "peck", label: "Pecho"}, {value: "back", label: "Espalda"}];
+  muscleGroups = [{value: "peck", label: "Pecho"}, {value: "back", label: "Espalda"},
+                  {value: "shoulders", label: "Hombros"}, {value: "biceps", label: "Bíceps"},
+                  {value: "triceps", label: "Tríceps"}, {value: "abs", label: "Abdominales"},
+                  {value: "legs", label: "Piernas"}, {value: "gemelos", label: "Gemelos"},];
 
-  constructor( private userService: UserService) { }
+  constructor( private userService: UserService, private snackService: SnackBarService, private router: Router) { }
 
   ngOnInit(): void {
     this.userID = !!window.localStorage.getItem('user_id')
@@ -48,11 +66,21 @@ export class CalendarListComponent implements OnInit {
     : null;
     this.initGoals();
     this.initRoutines();
+    if (this.routineMonday.length === 0 && this.routineTuesday.length === 0 &&
+        this.routineWednesday.length === 0 && this.routineThursday.length === 0 &&
+        this.routineFriday.length === 0 && this.routineSaturday.length === 0){
+          
+      this.isClear = true
+    }
   }
   initGoals(){
     this.userRoutine = !!window.localStorage.getItem('userRoutine')
     ? JSON.parse(window.localStorage.getItem('userRoutine'))
     : null;
+  }
+
+  toListExercises(): void{
+    this.router.navigate(['/dashboard/exercises']);
   }
 
   initRoutines(){
@@ -92,17 +120,20 @@ export class CalendarListComponent implements OnInit {
 
 
   getRoutine(muscleGroup: string) {
+    this.status = REQ_STATUS.LOADING
     this.routineByMuscle = []
     this.muscleGroup = this.parseMuscleGroup(muscleGroup)
         this.userService.getRoutines(muscleGroup).subscribe(
-          (routine: Routine[]) => {
-            this.routine = routine;
-            if (this.routine?.length > 0){
-              for (let index = 0; index < this.routine.length; index++) {
-                const item = {value: this.routine[index], disabled: false}
+          (routines: Routine[]) => {
+            this.routines = routines;
+            console.log(this.routines)
+            if (this.routines?.length > 0){
+              for (let index = 0; index < this.routines.length; index++) {
+                const item = {value: this.routines[index], disabled: false}
                 this.routineByMuscle.push(item)
               }
             }
+            this.status = REQ_STATUS.SUCCESS
           },
           (error) => {
             const errorRef = error?.error?.message ? error.error.message : error;
@@ -110,6 +141,7 @@ export class CalendarListComponent implements OnInit {
             console.error(`[calendar.component]: ${errorRef}`);
           }
         );
+
 
   }
 
@@ -133,8 +165,72 @@ export class CalendarListComponent implements OnInit {
     }
   }
 
-  send(){
-   console.log(this.routineMonday)
+  clearVariables(){
+    this.monday = []
+    this.tuesday = []
+    this.wednesday = []
+    this.thursday = []
+    this.friday = []
+    this.saturday = []
+  }
+
+  saveRoutine(){   
+  this.clearVariables()
+  this.routineMonday.forEach(element => {
+    console.log()
+    this.monday.push(element.value)
+  });
+  this.routineTuesday.forEach(element => {
+    this.tuesday.push(element.value)
+  });
+  this.routineWednesday.forEach(element => {
+    this.wednesday.push(element.value)
+  });
+  this.routineThursday.forEach(element => {
+    this.thursday.push(element.value)
+  });
+  this.routineFriday.forEach(element => {
+    this.friday.push(element.value)
+  });
+  this.routineSaturday.forEach(element => {
+    this.saturday.push(element.value)
+  });
+
+  this.userRoutineSave = {monday:this.monday, tuesday: this.tuesday, 
+                          wednesday: this.wednesday, thursday: this.thursday, 
+                          friday: this.friday, saturday: this.saturday}
+
+  
+
+
+      this.userService.saveRoutinesUser(this.userID, this.userRoutineSave).subscribe(
+        () => {
+          this.snackService.loadSnackBar(
+            'Rutina guardada con exito',
+            null,
+            null,
+            7000
+          );
+
+          window.localStorage.setItem(
+            'userRoutine',
+            JSON.stringify(this.userRoutineSave)
+          );
+        },
+        (error) => {
+          const errorRef = error?.error?.message ? error.error.message : error;
+          const errorMsg = this.parseSignUpError(errorRef);
+          this.snackService.loadSnackBar(
+            `Error al guardar rutina. ${
+              !!errorMsg ? errorMsg : 'Intente más tarde.'
+            }`,
+            'Cerrar'
+          );
+
+          console.error(`[calendar-list.component]: ${errorRef}`);
+        }
+      );
+    
   }
 
   clear(){
@@ -205,4 +301,9 @@ export class CalendarListComponent implements OnInit {
       this.routineSaturday[index].disabled = true;
     }
   }
+}
+
+export interface Item {
+  value: Routine;
+  disabled: boolean;
 }
