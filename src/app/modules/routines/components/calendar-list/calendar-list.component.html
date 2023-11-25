@@ -1,0 +1,227 @@
+
+<div class="container">
+  <h1 class="left">Crea tu rutina</h1>
+
+  <!-- Select muscle group -->
+  <mat-form-field appearance="outline">
+    <mat-label>Grupo muscular</mat-label>
+    <mat-select
+      [(value)]="selectedMuscle"
+      (selectionChange)="getRoutine(selectedMuscle)"
+      >
+      <mat-option
+        *ngFor="let muscle of muscleGroups"
+        [value]="muscle.value"
+      >
+        {{ muscle.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div cdkDropListGroup>
+
+    <!-- List muscle group -->
+      <div *ngIf="(showListExercises === false && this.routines?.length > 0)" cdkDropList class="example-list2" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineByMuscle">
+        <h3>{{this.muscleGroup}}</h3>
+        <div class="example-box2" *ngFor="let item of routineByMuscle" cdkDrag >
+            {{item.value.name}}
+            <img [src]="item.value.url_image" [alt]="item">
+            <img *cdkDragPreview [src]="item.value.url_image" [alt]="item">
+        </div>
+      </div>
+
+      <!-- buttons -->
+    <div class="right">
+      <button
+      mat-stroked-button
+        class="right"
+        id="edit-button"
+        type="submit"
+        (click)="showListExercises = false"
+        color="warn"
+        >
+        Ocultar lista
+      </button>
+      <button
+      mat-stroked-button
+        class="right"
+        id="edit-button"
+        type="submit"
+        (click)="showListExercises = true"
+        color="accent"
+        >
+        Ver listado de ejercicios
+      </button>
+      <button
+        mat-flat-button
+        id="save-button"
+        type="submit"
+        color="primary"
+        class="right"
+        (click)="saveRoutine()"
+        [disabled]="!(this.routines != null)">
+        Guardar
+      </button>
+      <button
+        mat-flat-button
+        id="save-button"
+        type="submit"
+        color="warn"
+        (click)="clear()"
+        class="right"
+        [disabled]="isClear">
+        Limpiar todo
+      </button>
+    </div>
+
+    <div class="row" *ngIf="isClear && showListExercises == false">
+      <div class="col" cdkDropList class="example-listClear" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineMonday">
+        <h3>Lunes</h3>
+      </div>
+      <div class="col" cdkDropList class="example-listClear" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineTuesday">
+        <h3>Martes</h3>
+      </div>
+      <div class="col" cdkDropList class="example-listClear" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineWednesday">
+        <h3>Miércoles</h3>
+      </div>
+      <div class="col" cdkDropList class="example-listClear" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineThursday">
+        <h3>Jueves</h3>
+      </div>
+      <div class="col" cdkDropList class="example-listClear" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineFriday">
+        <h3>Viernes</h3>
+      </div>
+      <div class="col" cdkDropList class="example-listClear" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineSaturday">
+        <h3>Sábado</h3>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!isClear && showListExercises == false">
+      <div class="col" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineMonday">
+        <h3>Lunes</h3>
+        <div class="example-box" *ngFor="let item of routineMonday" cdkDrag [cdkDragDisabled]="item.disabled">
+            <img [src]="item.value.url_image" [alt]="item">
+            <img *cdkDragPreview [src]="item.value.url_image" [alt]="item.value.name">
+        </div>
+      </div>
+      <div class="col" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineTuesday">
+        <h3>Martes</h3>
+        <div class="example-box" *ngFor="let item of routineTuesday" cdkDrag [cdkDragDisabled]="item.disabled">
+            <img [src]="item.value.url_image" [alt]="item">
+            <img *cdkDragPreview [src]="item.value.url_image" [alt]="item.value.name">
+        </div>
+      </div>
+      <div class="col" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineWednesday">
+        <h3>Miércoles</h3>
+        <div class="example-box" *ngFor="let item of  routineWednesday" cdkDrag [cdkDragDisabled]="item.disabled">
+          <img [src]="item.value.url_image" [alt]="item">  
+          <img *cdkDragPreview [src]="item.value.url_image" [alt]="item.name">
+        </div>
+      </div>
+      <div class="col" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineThursday">
+        <h3>Jueves</h3>
+        <div class="example-box" *ngFor="let item of routineThursday" cdkDrag [cdkDragDisabled]="item.disabled">
+          <img [src]="item.value.url_image" [alt]="item">  
+          <img *cdkDragPreview [src]="item.value.url_image" [alt]="item.name">
+        </div>
+      </div>
+      <div class="col" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineFriday">
+        <h3>Viernes</h3>
+        <div class="example-box" *ngFor="let item of routineFriday" cdkDrag [cdkDragDisabled]="item.disabled">
+          <img [src]="item.value.url_image" [alt]="item">  
+          <img *cdkDragPreview [src]="item.value.url_image" [alt]="item.name">
+        </div>
+      </div>
+      <div class="col" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineSaturday">
+        <h3>Sábado</h3>
+        <div class="example-box" *ngFor="let item of routineSaturday" cdkDrag [cdkDragDisabled]="item.disabled">
+          <img [src]="item.value.url_image" [alt]="item">  
+          <img *cdkDragPreview [src]="item.value.url_image" [alt]="item.name">
+        </div>
+      </div>
+    </div>
+    
+    <!-- table -->
+    <ng-container>
+      <div *ngIf="showListExercises">
+        <div class="col-12">
+          <table class="bg-white">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>URL Video</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- loader -->
+              <ng-container *ngIf="status < 2">
+                <tr>
+                  <td colspan="4">
+                    <div class="adaptable-container">
+                      <div class="loading-shade">
+                        <mat-spinner>Selecciona un grupo muscular</mat-spinner>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+    
+              <!-- users list -->
+              <ng-container *ngIf="routines?.length > 0 && status === 2">
+                <tr *ngFor="let exercise of routines">
+                  <td>
+                      <img class="center imgList" [src]="exercise.url_image">
+                  </td>
+                  <td>
+                    <div class="user-info">
+                      <span class="user-name blue">
+                        {{
+                          exercise.name
+                        }}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="user-email text-muted mt-1">
+                    {{ exercise.description }}
+                    </span>
+                  </td>
+                  <td>{{ exercise.video_url}}</td>
+                </tr>
+              </ng-container>
+    
+              <!-- messages -->
+              <ng-container
+                *ngIf="(routines?.length === 0 && status === 2) || status === 3"
+              >
+                <tr>
+                  <td colspan="4" class="text-center">
+                    <!-- empty message -->
+                    <p
+                      *ngIf="routines?.length === 0 && status === 2"
+                      class="text-muted my-0"
+                    >
+                      No se encontró ningún usuario.
+                    </p>
+    
+                    <!-- error message -->
+                    <p *ngIf="status === 3" class="text-danger my-0">
+                      Error al consultar la lista de usuarios.
+                      <br />
+                      Por favor, intenta más tarde.
+                    </p>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        </div>
+    
+    </ng-container>
+    
+    
+  </div>
+    
+</div>

@@ -1,0 +1,24 @@
+.layout-container {
+  height: 100vh;
+  width: 100vw;
+
+  .sidebar-container {
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 1.25rem;
+    width: 15rem;
+  }
+
+  .main-container {
+    max-height: calc(100vh - 3.25rem);
+    width: 100%;
+    overflow-y: auto;
+  }
+
+  &.expanded {
+    .sidebar-container {
+      padding: 1.25rem 0;
+      width: 2.75rem;
+    }
+  }
+}

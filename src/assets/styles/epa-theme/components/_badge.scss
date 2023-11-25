@@ -1,0 +1,19 @@
+.badge {
+  align-items: center;
+  background-color: $silver;
+  border-radius: 50%;
+  color: $white;
+  display: flex;
+  font-size: 0.8rem;
+  height: 1.8rem;
+  justify-content: center;
+  width: 1.8rem;
+
+  &.success {
+    background-color: $cyan !important;
+  }
+
+  &.danger {
+    background-color: $red !important;
+  }
+}

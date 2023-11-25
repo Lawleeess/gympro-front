@@ -1,0 +1,39 @@
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <div class="card shadow-sm py-5">
+            <div class="card-body">
+                <div class="form-container">
+                    <app-generic-select [optionList]="accountList" label="Selecciona una cuenta"
+                        extraPropName="external_id" (selectedOptionChange)="selectionChange('account', $event)"
+                        [status]="accountsReqStatus" [required]="true" [searchFilter]="true"
+                        errorMsg="Error al consultar cuentas" emptyMsg="No se encontraron cuentas">
+                    </app-generic-select>
+
+                    <div class="mt-4">
+                        <app-generic-select [optionList]="categoryList" label="Selecciona una categoría"
+                            (selectedOptionChange)="selectionChange('category', $event)" [status]="categoriesReqStatus"
+                            [required]="true" [searchFilter]="true" errorMsg="Error al consultar categorías"
+                            emptyMsg="No se encontraron categorías">
+                        </app-generic-select>
+                    </div>
+
+                    <div class="mt-4">
+                        <app-generic-select [optionList]="scriptList" label="Selecciona un script" [required]="true"
+                            [searchFilter]="true" (selectedOptionChange)="selectionChange('script', $event)"
+                            [emptyMsg]="selectedCategory && 'No se encontraron srpits para esta categoría'"
+                            [resetSelection]="resetSelectedScript">
+                        </app-generic-select>
+                    </div>
+
+                    <div class="button-container text-right mt-4">
+                        <button mat-flat-button color="primary" class="fit-content"
+                            [disabled]="!selectedAccount || !selectedCategory || !selectedScript || executeReqStatus === 1"
+                            (click)="executeScript()">
+                            Ejecutar script
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

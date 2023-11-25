@@ -1,0 +1,37 @@
+// -----------------------------------------------------------------------------
+// This file contains basic typography style for copy text.
+// -----------------------------------------------------------------------------
+
+.text-muted {
+  color: $regent-gray !important;
+}
+
+.text-default {
+  color: $iron !important;
+}
+
+.text-success {
+  color: $cyan !important;
+}
+
+.text-danger {
+  color: $red !important;
+}
+
+.text-warning {
+  color: $yellow !important;
+}
+
+.text-white {
+  color: $white !important;
+}
+
+.text-lg {
+  font-size: 15.6px;
+}
+
+.text-trim {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

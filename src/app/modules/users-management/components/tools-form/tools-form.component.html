@@ -1,0 +1,63 @@
+<div class="bg-white p-4">
+  <section class="section-container">
+    <form [formGroup]="form" (ngSubmit)="updateTool()">
+      <div class="row">
+        <!-- Module -->
+        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+          <mat-form-field appearance="outline">
+            <mat-label>Módulo</mat-label>
+            <mat-select formControlName="name" required>
+              <mat-option *ngFor="let tool of tools" [value]="tool.name">
+                {{ tool.parsedName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Role -->
+        <div class="col-12 col-lg-6 mb-3 mb-lg-0 text-right">
+          <mat-form-field appearance="outline">
+            <mat-label>Rol</mat-label>
+            <mat-select formControlName="role" required>
+              <mat-option *ngFor="let role of ROLES" [value]="role.id"
+                >{{ role.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-12 mt-2">
+        <p class="text-muted text-left">
+          Sólo es posible agregar herramientas si tienes acceso a ellos con el rol de
+          "Admin"
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="col-12 text-right mt-2">
+        <div
+          class="button-container d-flex justify-content-end align-items-end"
+        >
+          <button
+            mat-flat-button
+            type="button"
+            class="mr-3"
+            (click)="closeForm()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            [formGroup]="form"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!form.valid"
+          >
+            Agregar
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,51 @@
+<div md-dialog-content>
+    <div class="details-container" [ngClass]="{'center-align': imageType}">
+        <div class="image-container" *ngIf="imageType">
+            <!-- generic error image here <img>-->
+        </div>
+        <div class="mb-2">
+            <strong class="question" *ngIf="question">
+                {{ question }}
+            </strong>
+        </div>
+
+
+        <div class="content mb-3">
+            <p *ngFor="let line of content; let i = index">
+                <span [innerHTML]="line"></span>
+                <a *ngIf="legendLink && i === content.length - 1" class="link" [href]="srcLink" target="_blank">
+                    {{ legendLink }}
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <ng-container *ngIf="trueBtnDirection === 'right'">
+                <div md-dialog-actions class="col-12 text-right">
+                    <button *ngIf="falseBtn" type="button" mat-flat-button [color]="falseBtnColor"
+                        class="fit-content mb-3 mr-0" mat-button mat-dialog-close="false">
+                        {{ falseBtn }}
+                    </button>
+
+                    <button type="button" mat-flat-button [color]="trueBtnColor" class="fit-content mb-3 ml-3"
+                        mat-button mat-button mat-dialog-close="true">
+                        {{ trueBtn }}
+                    </button>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="trueBtnDirection === 'left'">
+                <div md-dialog-actions class="col-12 text-right">
+                    <button type="button" mat-flat-button [color]="trueBtnColor" class="fit-content mb-3 ml-3"
+                        mat-button mat-button mat-dialog-close="true">
+                        {{ trueBtn }}
+                    </button>
+
+                    <button *ngIf="falseBtn" type="button" mat-flat-button [color]="falseBtnColor"
+                        class="fit-content mb-3 mr-0" mat-button mat-dialog-close="false">
+                        {{ falseBtn }}
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

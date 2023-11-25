@@ -1,0 +1,178 @@
+// -----------------------------------------------------------------------------
+// This file contains CSS helper classes.
+// -----------------------------------------------------------------------------
+
+.card {
+  border: none;
+  border-radius: 0.3rem;
+}
+
+.blue {
+  color: $blue !important;
+}
+
+.purple {
+  color: $purple !important;
+}
+
+.cyan {
+  color: $cyan !important;
+}
+
+.yellow {
+  color: $yellow !important;
+}
+
+.orange {
+  color: $orange !important;
+}
+
+.red {
+  color: $red !important;
+}
+
+.white {
+  color: $white !important;
+}
+
+.bg-muted {
+  background-color: $regent-gray !important;
+}
+
+.bg-default {
+  background-color: $iron !important;
+}
+
+.bg-success {
+  background-color: $cyan !important;
+}
+
+.bg-danger {
+  background-color: $red !important;
+}
+
+.bg-warning {
+  background-color: $yellow !important;
+}
+
+.bg-blue {
+  background-color: $blue !important;
+}
+
+.bg-purple {
+  background-color: $purple !important;
+}
+
+.bg-cyan {
+  background-color: $cyan !important;
+}
+
+.bg-yellow {
+  background-color: $yellow !important;
+}
+
+.bg-orange {
+  background-color: $orange !important;
+}
+
+.bg-red {
+  background-color: $red !important;
+}
+
+.bg-white {
+  background-color: $white !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.pointer {
+  cursor: pointer !important;
+}
+
+.container-overflow {
+  overflow: auto !important;
+}
+
+.container-overflow-y {
+  overflow-y: auto !important;
+}
+
+.container-overflow-x {
+  overflow-x: auto !important;
+}
+
+.popover-container {
+  > div {
+    cursor: pointer;
+
+    &:hover {
+      .status-icon {
+        color: $iron !important;
+        transition: color 1s;
+      }
+      .text-value {
+        opacity: 0.8;
+        text-decoration: underline;
+      }
+    }
+  }
+  .content {
+    padding: 6px 10px;
+
+    p {
+      font-size: 12px;
+      line-height: 18px;
+      margin: 0;
+    }
+  }
+}
+
+.section-container {
+  background-color: $albaster;
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
+
+.card.actionable {
+  &:hover,
+  &:focus,
+  &:active {
+    box-shadow: 4px 6px 12px 0px rgb(0 0 0 / 15%);
+    color: $cape-cod;
+  }
+}
+
+i.actionable {
+  cursor: pointer;
+  &:hover {
+    color: $cyan;
+  }
+}
+
+.chart-container {
+  .chart,
+  .complementary-container {
+    height: inherit;
+    width: inherit;
+  }
+
+  .complementary-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input.arrows-disabled::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"].arrows-disabled {
+  -moz-appearance: textfield;
+}

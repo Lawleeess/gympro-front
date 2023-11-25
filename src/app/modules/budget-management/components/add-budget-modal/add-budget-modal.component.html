@@ -1,0 +1,189 @@
+<div md-dialog-title>Nuevo presupuesto</div>
+<div md-dialog-content>
+  <div class="dialog-container mt-3">
+    <div class="row">
+      <div class="col-12">
+        <h4 class="text-muted mb-2">{{ account.clientName }}</h4>
+        <div class="d-flex">
+          <ng-container [ngSwitch]="account?.provider">
+            <span
+              *ngSwitchCase="'adwords'"
+              class="iconify mr-2"
+              data-width="24"
+              data-icon="logos:google-ads"
+            >
+            </span>
+            <span
+              *ngSwitchCase="'facebook'"
+              class="iconify mr-2"
+              data-width="24"
+              data-icon="logos:facebook"
+            >
+            </span>
+          </ng-container>
+          <div>
+            <h4 class="mb-0">{{ account.name }}</h4>
+            <small class="text-muted mt-2">{{ account.id }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="form" class="mt-3">
+      <div class="row">
+        <div class="col-12 mb-3" [hidden]="account.provider === 'facebook'">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre del presupuesto</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="budgetName"
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </div>
+        <div
+          class="col-12 col-lg-6 mb-3"
+          [hidden]="account.provider === 'facebook'"
+        >
+          <mat-form-field appearance="outline">
+            <mat-label>Periodo</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input
+                matStartDate
+                formControlName="startDate"
+                placeholder="Fecha inicio"
+                autocomplete="off"
+              />
+              <input
+                matEndDate
+                formControlName="endDate"
+                placeholder="Fecha fin"
+                autocomplete="off"
+              />
+            </mat-date-range-input>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+        <div
+          class="col-12 col-lg-6 mb-3"
+          [ngClass]="{ 'col-lg-12': account.provider === 'facebook' }"
+        >
+          <mat-form-field appearance="outline">
+            <mat-label>Presupuesto</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              formControlName="budget"
+              autocomplete="off"
+              (paste)="(false)"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="showConfirmation">
+        <div class="col-12 text-center">
+          <h4>Para continuar, es necesario confirmar el presupuesto:</h4>
+          <h1>
+            {{ form.get("budget").value | currency: "USD":"symbol-narrow" }}
+          </h1>
+          <h3>{{ valueInText }}</h3>
+        </div>
+      </div>
+
+      <div class="row" [hidden]="!showConfirmation">
+        <div class="col-12 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Confirmación por números</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              formControlName="budgetConfirmationByNumbers"
+              [placeholder]="form.get('budget').value"
+              autocomplete="off"
+              (paste)="(false)"
+            />
+          </mat-form-field>
+          <p
+            *ngIf="validConfirmation.numbers === false"
+            class="text-danger text-right my-0"
+          >
+            <small> El número no coincide </small>
+          </p>
+        </div>
+
+        <div class="col-12 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Confirmación por texto</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="budgetconfirmationByWords"
+              [placeholder]="valueInText"
+              oninput="this.value = this.value.toUpperCase()"
+              autocomplete="off"
+              (paste)="(false)"
+            />
+          </mat-form-field>
+          <p
+            *ngIf="validConfirmation.words === false"
+            class="text-danger text-right my-0"
+          >
+            <small> El texto no coincide </small>
+          </p>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="row mt-4">
+    <div md-dialog-actions class="col-12 text-right">
+      <button
+        type="button"
+        mat-flat-button
+        class="fit-content mb-3 mr-0"
+        mat-button
+        mat-dialog-close="false"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        class="fit-content mb-3 ml-3"
+        [disabled]="
+          form.get('budgetName').invalid ||
+          form.get('startDate').invalid ||
+          form.get('endDate').invalid ||
+          form.get('budget').invalid
+        "
+        [hidden]="showConfirmation"
+        (click)="showConfirmation = true"
+      >
+        Aceptar
+      </button>
+
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        class="fit-content mb-3 ml-3"
+        mat-button
+        [disabled]="form.invalid"
+        (click)="validateConfirmation()"
+        [hidden]="!showConfirmation"
+      >
+        Confirmar
+      </button>
+    </div>
+  </div>
+</div>

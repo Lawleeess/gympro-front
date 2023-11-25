@@ -1,0 +1,59 @@
+<div class="container">
+  <img class="center" [src]="imagePath">
+  <h1 id="userName">
+    Nombre(s) Apellidos
+  </h1>   
+  <h4 class="opacity marginB"
+    id="userEmail">
+    Correo
+  </h4>
+  
+  <h5>
+    Fecha de nacimiento
+  </h5>
+  <h4 
+      id="userBirthday">
+      {{ birthday | date:'longDate' }} 
+  </h4>
+  <h5>
+    Número de celular
+  </h5>
+  <h4 
+      id="userPhone">
+      Phone number
+  </h4>  
+  <h5>
+    Vencimiento de subscripcion
+  </h5>
+  <h4 
+      id="userSubscription">
+      {{ subscription | date:'fullDate' }}
+  </h4>   
+
+
+  <div class="text-center" *ngIf="reqStatus==0 || reqStatus==2"> 
+    <input class="form-control" type="file" 
+            (change)="onFileChanged($event)"> 
+  
+    <button (click)="onUpload()" 
+            mat-flat-button
+            type="submit"
+            color="primary"
+            class="fit-content"
+            [disabled]="reqStatus === 1"> 
+        Actualizar
+    </button> 
+  </div> 
+  
+  
+<div>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <!--Flag variable is used here-->
+    <div class="container" *ngIf="loading"> 
+      <h3>Cargando ...</h3> 
+    </div> 
+</div>
+
+</div>
+
+

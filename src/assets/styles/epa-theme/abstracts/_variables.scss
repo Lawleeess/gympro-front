@@ -1,0 +1,28 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
+
+// Colors
+$blue: #0a0946;
+$cyan: #05adb4;
+$purple: #a31b69;
+$yellow: #ffc901;
+$orange: #ea6c25;
+$red: #c72333;
+$cape-cod: #353636;
+$silver: #a5a5a5;
+$regent-gray: #89919b;
+$iron: #c9cdd1;
+$alto: #d4d4d4;
+$seashell: #f1f1f1;
+$albaster: #f7f7f7;
+$athens-gray: #f8f9fa;
+$white: #ffffff;
+
+// Gradients
+$loader-gradient: linear-gradient(
+  to right,
+  $albaster 8%,
+  $seashell 18%,
+  $albaster 23%
+);

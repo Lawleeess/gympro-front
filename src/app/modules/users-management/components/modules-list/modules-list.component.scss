@@ -1,0 +1,52 @@
+.module-info-container {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+
+  .module-icon-container {
+    align-items: center;
+    border-radius: 50%;
+    display: flex;
+    height: 2rem;
+    justify-content: center;
+    width: 2rem;
+
+    .module-icon {
+      font-size: 1.2rem;
+    }
+  }
+
+  .module-info {
+    display: flex;
+    flex-direction: column;
+
+    .module-name {
+      font-size: 1rem;
+    }
+  }
+}
+
+.audit-point-title:focus {
+  outline: none;
+}
+
+.adaptable-container {
+  background-color: var(--white);
+  border-radius: 0.3rem;
+  min-height: 60vh;
+  overflow: auto;
+  position: relative;
+
+  .loading-shade {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.03);
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+}

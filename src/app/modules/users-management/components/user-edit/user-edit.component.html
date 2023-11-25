@@ -1,0 +1,107 @@
+<div class="bg-white p-4">
+    <section class="section-container">
+    <h2 class="mt-3 mb-4">Editar usuario</h2>
+  
+    <form [formGroup]="form" (ngSubmit)="formChange()">
+      <div class="row">
+        <div class="col-6 padding">
+              <!-- name -->
+          <div class="form-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre(s)</mat-label>
+              <mat-icon matPrefix><i class="fas fa-user"></i></mat-icon>
+              <input
+                matInput
+                type="text"
+                placeholder="Nombre"
+                formControlName="name"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </div>
+  
+          <!-- lastname -->
+          <div class="form-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Apellidos</mat-label>
+              <mat-icon matPrefix><i class="fas fa-user"></i></mat-icon>
+              <input
+                matInput
+                type="text"
+                placeholder="Apellidos"
+                formControlName="lastname"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </div>
+
+        </div>
+        
+        <div class="col-6 padding">
+           <!-- phone_number -->
+      <div class="form-item">
+        <mat-form-field appearance="outline">
+          <mat-label>Número de celular</mat-label>
+          <mat-icon matPrefix><i class="fas fa-phone"></i></mat-icon>
+          <input
+            matInput
+            type="tel"
+            placeholder="(XXX) XXX-XXXX"
+            formControlName="phone_number"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+
+  
+          <!-- subscription -->
+          <div class="form-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Vencimiento de subscripción</mat-label>
+              <mat-icon matPrefix><i class="fas fa-calendar"></i></mat-icon>
+              <input
+                matInput
+                type="date"
+                placeholder="yyyy-MM-dd"
+                [min]="currentDate"
+                formControlName="subscription"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </div>
+   
+        </div>
+      </div>
+  
+      <div class="col-12 text-right">
+        <div
+          class="button-container d-flex justify-content-end align-items-end"
+        >
+          <button
+            mat-flat-button
+            type="button"
+            class="mr-3"
+            (click)="closeForm()"
+          >
+            Cancelar
+          </button>
+          <button
+          mat-flat-button
+          id="edit-button"
+          type="submit"
+          color="primary"
+          class="fit-content"
+          [disabled]="
+            !form.valid ||
+            reqStatus === 1
+          "
+        >
+          Editar
+        </button>
+        </div>
+      </div>
+
+    </form>
+  
+</section>
+</div>

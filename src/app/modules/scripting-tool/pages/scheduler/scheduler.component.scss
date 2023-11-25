@@ -1,0 +1,24 @@
+.form-border-panel {
+  background-color: var(--alto);
+  border-radius: 0.3rem;
+  padding: 40px 24px;
+
+  .form-container {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+
+    @media screen and (max-width: 575px) {
+      gap: 0;
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .button-container {
+    align-items: flex-end;
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+  }
+}

@@ -1,0 +1,776 @@
+<div class="row mb-3" *ngIf="searchFilter">
+  <div class="col-12 col-sm-6 col-lg-9">
+    <div class="d-flex align-items-end" [style.height.%]="100">
+      <h3 class="my-0">{{ tableTitle }}</h3>
+    </div>
+  </div>
+
+  <div
+    class="col-12 col-sm-6 col-lg-3"
+    [ngClass]="{
+      'offset-sm-0': !!tableTitle,
+      'offset-lg-0': !!tableTitle,
+      'offset-sm-6': !tableTitle,
+      'offset-lg-9': !tableTitle
+    }"
+  >
+    <div class="text-right">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar</mat-label>
+        <input
+          matInput
+          #input
+          type="text"
+          autocomplete="off"
+          (keyup)="applyFilter($event)"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+<div
+  class="adaptable-container"
+  [ngClass]="{ auto: tableData?.reqStatus > 1 }"
+  [style.minHeight.vh]="minHeightVh"
+>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    [matSortActive]="colSortedByDefault?.name && colSortedByDefault.name"
+    [matSortDirection]="
+      colSortedByDefault?.sortDirection && colSortedByDefault.sortDirection
+    "
+    [ngClass]="{ 'loading-state': tableData?.reqStatus === 1 }"
+  >
+    <ng-container *ngFor="let column of displayedColumns">
+      <ng-container [matColumnDef]="column.name">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          [ngClass]="
+            column.textAlign ? column.textAlign + '-align' : 'left-align'
+          "
+          [disabled]="column.sortingDisabled"
+        >
+          {{ column.title }}
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [style.width.rem]="column.widthColumn && column.widthColumn"
+          [style.max-width.vw]="column.maxWidthColumn && column.maxWidthColumn"
+          [style.text-align]="column.textAlign ? column.textAlign : 'left'"
+          [hidden]="tableData?.reqStatus === 3 || tableData?.data?.length === 0"
+        >
+          <!-- with empty line -->
+          <span *ngIf="column.emptyLine && !element[column.name]">-</span>
+
+          <!-- without empty line -->
+          <div
+            ngbDropdown
+            [ngClass]="{
+              'popover-container':
+                !!column.droptipPropertyName &&
+                !!element[column.droptipPropertyName]
+            }"
+          >
+            <div ngbDropdownToggle>
+              <div
+                *ngIf="!(column.emptyLine && !element[column.name])"
+                #tooltip="matTooltip"
+                md-raised-button
+                [matTooltip]="
+                  column.tooltipPropertyName
+                    ? element[column.tooltipPropertyName]
+                    : column.tooltip
+                    ? element[column.name]
+                    : ''
+                "
+                matTooltipPosition="below"
+                matTooltipClass="custom-tooltip"
+                [ngClass]="{ 'value-container': column.comparativeName }"
+                [style.text-align]="
+                  column.textAlign ? column.textAlign : 'left'
+                "
+                [style.width.%]="100"
+              >
+                <ng-container [ngSwitch]="true">
+                  <!-- icon column -->
+                  <div
+                    *ngSwitchCase="!!column.icon"
+                    class="icon-container"
+                    (click)="selectRow(element, column.name)"
+                  >
+                    <i [ngClass]="column.icon"></i>
+                  </div>
+
+                  <!-- button column -->
+                  <div *ngSwitchCase="!!column.button">
+                    <button
+                      *ngIf="!!element[column.name]"
+                      mat-flat-button
+                      color="primary"
+                      class="fit-content"
+                      (click)="selectRow(element, column.name)"
+                    >
+                      {{ column.title }}
+                    </button>
+                  </div>
+
+                  <!-- link column -->
+                  <div *ngSwitchCase="!!column.link">
+                    <a
+                      *ngIf="column?.linkEmpty !== element[column.name]"
+                      [href]="element[column.name]"
+                      target="_blank"
+                    >
+                      {{
+                        column?.linkName && element[column.name]
+                          ? column?.linkName
+                          : element[column.name]
+                      }}
+                    </a>
+                    <span *ngIf="column?.linkEmpty === element[column.name]">
+                      {{ element[column.name] }}
+                    </span>
+                  </div>
+
+                  <!-- status column -->
+                  <div *ngSwitchCase="!!column.status">
+                    <div class="status-container">
+                      <mat-spinner
+                        *ngIf="element[column.name] === 'running'"
+                        diameter="15"
+                      >
+                      </mat-spinner>
+
+                      <i
+                        *ngIf="element[column.name] !== 'running'"
+                        [ngClass]="{
+                          'text-success':
+                            element[column.name].toLowerCase() === 'finished' ||
+                            element[column.name].toLowerCase() === 'active',
+                          'text-danger':
+                            element[column.name].toLowerCase() === 'fail',
+                          'text-default':
+                            element[column.name].toLowerCase() === 'timeout' ||
+                            element[column.name].toLowerCase() == 'paused'
+                        }"
+                        class="fas fa-circle status-icon"
+                      >
+                      </i>
+
+                      <div
+                        [ngSwitch]="element[column.name].toLowerCase()"
+                        class="text-value"
+                      >
+                        <!-- scripting tool status -->
+                        <span *ngSwitchCase="'finished'">Finalizado</span>
+                        <span *ngSwitchCase="'running'">Ejecutando</span>
+                        <span *ngSwitchCase="'timeout'">Timeout</span>
+                        <span *ngSwitchCase="'fail'">Error</span>
+                        <!-- customer status -->
+                        <span *ngSwitchCase="'active'">Activo</span>
+                        <span *ngSwitchCase="'paused'">Pausado</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- media column (iconify-icon)-->
+                  <div *ngSwitchCase="column.media === 'iconify-icon'">
+                    <span
+                      class="iconify"
+                      data-width="18"
+                      [attr.data-icon]="element[column.name]?.dataIcon"
+                    >
+                    </span>
+                  </div>
+
+                  <!-- media column (increment)-->
+                  <div *ngSwitchCase="column.media === 'increment'">
+                    <div
+                      class="d-flex align-items-center text-muted"
+                      [ngClass]="{
+                        'text-success':
+                          element[column.name]?.newValue >
+                          element[column.name]?.previousValue,
+                        'text-danger':
+                          element[column.name]?.newValue <
+                          element[column.name]?.previousValue
+                      }"
+                    >
+                      <!-- icon -->
+                      <i
+                        class="fa mr-2"
+                        [ngClass]="{
+                          'fa-caret-up':
+                            element[column.name]?.newValue >
+                            element[column.name]?.previousValue,
+                          'fa-caret-down':
+                            element[column.name]?.newValue <
+                            element[column.name]?.previousValue,
+                          'regular fa-equals':
+                            element[column.name]?.newValue ===
+                            element[column.name]?.previousValue
+                        }"
+                      ></i>
+
+                      <!-- value -->
+                      <ng-container
+                        [ngSwitch]="element[column.name]?.valueFormat"
+                      >
+                        <!-- value (total + percentage) -->
+                        <div
+                          class="d-flex flex-column"
+                          *ngSwitchCase="'currency'"
+                        >
+                          <div class="d-flex">
+                            <!-- sign -->
+                            <small
+                              class="sign mr-1"
+                              [ngClass]="{
+                                positive:
+                                  element[column.name]?.newValue >
+                                  element[column.name]?.previousValue,
+                                negative:
+                                  element[column.name]?.newValue <
+                                  element[column.name]?.previousValue
+                              }"
+                            >
+                            </small>
+
+                            <!-- total value -->
+                            <small>
+                              {{
+                                myMath.abs(
+                                  element[column.name]?.newValue -
+                                    element[column.name]?.previousValue
+                                ) | currency: "USD":"symbol-narrow"
+                              }}
+                            </small>
+                          </div>
+
+                          <!-- percentage value -->
+                          <div class="d-flex">
+                            <small
+                              class="sign mr-1"
+                              [ngClass]="{
+                                positive:
+                                  element[column.name]?.newValue >
+                                  element[column.name]?.previousValue,
+                                negative:
+                                  element[column.name]?.newValue <
+                                  element[column.name]?.previousValue
+                              }"
+                            >
+                            </small>
+                            <!-- increment -->
+                            <small
+                              *ngIf="
+                                element[column.name]?.newValue >
+                                element[column.name]?.previousValue
+                              "
+                            >
+                              {{
+                                myMath.abs(
+                                  (element[column.name]?.previousValue * 100) /
+                                    element[column.name]?.newValue
+                                ) | number: "1.2-2"
+                              }}%
+                            </small>
+
+                            <!-- decrement -->
+                            <small
+                              *ngIf="
+                                element[column.name]?.newValue <
+                                element[column.name]?.previousValue
+                              "
+                            >
+                              {{
+                                myMath.abs(
+                                  (element[column.name]?.newValue * 100) /
+                                    element[column.name]?.previousValue
+                                ) | number: "1.2-2"
+                              }}%
+                            </small>
+
+                            <!-- equals -->
+                            <small
+                              *ngIf="
+                                element[column.name]?.newValue ===
+                                element[column.name]?.previousValue
+                              "
+                            >
+                              {{ 0 | number: "1.2-2" }}%
+                            </small>
+                          </div>
+                        </div>
+
+                        <!-- value (percentage) -->
+                        <div *ngSwitchCase="'percentage'">
+                          <small
+                            class="sign mr-1"
+                            [ngClass]="{
+                              positive:
+                                element[column.name]?.newValue >
+                                element[column.name]?.previousValue,
+                              negative:
+                                element[column.name]?.newValue <
+                                element[column.name]?.previousValue
+                            }"
+                          >
+                          </small>
+
+                          <!-- increment -->
+                          <small
+                            *ngIf="
+                              element[column.name]?.newValue >
+                              element[column.name]?.previousValue
+                            "
+                          >
+                            {{
+                              myMath.abs(
+                                (element[column.name]?.previousValue * 100) /
+                                  element[column.name]?.newValue
+                              ) | number: "1.2-2"
+                            }}%
+                          </small>
+
+                          <!-- decrement -->
+                          <small
+                            *ngIf="
+                              element[column.name]?.newValue <
+                              element[column.name]?.previousValue
+                            "
+                          >
+                            {{
+                              myMath.abs(
+                                (element[column.name]?.newValue * 100) /
+                                  element[column.name]?.previousValue
+                              ) | number: "1.2-2"
+                            }}%
+                          </small>
+
+                          <!-- equals -->
+                          <small
+                            *ngIf="
+                              element[column.name]?.newValue ===
+                              element[column.name]?.previousValue
+                            "
+                          >
+                            {{ 0 | number: "1.2-2" }}%
+                          </small>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+
+                  <!-- media column (indicator)-->
+                  <div
+                    *ngSwitchCase="column.media === 'indicator'"
+                    class="text-left text-success"
+                  >
+                    <div
+                      *ngIf="isIndicatorColumnValid(element[column.name])"
+                      [ngClass]="{
+                        'lg-container': column.maxWidthTdPercentage,
+                        'text-danger': isIndicatorColumnOutOfMargin(
+                          element[column.name]
+                        )
+                      }"
+                    >
+                      <div
+                        [ngSwitch]="column.formatValue"
+                        #tooltip="matTooltip"
+                        [matTooltip]="
+                          loadTooltipValueForIndicatorColumn(
+                            element[column.name].targetValue,
+                            column.indicatorTooltipPrefix,
+                            column.indicatorTooltipSuffix
+                          )
+                        "
+                        matTooltipPosition="right"
+                        [ngStyle]="{ width: 'fit-content' }"
+                      >
+                        <!-- numeric values -->
+                        <span *ngSwitchCase="'currency'">
+                          {{
+                            getIndicatorColumnValue(element[column.name])
+                              | currency
+                                : "USD"
+                                : "symbol-narrow"
+                                : (column?.decimalInValues >= 0
+                                    ? "1." + column.decimalInValues + "-0"
+                                    : "1.2")
+                          }}
+                        </span>
+                        <span *ngSwitchCase="'percentage'"
+                          >{{
+                            getIndicatorColumnValue(element[column.name])
+                              | number
+                                : (column?.decimalInValues >= 0
+                                    ? "1." + column.decimalInValues + "-0"
+                                    : "1.2")
+                          }}%
+                        </span>
+                        <span *ngSwitchCase="'decimal'">
+                          {{
+                            getIndicatorColumnValue(element[column.name])
+                              | number
+                                : (column?.decimalInValues >= 0
+                                    ? "1." + column.decimalInValues
+                                    : "1.2")
+                          }}
+                        </span>
+                        <span *ngSwitchCase="'integer'">
+                          {{
+                            getIndicatorColumnValue(element[column.name])
+                              | number: "1.0-0"
+                          }}
+                        </span>
+                        <span *ngSwitchDefault>
+                          {{ getIndicatorColumnValue(element[column.name]) }}
+                        </span>
+                      </div>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="!isIndicatorColumnValid(element[column.name])"
+                    >
+                      invalid indicator properties
+                    </span>
+                  </div>
+
+                  <!-- media column (progress-bar)-->
+                  <div
+                    *ngSwitchCase="column.media === 'progress-bar'"
+                    class="text-right"
+                    [style.width.px]="100"
+                  >
+                    <small class="text-muted">
+                      {{ element[column.name] | number: "1.2-2" }}%
+                    </small>
+                    <mat-progress-bar
+                      [color]="element[column.name] >= 90 ? 'warn' : 'primary'"
+                      mode="determinate"
+                      [value]="element[column.name]"
+                    >
+                    </mat-progress-bar>
+                  </div>
+
+                  <!-- media column (chart-line)-->
+                  <div *ngSwitchCase="column.media === 'chart-line'">
+                    <ng-container
+                      *ngIf="
+                        column.chartLineSettings?.dateRefName &&
+                        column.chartLineSettings?.valueRefName
+                      "
+                    >
+                      <app-chart-line-mini
+                        [categoryName]="column.chartLineSettings.dateRefName"
+                        [valueName]="column.chartLineSettings.valueRefName"
+                        [data]="element[column.name]"
+                        [widthPx]="
+                          column.widthColumn ? column.widthColumn * 16 : 100
+                        "
+                      ></app-chart-line-mini>
+                    </ng-container>
+                  </div>
+
+                  <!-- edit action column -->
+                  <div
+                    *ngSwitchCase="!!column.editTrigger"
+                    class="icon-container"
+                    [ngClass]="column.textAlign"
+                  >
+                    <ng-container *ngIf="!!element[column.name]">
+                      <i
+                        *ngIf="
+                          !enableEdition || editedElement.id !== element.id
+                        "
+                        class="fas fa-edit"
+                        (click)="
+                          enableEdition = !enableEdition;
+                          editedElement = element
+                        "
+                      ></i>
+
+                      <i
+                        *ngIf="enableEdition && editedElement.id === element.id"
+                        class="fas fa-save"
+                        (click)="enableEdition = false; updateRow()"
+                      ></i>
+                    </ng-container>
+                  </div>
+
+                  <!-- value (text) column -->
+                  <div
+                    *ngSwitchDefault
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    <div
+                      [hidden]="
+                        (column.editable &&
+                          enableEdition &&
+                          editionMode === 'row' &&
+                          editedElement?.id === element.id) ||
+                        (editionMode === 'cell' &&
+                          editedElement?.id === element.id &&
+                          editedColumn === column.name)
+                      "
+                    >
+                      <div
+                        [ngSwitch]="column.formatValue"
+                        class="text-value"
+                        [ngClass]="{
+                          'lg-container': column.maxWidthTdPercentage
+                        }"
+                      >
+                        <!-- numeric values -->
+                        <span *ngSwitchCase="'currency'">
+                          {{
+                            element[column.name]
+                              | currency
+                                : "USD"
+                                : "symbol-narrow"
+                                : (column?.decimalInValues >= 0
+                                    ? "1." + column.decimalInValues + "-0"
+                                    : "1.2")
+                          }}
+                        </span>
+                        <span *ngSwitchCase="'percentage'"
+                          >{{
+                            element[column.name]
+                              | number
+                                : (column?.decimalInValues >= 0
+                                    ? "1." + column.decimalInValues + "-0"
+                                    : "1.2")
+                          }}%
+                        </span>
+                        <span *ngSwitchCase="'decimal'">
+                          {{
+                            element[column.name]
+                              | number
+                                : (column?.decimalInValues >= 0
+                                    ? "1." + column.decimalInValues
+                                    : "1.2")
+                          }}
+                        </span>
+                        <span *ngSwitchCase="'integer'">
+                          {{ element[column.name] | number: "1.0-0" }}
+                        </span>
+
+                        <!-- string values -->
+                        <ng-container *ngSwitchDefault>
+                          <ng-container [ngSwitch]="column.textPipe">
+                            <span *ngSwitchCase="'titlecase'">
+                              {{ element[column.name] | titlecase }}
+                            </span>
+                            <span *ngSwitchCase="'lowercase'">
+                              {{ element[column.name] | lowercase }}
+                            </span>
+                            <span *ngSwitchCase="'uppercase'">
+                              {{ element[column.name] | uppercase }}
+                            </span>
+                            <span *ngSwitchDefault>
+                              {{ element[column.name] }}
+                            </span>
+                          </ng-container>
+                        </ng-container>
+                      </div>
+                    </div>
+
+                    <!-- column edition -->
+                    <ng-container *ngIf="column.editable">
+                      <div
+                        *ngIf="
+                          enableEdition &&
+                          editedElement.id === element.id &&
+                          (editionMode === 'row' ||
+                            (editionMode === 'cell' &&
+                              editedColumn === column.name))
+                        "
+                      >
+                        <div class="editable-field-container">
+                          <mat-form-field
+                            appearance="outline"
+                            floatLabel="never"
+                          >
+                            <input
+                              matInput
+                              #input
+                              [type]="column.formatValue ? 'number' : 'text'"
+                              autocomplete="off"
+                              [value]="element[column.name]"
+                              (keyup)="
+                                columnValueChange(
+                                  element,
+                                  column.name,
+                                  $event.target.value
+                                )
+                              "
+                              (keyup.enter)="
+                                columnValueChange(
+                                  element,
+                                  column.name,
+                                  $event.target.value
+                                );
+                                enableEdition = false;
+                                updateCell();
+                                editedColumn = null
+                              "
+                            />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="editionMode === 'cell'"
+                        class="icon-container"
+                        [ngClass]="column.textAlign"
+                      >
+                        <ng-container>
+                          <!-- edit button -->
+                          <button
+                            mat-icon-button
+                            aria-label="Edit"
+                            class="ml-2"
+                            *ngIf="
+                              !enableEdition ||
+                              editedElement?.id !== element.id ||
+                              (enableEdition &&
+                                editedElement?.id === element.id &&
+                                editedColumn !== column.name)
+                            "
+                            (click)="
+                              enableEdition = true;
+                              editedElement = element;
+                              editedColumn = column.name
+                            "
+                          >
+                            <i class="fas fa-edit"></i>
+                          </button>
+
+                          <!-- save button -->
+                          <button
+                            mat-icon-button
+                            aria-label="Save"
+                            class="ml-2"
+                            *ngIf="
+                              enableEdition &&
+                              editedElement.id === element.id &&
+                              editedColumn === column.name
+                            "
+                            [disabled]="
+                              !selectedElement ||
+                              selectedElement?.id !== element.id
+                            "
+                            (click)="
+                              enableEdition = false;
+                              updateCell();
+                              editedColumn = null
+                            "
+                          >
+                            <i
+                              class="fas fa-save"
+                              [ngClass]="{
+                                disabled:
+                                  !selectedElement ||
+                                  selectedElement?.id !== element.id
+                              }"
+                            ></i>
+                          </button>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div
+              class="content"
+              ngbDropdownMenu
+              *ngIf="
+                !!column.droptipPropertyName &&
+                !!element[column.droptipPropertyName]
+              "
+            >
+              <p>{{ element[column.droptipPropertyName] }}</p>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+    </ng-container>
+
+    <ng-container matColumnDef="disclaimer">
+      <td
+        mat-footer-cell
+        *matFooterCellDef
+        [attr.colspan]="displayedColumns?.length"
+      >
+        <!-- loading -->
+        <div
+          class="loading-shade"
+          [style.minHeight.vh]="minHeightVh - 1"
+          [hidden]="tableData?.reqStatus !== 1"
+        >
+          <mat-spinner class="mt-5"></mat-spinner>
+        </div>
+
+        <!-- error message -->
+        <div
+          class="text-danger text-center mb-2"
+          *ngIf="tableData?.reqStatus === 3"
+        >
+          {{ errorMsg }}
+        </div>
+
+        <!-- empty data message -->
+        <div
+          class="text-muted text-center mb-2"
+          *ngIf="tableData?.data?.length === 0 && tableData?.reqStatus === 2"
+        >
+          {{ emptyDataMsg }}
+        </div>
+
+        <!-- filter without results -->
+        <div
+          class="text-muted text-center mb-2"
+          *ngIf="
+            tableData?.reqStatus === 2 &&
+            tableData?.data?.length > 0 &&
+            dataSource.filteredData.length === 0
+          "
+        >
+          No se encontraron resultados que coincidan.
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsHeaders"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsHeaders"></tr>
+    </ng-container>
+
+    <tr
+      mat-footer-row
+      *matFooterRowDef="['disclaimer']"
+      class="example-second-footer-row"
+      [hidden]="
+        tableData?.reqStatus < 1 ||
+        (tableData?.reqStatus === 2 &&
+          tableData?.data?.length > 0 &&
+          dataSource.filteredData.length > 0)
+      "
+    ></tr>
+  </table>
+</div>
+
+<mat-paginator
+  class="paginator"
+  pageSize="50"
+  [pageSizeOptions]="[5, 10, 50, 100]"
+  showFirstLastButtons
+></mat-paginator>

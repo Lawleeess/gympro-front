@@ -1,0 +1,114 @@
+<br><mat-divider></mat-divider><br><br>
+<ng-container>
+    <h3 class="module-title">Clientes</h3>
+    <div class="row">
+      <!-- table -->
+      <div class="col-12">
+        <table class="bg-white">
+          <thead>
+            <tr>
+              <th>Clientes</th>
+              <th *ngIf="allowActions">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- loader -->
+            <ng-container *ngIf="status < 2">
+              <tr>
+                <td colspan="4">
+                  <div class="adaptable-container">
+                    <div class="loading-shade">
+                      <mat-spinner></mat-spinner>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+  
+            <!-- customers list -->
+  
+            <ng-container *ngIf="customers.data?.length > 0 && status === 2">
+              <tr>
+                <td>
+                  <div class="module-info-container">
+                    <div class="module-info">
+                      <span
+                        class="module-name text-muted mt-1"
+                        *ngIf="preselectedOptions.length == 0"
+                      >
+                        Sin Clientes Asignados
+                      </span>
+                      <span
+                        class="module-name text-muted mt-1"
+                        *ngIf="preselectedOptions.join(', ').length > 60"
+                      >
+                        {{ preselectedOptions.join(", ") | slice : 0 : 60 }}...
+                      </span>
+                      <span
+                        class="module-name text-muted mt-1"
+                        *ngIf="preselectedOptions.join(', ').length <= 60"
+                      >
+                        {{ preselectedOptions.join(", ") }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="allowActions">
+                  <!-- module actions -->
+                  <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon
+                      *ngIf="
+                      reqStatus !== 1 ||
+                        selectedModule?.name !== module.name
+                      "
+                    >
+                      <i class="fas fa-cog text-muted"></i>
+                    </mat-icon>
+                    <mat-spinner
+                      *ngIf="
+                      reqStatus === 1 &&
+                        selectedModule?.name === module.name
+                      "
+                      diameter="18"
+                      class="ml-2"
+                    ></mat-spinner>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <!-- update clients -->
+                    <button
+                      mat-menu-item
+                      *ngIf="allowActions"
+                      (click)="requestUpdate()"
+                    >
+                      <mat-icon><i class="fas fa-edit"></i></mat-icon>
+                      <span *ngIf="allowActions">
+                        Cambiar permisos de clientes
+                      </span>
+                    </button>
+                  </mat-menu>
+                </td>
+              </tr>
+            </ng-container>
+  
+            <!-- messages -->
+            <ng-container
+              *ngIf="(customers?.data?.length === 0 && status === 2) || status === 3"
+            >
+              <tr>
+                <td colspan="4" class="text-center">
+                  <!-- error message -->
+                  <p *ngIf="status === 3" class="text-danger my-0">
+                    Error al consultar la lista de clientes a las cuales tiene
+                    acceso este usuario.
+                    <br />
+                    Por favor, intenta más tarde.
+                  </p>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  

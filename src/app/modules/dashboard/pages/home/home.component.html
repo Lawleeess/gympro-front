@@ -1,0 +1,204 @@
+<div class="container my-5" *ngIf="!!user.id">
+  <ng-container >
+    <div class="row">
+      <!-- user info -->
+      <div class="col-12 col-lg-6 mb-3">
+        <mat-card class="fluid">
+          <div class="d-flex">
+            <div>
+              <div class="avatar-container mr-4">
+                <mat-icon>
+                  <i class="fas fa-user-alt blue"></i>
+                </mat-icon>
+              </div>
+            </div>
+            <div>
+              <h2 >Bienvenido</h2>
+              <mat-card-subtitle>
+                {{
+                  !!user?.name ? user?.name + " " + user?.lastname : user?.email
+                }}
+              </mat-card-subtitle>
+              <mat-card-content >
+                <p>
+                  En esta plataforma encontrarás distintas herramientas. <br />
+                  Puedes acceder a ellas por medio de los accesos directos que
+                  se muestran a continuación, o bien, a través del sidebar.
+                </p>
+              </mat-card-content>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- work calendar -->
+      <div class="col-12 col-lg-6 mb-3">
+        <mat-card>
+          <div class="d-flex flex-column">
+            <div class="d-flex align-items-center mb-3">
+              <div class="icon-container mr-2">
+                <mat-icon>
+                  <i class="fas fa-calendar-alt sm purple"></i>
+                </mat-icon>
+              </div>
+              <h3 class="mb-0">Subscripción</h3>
+            </div>
+            <div class="placeholder-container">
+              <div class="placeholder-box mt-2">
+                <h3 *ngIf="difDate > 0" >Tu subscripción vence el {{user.subscription | date:'fullDate' }}</h3>
+                <h3 *ngIf="difDate === 0" >Tu subscripción vence hoy</h3>
+                <h3 *ngIf="difDate < 0" class="red">Tu subscripción venció el {{user.subscription | date:'fullDate' }}</h3>
+              </div>
+              
+            </div>
+            <div class="row container">
+              <i *ngIf="difDate > 6" class="fas fa-clock sm green"></i>
+              <h3 *ngIf="difDate > 6" class="margenes plus5">
+                Restan {{difDate}}
+                <ng-container [ngPlural]="difDate">
+                  <ng-template ngPluralCase="=1">día.</ng-template>
+                  <ng-template ngPluralCase="other">días.</ng-template>
+                </ng-container>
+              </h3>
+              <i *ngIf="difDate >= 0 && difDate <= 5" class="fas fa-clock sm orange"></i>
+              <h3 *ngIf="difDate >= 0 && difDate <= 5" class="margenes around6">
+                Restan {{difDate}}
+                <ng-container [ngPlural]="difDate">
+                  <ng-template ngPluralCase="=1">día.</ng-template>
+                  <ng-template ngPluralCase="other">días.</ng-template>
+                </ng-container>
+              </h3>
+              <!-- <i *ngIf="difDate < 0" class="fas fa-clock sm red"></i>
+              <h3 *ngIf="difDate < 0" class="margenes less5">
+                Restan {{difDate}}
+                <ng-container [ngPlural]="difDate">
+                  <ng-template ngPluralCase="=1">día.</ng-template>
+                  <ng-template ngPluralCase="other">días.</ng-template>
+                </ng-container>
+              </h3> -->
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+
+      <div class="col-12 col-lg-12 mb-3">
+        <mat-card>
+          <div class="d-flex flex-column">
+            <div class="d-flex align-items-center mb-3">
+              <div class="icon-container mr-2">
+                <mat-icon>
+                  <i class="fas fa-calendar sm orange"></i>
+                </mat-icon>
+              </div>
+              <h3 class="mb-0">Rutina de hoy</h3>
+            </div>
+
+            <div *ngIf="!haveRoutine && difDate >= 0" class="placeholder-container large">
+              <div class="placeholder-box large mt-2">
+                <span class="text-muted">Nada por hoy</span>
+              </div>
+            </div>
+
+            <div *ngIf="difDate < 0" class="placeholder-container large">
+              <div class="placeholder-box large mt-2">
+                <span class="text-muted">Realiza el pago de tu subscripción para seguir disfrutando de los beneficios que tenemos para ti.</span>
+              </div>
+            </div>
+
+            <div *ngIf="haveRoutine && difDate >= 0" class="placeholder-container large">
+              <!-- table -->
+              <ng-container >
+                  <div class="col-12">
+                    <table class="bg-white">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Nombre</th>
+                          <th>Descripción</th>
+                          <th>URL Video</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- loader -->
+                        <ng-container *ngIf="status < 2">
+                          <tr>
+                            <td colspan="4">
+                              <div class="adaptable-container">
+                                <div class="loading-shade">
+                                  <mat-spinner>Selecciona un grupo muscular</mat-spinner>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+
+                        <!-- users list -->
+                        <ng-container *ngIf="todayRoutine?.length > 0 && status === 2">
+                          <tr *ngFor="let routine of todayRoutine">
+                            <td>
+                                <img class="center imgList" [src]="routine.url_image">
+                            </td>
+                            <td>
+                              <div class="user-info">
+                                <span class="user-name blue">
+                                  {{
+                                    routine.name
+                                  }}
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                              <span class="user-email text-muted mt-1">
+                              {{ routine.description }}
+                              </span>
+                            </td>
+                            <td>{{ routine.video_url}}</td>
+                          </tr>
+                        </ng-container>
+              
+                        <!-- messages -->
+                        <ng-container
+                          *ngIf="(routines?.length === 0 && status === 2) || status === 3"
+                        >
+                          <tr>
+                            <td colspan="4" class="text-center">
+                              <!-- empty message -->
+                              <p
+                                *ngIf="routines?.length === 0 && status === 2"
+                                class="text-muted my-0"
+                              >
+                                No se encontró ningún usuario.
+                              </p>
+              
+                              <!-- error message -->
+                              <p *ngIf="status === 3" class="text-danger my-0">
+                                Error al consultar tu rutina.
+                                <br />
+                                Por favor, intenta más tarde.
+                              </p>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+              
+              </ng-container>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- <ng-container
+    *ngIf="
+      !user?.modulesWithPermission || user?.modulesWithPermission?.length === 0
+    "
+  >
+    <app-standby-access-modules></app-standby-access-modules>
+  </ng-container> -->
+</div>

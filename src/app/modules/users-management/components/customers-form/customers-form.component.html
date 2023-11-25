@@ -1,0 +1,56 @@
+<div class="bg-white p-4">
+    <section class="section-container">
+      <form [formGroup]="form" (ngSubmit)="updateCustomers()">
+        <!-- Clients -->
+        <div class="mt-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Clientes</mat-label>
+            <mat-select formControlName="clients" multiple>
+              <mat-option (click)="clearOpts()">None</mat-option>
+              <mat-option (click)="selectAll()">All</mat-option>
+              <mat-option
+                *ngFor="let customer of customers.data"
+                [value]="customer"
+              >
+                {{ customer.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+        <div class="col-12 mt-2">
+          <p class="text-muted text-left">
+            Sólo es posible agregar clientes si tienes acceso a ellos con el rol de
+            "Admin"
+          </p>
+        </div>
+  
+        <!-- Buttons -->
+        <div class="col-12 text-right mt-2">
+          <div
+            class="button-container d-flex justify-content-end align-items-end"
+          >
+            <button
+              mat-flat-button
+              type="button"
+              class="mr-3"
+              (click)="closeForm()"
+            >
+              Cancelar
+            </button>
+  
+            <button
+              [formGroup]="form"
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="!form.valid"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+  

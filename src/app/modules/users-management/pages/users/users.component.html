@@ -1,0 +1,16 @@
+<div class="container mb-3">
+  <app-redirect-button redirectRoute="/dashboard/home"></app-redirect-button>
+</div>
+
+<div class="container">
+  <div class="row mt-4 mt-sm-0">
+    <div class="col-12">
+      <app-users-list
+        [users]="users"
+        [usersTotal]="usersTotal"
+        [status]="usersReqStatus"
+        (refreshUsers)="getUsers($event)"
+      ></app-users-list>
+    </div>
+  </div>
+</div>

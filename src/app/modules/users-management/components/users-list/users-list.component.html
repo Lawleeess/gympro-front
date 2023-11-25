@@ -1,0 +1,196 @@
+<ng-container>
+  <div class="row">
+    <!-- add admin -->
+    <div class="col-12 col-lg-4 col-lg-4 mb-3">
+      <div class="center d-flex justify-content-end">
+      <button
+      mat-flat-button
+      id="edit-button"
+      type="submit"
+      (click)="toAddAdmin()"
+      color="primary"
+      class="fit-content"
+    >
+      Agregar admin
+    </button>
+    </div>
+    </div>
+  
+    <!-- filters -->
+    <div class="col-12 col-lg-4 col-lg-4 mb-3">
+      <mat-form-field appearance="outline">
+        <mat-label>Rol</mat-label>
+        <mat-select
+          [(value)]="selectedDepartment"
+          (selectionChange)="applyFilter()"
+          [disabled]="status !== 2"
+        >
+          <mat-option
+            *ngFor="let rol of roles"
+            [value]="rol.value"
+          >
+            {{ rol.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-lg-4 mb-3">
+      <div class="d-flex justify-content-end">
+        <mat-form-field appearance="outline">
+          <mat-label>Buscar</mat-label>
+          <input
+            matInput
+            type="text"
+            autocomplete="off"
+            [formControl]="filter"
+          />
+          <button
+            *ngIf="filter"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="filter.setValue(''); applyFilter()"
+            my="0"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="col-12">
+      <table class="bg-white">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Módulos</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- loader -->
+          <ng-container *ngIf="status < 2">
+            <tr>
+              <td colspan="4">
+                <div class="adaptable-container">
+                  <div class="loading-shade">
+                    <mat-spinner></mat-spinner>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <!-- users list -->
+          <ng-container *ngIf="users?.length > 0 && status === 2">
+            <tr *ngFor="let user of users">
+              <td>
+                <div class="user-info-container">
+                  <i class="user-avatar-container bg-muted">
+                    <img class="center2" [src]="user.url_image">
+                  </i>
+
+                  <div class="user-info">
+                    <span class="user-name blue">
+                      {{
+                        !!user.name
+                          ? user.name + " " + user.lastname
+                          : user.email
+                      }}
+                    </span>
+                    <span class="user-email text-muted mt-1">
+                      {{ user.email }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td>{{ user.user_role | titlecase }}</td>
+              <td>
+                {{
+                  user.modulesWithPermission
+                    ? user.modulesWithPermission.length
+                    : 0
+                }}
+              </td>
+              <td>
+                <!-- actions for admin role -->
+                <ng-container
+                  *ngIf="
+                    loggedInUserRole === 'admin' && loggedInUser.id !== user.id
+                  "
+                >
+                  <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon><i class="fas fa-cog text-muted"></i></mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button
+                      mat-menu-item
+                      routerLink="details"
+                      [queryParams]="{ id: user.id }"
+                    >
+                      <mat-icon><i class="fas fa-edit"></i></mat-icon>
+                      <span>Editar</span>
+                    </button>
+                    <button mat-menu-item (click)="confirmDeletetion(user)">
+                      <mat-icon><i class="fas fa-trash-alt"></i></mat-icon>
+                      <span>Eliminar</span>
+                    </button>
+                  </mat-menu>
+                </ng-container>
+
+                <!-- actions for viewer role -->
+                <ng-container
+                  *ngIf="
+                    loggedInUserRole === 'viewer' || loggedInUser.id === user.id
+                  "
+                >
+                  <button
+                    mat-icon-button
+                    routerLink="details"
+                    [queryParams]="{ id: user.id }"
+                  >
+                    <mat-icon><i class="fas fa-eye text-muted"></i></mat-icon>
+                  </button>
+                </ng-container>
+              </td>
+            </tr>
+          </ng-container>
+
+          <!-- messages -->
+          <ng-container
+            *ngIf="(users?.length === 0 && status === 2) || status === 3"
+          >
+            <tr>
+              <td colspan="4" class="text-center">
+                <!-- empty message -->
+                <p
+                  *ngIf="users?.length === 0 && status === 2"
+                  class="text-muted my-0"
+                >
+                  No se encontró ningún usuario.
+                </p>
+
+                <!-- error message -->
+                <p *ngIf="status === 3" class="text-danger my-0">
+                  Error al consultar la lista de usuarios.
+                  <br />
+                  Por favor, intenta más tarde.
+                </p>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <mat-paginator
+        pageSize="50"
+        [pageSizeOptions]="[50, 100, 200, 1000]"
+        [length]="usersTotal"
+        (page)="pageChange($event)"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+  </div>
+</ng-container>

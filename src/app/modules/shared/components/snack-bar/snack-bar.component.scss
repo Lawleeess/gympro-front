@@ -1,0 +1,12 @@
+.snack-bar-container {
+  align-items: center;
+  color: var(--white);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+
+  p {
+    margin: 0;
+  }
+}

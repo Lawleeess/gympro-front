@@ -1,0 +1,17 @@
+.layout-container {
+  height: calc(100vh - 15rem);
+
+  img {
+    width: 30vw;
+  }
+
+  @media screen and (max-width: 815px) {
+    img {
+      width: 50vw;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    text-align: center;
+  }
+}

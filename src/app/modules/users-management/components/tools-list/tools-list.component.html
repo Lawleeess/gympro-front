@@ -1,0 +1,132 @@
+<mat-divider></mat-divider><br><br>
+<ng-container>
+  <h3 class="module-title">Herramientas</h3>
+  <div class="row">
+    <!-- table -->
+    <div class="col-12">
+      <table class="bg-white">
+        <thead>
+          <tr>
+            <th>Herramienta</th>
+            <th>Rol</th>
+            <th *ngIf="allowActionsTools">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- loader -->
+          <ng-container *ngIf="status < 2">
+            <tr>
+              <td colspan="4">
+                <div class="adaptable-container">
+                  <div class="loading-shade">
+                    <mat-spinner></mat-spinner>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <!-- tools list -->
+
+          <ng-container *ngIf="tools?.length > 0 && status === 2">
+            <tr *ngFor="let tool of tools">
+              <td>
+                <div class="module-info-container">
+                  <i class="module-icon-container bg-default">
+                    <i class="white" [ngClass]="tool.icon"></i>
+                  </i>
+
+                  <div class="module-info">
+                    <span class="module-name text-muted mt-1">
+                      {{ tool.parsedName }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td>{{ tool.parsedRole }}</td>
+              
+              <td *ngIf="allowActionsTools">
+                <!-- tools actions -->
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon
+                    *ngIf="updateReqStatus !== 1"
+                  >
+                    <i class="fas fa-cog text-muted"></i>
+                  </mat-icon>
+                  <mat-spinner
+                    *ngIf="
+                      updateReqStatus === 1
+                    "
+                    diameter="18"
+                    class="ml-2"
+                  ></mat-spinner>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <!-- update role -->
+                  <button
+                    mat-menu-item
+                    *ngIf="allowActionsTools"
+                    [disabled]="disableActions || updateReqStatus === 1"
+                    (click)="confirmRoleUpdate(tool)"
+                  >
+                    <mat-icon><i class="fas fa-edit"></i></mat-icon>
+                    <span *ngIf="tool.parsedRole === ROLES.admin.name">
+                      Cambiar rol a {{ ROLES.viewer.name }}
+                    </span>
+                    <span *ngIf="tool.parsedRole === ROLES.viewer.name">
+                      Cambiar rol a {{ ROLES.admin.name }}
+                    </span>
+                  </button>
+                  <!-- remove module -->
+                  <button
+                    mat-menu-item
+                    *ngIf="allowActionsTools"
+                    [disabled]="disableActions || updateReqStatus === 1"
+                    (click)="confirmDeletion(tool)"
+                  >
+                    <mat-icon><i class="fas fa-trash-alt"></i></mat-icon>
+                    <span>Eliminar acceso a la herramienta</span>
+                  </button>
+
+                  <p
+                    class="text-muted my-2 mx-3"
+                    *ngIf="!tool.editableForActiveUser"
+                  >
+                    Sólo es posible gestionar herramientas si tienes acceso a ellos
+                    con el rol de "Admin"
+                  </p>
+                </mat-menu>
+              </td>
+            </tr>
+          </ng-container>
+
+          <!-- messages -->
+          <ng-container
+            *ngIf="(tools?.length === 0 && status === 2) || status === 3"
+          >
+            <tr>
+              <td colspan="4" class="text-center">
+                <!-- empty message -->
+                <p
+                  class="text-muted my-0"
+                  *ngIf="tools?.length === 0 && status === 2"
+                >
+                  No se encontró ninguna herramienta a la cual tenga acceso este
+                  usuario.
+                </p>
+
+                <!-- error message -->
+                <p *ngIf="status === 3" class="text-danger my-0">
+                  Error al consultar la lista de herramientas a las cuales tiene
+                  acceso este usuario.
+                  <br />
+                  Por favor, intenta más tarde.
+                </p>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-12 col-sm-6">
+        <app-generic-select [optionList]="accountList" label="Selecciona una cuenta" extraPropName="external_id"
+            (selectedOptionChange)="getAccountScripts($event)" [status]="accountsReqStatus" [searchFilter]="true"
+            errorMsg="Error al consultar cuentas" emptyMsg="No se encontraron cuentas">
+        </app-generic-select>
+    </div>
+</div>
+
+<!-- NEW SCRIPT FORM -->
+<div class="row mt-4" *ngIf="newScript">
+    <div class="col-12">
+        <h3>Agregar nuevo script</h3>
+        <div class="form-border-panel">
+
+            <div class="form-container">
+                <app-generic-select [optionList]="scriptList" label="Selecciona un script" [required]="true"
+                    [searchFilter]="true" [resetSelection]="resetNewScriptFields"
+                    (selectedOptionChange)="newScriptChange('script', $event)" emptyMsg="No se encontraron srpits">
+                </app-generic-select>
+
+                <app-generic-select [optionList]="frequencyList" label="Selecciona una frecuencia" [required]="true"
+                    [searchFilter]="true" [resetSelection]="resetNewScriptFields"
+                    (selectedOptionChange)="newScriptChange('frequency', $event)"
+                    emptyMsg="No se encontraron frecuencias">
+                </app-generic-select>
+            </div>
+
+            <div class="button-container mt-4">
+                <small class="text-muted" *ngIf="!selectedAccount">
+                    Selecciona una cuenta a la que se le agregará este script
+                </small>
+                <button type="button" mat-flat-button class="fit-content" (click)="cancelScriptCreation()">
+                    Cancelar
+                </button>
+                <button mat-flat-button color="primary" class="fit-content"
+                    [disabled]="!selectedAccount?.id || !selectedScript || !selectedFrequency || scriptReqStatus === 1"
+                    (click)="createScript()">
+                    Agregar script
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12 col-md-6">
+        <h2>Scripts corriendo en la cuenta</h2>
+    </div>
+    <div class="col-12 col-md-6 text-right" *ngIf="!newScript">
+        <button mat-flat-button color="primary" class="fit-content" (click)="newScript = !newScript">
+            Nuevo script
+        </button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12">
+        <app-generic-table [displayedColumns]="schedulerTableColumns" [tableData]="scheduler"
+            [tableDataChange]="scheduler.data" (selectedRowChange)="confirmScriptDeletion($event)"
+            errorMsg="Error al consultar los scripts de la cuenta"
+            [emptyDataMsg]="!selectedAccount?.id ? 'Selecciona una cuenta para visualizar los scripts' : 'No se encontraron scripts en la cuenta'">
+        </app-generic-table>
+    </div>
+</div>

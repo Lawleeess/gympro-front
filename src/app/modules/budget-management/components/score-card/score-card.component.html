@@ -1,0 +1,49 @@
+<mat-card>
+  <div class="card-container d-flex flex-column align-items-end">
+    <div class="icon-container" [ngClass]="bgClass">
+      <i [ngClass]="iconClass"></i>
+    </div>
+
+    <ng-container *ngIf="!loader">
+      <h3 class="text-muted my-3">{{ title }}</h3>
+
+      <h2 class="my-0" [ngSwitch]="totalFormat">
+        <strong *ngSwitchCase="'currency'">
+          {{
+            total
+              | currency
+                : "USD"
+                : "symbol-narrow"
+                : (decimalsInTotal >= 0 ? "1." + decimalsInTotal + "-0" : "1.2")
+          }}
+        </strong>
+        <strong *ngSwitchCase="'percentage'"
+          >{{
+            total
+              | number
+                : (decimalsInTotal >= 0
+                    ? "1." + decimalsInTotal + "-0"
+                    : "1.2")
+          }}%
+        </strong>
+        <strong *ngSwitchCase="'decimal'">
+          {{
+            total
+              | number: (decimalsInTotal >= 0 ? "1." + decimalsInTotal : "1.2")
+          }}
+        </strong>
+        <strong *ngSwitchCase="'integer'">
+          {{ total | number: "1.0-0" }}
+        </strong>
+      </h2>
+    </ng-container>
+    <ng-container *ngIf="loader">
+      <div class="bar-loader mt-4" [style.width.%]="80"></div>
+      <div
+        class="bar-loader mt-4"
+        [style.width.%]="90"
+        [style.height.rem]="1.3"
+      ></div>
+    </ng-container>
+  </div>
+</mat-card>

@@ -1,0 +1,160 @@
+<ng-container>
+  <div class="row">
+    <!-- filters -->
+    <!-- <div class="col-12 col-lg-4 offset-lg-8 mb-3">
+      <div class="d-flex justify-content-end">
+        <mat-form-field appearance="outline">
+          <mat-label>Buscar</mat-label>
+          <input
+            matInput
+            type="text"
+            autocomplete="off"
+            [(ngModel)]="filter"
+            (keyup)="applyFilter()"
+            [disabled]="status !== 2"
+          />
+          <button
+            *ngIf="filter"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="filter = ''; applyFilter()"
+            my="0"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </mat-form-field>
+      </div>
+    </div> -->
+
+    <!-- table -->
+    <div class="col-12">
+      <h3 class="module-title">Módulos</h3>
+      <table class="bg-white">
+        <thead>
+          <tr>
+            <th>Módulo</th>
+            <th>Rol</th>
+            <th *ngIf="allowActions">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- loader -->
+          <ng-container *ngIf="status < 2">
+            <tr>
+              <td colspan="3">
+                <div class="adaptable-container">
+                  <div class="loading-shade">
+                    <mat-spinner></mat-spinner>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <!-- module list -->
+          <ng-container *ngIf="modules?.length > 0 && status === 2">
+            <tr *ngFor="let module of modules">
+              <td>
+                <div class="module-info-container">
+                  <i class="module-icon-container bg-default">
+                    <i class="white" [ngClass]="module.icon"></i>
+                  </i>
+
+                  <div class="module-info">
+                    <span class="module-name text-muted mt-1">
+                      {{ module.parsedName }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td>{{ module.parsedRole }}</td>
+              <td *ngIf="allowActions">
+                <!-- module actions -->
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon
+                    *ngIf="
+                      updateReqStatus !== 1 ||
+                      selectedModule?.name !== module.name
+                    "
+                  >
+                    <i class="fas fa-cog text-muted"></i>
+                  </mat-icon>
+                  <mat-spinner
+                    *ngIf="
+                      updateReqStatus === 1 &&
+                      selectedModule?.name === module.name
+                    "
+                    diameter="18"
+                    class="ml-2"
+                  ></mat-spinner>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <!-- update role -->
+                  <button
+                    mat-menu-item
+                    *ngIf="module.editableForActiveUser"
+                    [disabled]="disableActions || updateReqStatus === 1"
+                    (click)="confirmRoleUpdate(module)"
+                  >
+                    <mat-icon><i class="fas fa-edit"></i></mat-icon>
+                    <span *ngIf="module.role === ROLES.admin.id">
+                      Cambiar rol a {{ ROLES.viewer.name }}
+                    </span>
+                    <span *ngIf="module.role === ROLES.viewer.id">
+                      Cambiar rol a {{ ROLES.admin.name }}
+                    </span>
+                  </button>
+                  <!-- remove module -->
+                  <button
+                    mat-menu-item
+                    *ngIf="module.editableForActiveUser"
+                    [disabled]="disableActions || updateReqStatus === 1"
+                    (click)="confirmDeletetion(module)"
+                  >
+                    <mat-icon><i class="fas fa-trash-alt"></i></mat-icon>
+                    <span>Eliminar acceso al módulo</span>
+                  </button>
+
+                  <p
+                    class="text-muted my-2 mx-3"
+                    *ngIf="!module.editableForActiveUser"
+                  >
+                    Sólo es posible gestionar módulos si tienes acceso a ellos
+                    con el rol de "Admin"
+                  </p>
+                </mat-menu>
+              </td>
+            </tr>
+          </ng-container>
+
+          <!-- messages -->
+          <ng-container
+            *ngIf="(modules?.length === 0 && status === 2) || status === 3"
+          >
+            <tr>
+              <td colspan="4" class="text-center">
+                <!-- empty message -->
+                <p
+                  *ngIf="modules?.length === 0 && status === 2"
+                  class="text-muted my-0"
+                >
+                  No se encontró ningún módulo al cual tenga acceso este
+                  usuario.
+                </p>
+
+                <!-- error message -->
+                <p *ngIf="status === 3" class="text-danger my-0">
+                  Error al consultar la lista de módulos a los cuales tiene
+                  acceso este usuario.
+                  <br />
+                  Por favor, intenta más tarde.
+                </p>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>

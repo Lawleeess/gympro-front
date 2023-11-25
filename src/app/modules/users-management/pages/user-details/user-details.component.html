@@ -1,0 +1,239 @@
+<div class="container mb-3">
+  <app-redirect-button redirectRoute="/dashboard/users"></app-redirect-button>
+</div>
+
+<div class="container">
+  <div class="row mt-4 mt-sm-0">
+    <!-- USER DETAILS -->
+    <ng-container *ngIf="!errorMsg">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
+        <div class="bg-white p-3 user-info-panel">
+          <!-- loader -->
+          <ng-container *ngIf="userReqStatus < 2">
+            <div class="user-info-container">
+              <i class="user-avatar-container bg-default">
+                <i class="fas fa-user user-avatar white"></i>
+              </i>
+
+              <div class="user-info">
+                <div class="bar-loader"></div>
+                <div class="bar-loader title"></div>
+              </div>
+            </div>
+            <div class="bar-loader mt-4"></div>
+            <div class="bar-loader mt-3"></div>
+            <div class="bar-loader form-button mt-4"></div>
+          </ng-container>
+
+          <i class="user-avatar-container bg-muted">
+            <img class="center2" [src]="user.url_image" alt="user.name">
+          </i>
+          
+          <!-- user data -->
+          <ng-container *ngIf="userReqStatus === 2">
+            <div class="user-info-container">
+              <div class="user-info" *ngIf="user">
+                <span class="user-name blue">
+                  {{
+                    !!user.name ? user.name + " " + user.lastname : user.email
+                  }}
+                </span>
+                <span class="user-email text-muted mt-1">
+                  {{ user.email }}
+                </span>
+              </div>
+            </div>
+            <ul class="mt-4">
+              <li class="text-muted mt-3">
+                <i class="fas fa-phone mr-2"></i>
+                <span>
+                  {{ user.phone_number }}
+                </span>
+              </li>
+              <li class="text-muted mt-3">
+                <!-- Subscription active -->
+                <i *ngIf="difDate > 6"  class="fas fa-calendar mr-2 verde"></i>
+                <span *ngIf="difDate > 6" class="verde">
+                  {{user.subscription | date:'longDate' }}
+                </span>
+                <h4 *ngIf="difDate > 6" class="restanVerde">
+                  Restan {{difDate}}
+                  <ng-container [ngPlural]="difDate">
+                    <ng-template ngPluralCase="=1">día</ng-template>
+                    <ng-template ngPluralCase="other">días</ng-template>
+                  </ng-container>
+                </h4>
+
+                <!-- Subscription about to expire -->
+                <i *ngIf="difDate >= 0 && difDate <= 5" class="fas fa-calendar mr-2 naranja"></i>
+                <span *ngIf="difDate >= 0 && difDate <= 5" class="naranja">
+                  {{user.subscription | date:'longDate' }}
+                </span>
+                <h4 *ngIf="difDate > 0 && difDate <= 5" class="restanNaranja">
+                  Restan {{difDate}}
+                  <ng-container [ngPlural]="difDate">
+                    <ng-template ngPluralCase="=1">día</ng-template>
+                    <ng-template ngPluralCase="other">días</ng-template>
+                  </ng-container>
+                </h4>
+                <h4 *ngIf="difDate === 0" class="restanNaranja">
+                  Vence hoy
+                </h4>
+
+                <!-- Expired Subscription -->
+                <i *ngIf="difDate < 0" class="fas fa-calendar mr-2 rojo"></i>
+                <span *ngIf="difDate < 0" class="rojo">
+                  Venció el {{user.subscription | date:'longDate' }}
+                </span>
+
+              </li>
+
+              <!-- <li class="text-muted mt-3">
+                <i class="fas fa-list mr-2"></i>
+                <span>
+                  {{
+                    user?.modulesWithPermission?.length
+                      ? user.modulesWithPermission.length
+                      : 0
+                  }}
+                  {{
+                    user?.modulesWithPermission?.length === 1
+                      ? "módulo"
+                      : "módulos"
+                  }}
+                </span>
+              </li> -->
+              <li
+                class="text-muted mt-3 text-primary"
+                *ngIf="user['clientsRole'] == 'admin'"
+              >
+                <i class="fas fa-certificate mr-2"></i>
+                <span>Admin Global</span>
+                <br />
+                <small class="mt-1 text-success"
+                  >Este usuario tiene acceso a
+                  <u><b>todos los clientes</b></u></small
+                >
+              </li>
+            </ul>
+            <button
+              mat-stroked-button
+              *ngIf="loggedInUserRole === 'admin' && loggedInUser.id !== userID"
+              class="mt-3"
+              color="accent"
+              [disabled]="deleteReqStatus === 1 || updateReqStatus === 1"
+              (click)="showEditUser = true"
+            >
+              <div class="d-flex align-items-center">
+                <mat-spinner
+                  diameter="18"
+                  class="mr-2"
+                  *ngIf="deleteReqStatus === 1"
+                ></mat-spinner>
+                <span>Editar usuario</span>
+              </div>
+            </button>
+            <button
+              mat-stroked-button
+              *ngIf="loggedInUserRole === 'admin' && loggedInUser.id !== userID"
+              class="mt-3"
+              color="warn"
+              [disabled]="deleteReqStatus === 1 || updateReqStatus === 1"
+              (click)="confirmUserDeletetion()"
+            >
+              <div class="d-flex align-items-center">
+                <mat-spinner
+                  diameter="18"
+                  class="mr-2"
+                  *ngIf="deleteReqStatus === 1"
+                  ></mat-spinner>
+                <span>Eliminar usuario</span>
+              </div>
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="userReqStatus === 3">
+            <p class="text-danger my-0 text-center pt-4 pb-4 pr-3 pl-3">
+              Error al consultar la información del usuario
+            </p>
+          </ng-container>
+        </div>
+      </div>
+      <!-- Modules list -->
+      <div class="col-12 col-lg-9 mb-4">
+        <app-modules-list
+          [user]="user"
+          [status]="userReqStatus"
+          [allowActions]="
+            loggedInUserRole === 'admin' && loggedInUser.id !== userID
+          "
+          [disableActions]="deleteReqStatus === 1 || updateReqStatus === 1"
+          (refreshUser)="getUser()"
+        ></app-modules-list>
+
+        <ng-container
+          *ngIf="loggedInUserRole === 'admin' && loggedInUser.id !== userID"
+        >
+          <div
+            class="mt-4 text-right"
+            *ngIf="userReqStatus === 2 && modulesToAdd?.length > 0"
+          >
+            <button
+              *ngIf="!showNewModuleForm"
+              mat-stroked-button
+              color="primary"
+              (click)="showNewModuleForm = true"
+            >
+              Dar acceso a un nuevo módulo
+            </button>
+
+            <div *ngIf="showNewModuleForm" class="mb-3">
+              <app-module-form
+                [allowedModules]="modulesToAdd"
+                [isLoading]="updateReqStatus === 1"
+                (formModuleChange)="addNewModule($event)"
+                (closeFormModule)="showNewModuleForm = false"
+              ></app-module-form>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!-- Customers form -->
+      <div class="col-12 col-lg-9 mb-4 offset-lg-3">
+        <app-customers-form
+          *ngIf="clientsModuleVisible && loggedInUser.clientsRole === 'admin'"
+          [user]="user"
+          (formModuleChange)="addNewCustomers($event)"
+          (emittUpdateRequest)="emittUpdateRequest($event)"
+          [status]="userReqStatus"
+          [allowActionsTools]="
+            loggedInUserRole === 'admin' && loggedInUser.id !== userID
+          "
+          [disableActions]="deleteReqStatus === 1 || updateReqStatus === 1"
+          (refreshUser)="getUser()"
+        ></app-customers-form>
+      </div>
+    </ng-container>
+
+    <!-- ERROR MESSAGE -->
+    <ng-container *ngIf="!!errorMsg">
+      <div class="col-12">
+        <mat-card class="mt-5">
+          <p class="text-danger text-center p-4">
+            <ng-container>
+              {{ errorMsg }}
+            </ng-container>
+          </p>
+        </mat-card>
+      </div>
+    </ng-container>
+  </div>
+  <div *ngIf="showEditUser" class="mb-3">
+    <app-user-edit
+      [isLoading]="updateReqStatus === 1"
+      [user]="user"
+      (formModuleChange)="editUser($event)"
+      (closeFormModule)="showEditUser = false"
+    ></app-user-edit>
+  </div>
+</div>
