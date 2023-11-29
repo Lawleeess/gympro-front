@@ -2,6 +2,6 @@
 (function (window) {
   window.__env = window.__env || {};
   window.__env.endpoint =
-    "https://epa-admin-api-l6dmrzkz7a-uc.a.run.app/api/v1";
+    "https://gympro-api-btso66yfxa-uc.a.run.app:8080/api/v1";
   window.__env.production = true;
 })(this);
