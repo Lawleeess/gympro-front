@@ -21,6 +21,13 @@ export const MODULES = {
     icon: 'fas fa-calendar',
     redirectPath: '/dashboard/routine',
   },
+  routinesManagement: {
+    id: 'routinesManagement',
+    name: 'Administración de rutinas',
+    type: 'module',
+    icon: 'fas fa-calendar',
+    redirectPath: '/dashboard/routine-management',
+  },
 };
 
 export const ROLES = {

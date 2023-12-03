@@ -35,7 +35,6 @@ export class UsersManagementService {
     if (!!filter) {
       queryParams = `${queryParams}&filter=${encodeURIComponent(filter)}`;
     }
-    console.log(this.http.get(`${this.baseUrl}?${queryParams}`));
     return this.http.get(`${this.baseUrl}?${queryParams}`);
   }
 

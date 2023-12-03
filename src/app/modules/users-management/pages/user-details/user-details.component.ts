@@ -23,7 +23,17 @@ registerLocaleData(localeEs,'es');
 })
 export class UserDetailsComponent implements OnInit {
   userID: string;
-  user: User;
+  user: User = {
+    id: '',
+    name: '',
+    lastname: '',
+    email: '',
+    phone_number: '',
+    birthday: '',
+    subscription: '',
+    url_image: '',
+    user_role: ''
+  };
   userReqStatus: number = REQ_STATUS.INITIAL;
   updateReqStatus: number = REQ_STATUS.INITIAL;
   deleteReqStatus: number = REQ_STATUS.INITIAL;
@@ -59,6 +69,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     this.route.queryParams.subscribe((params) => {
       if (!!params.id) {
         this.userID = params.id;
@@ -71,6 +82,7 @@ export class UserDetailsComponent implements OnInit {
         this.errorMsg = 'No fue posible encontrar el id del usuario.';
       }
     });
+
   }
 
   getUser() {
@@ -79,9 +91,7 @@ export class UserDetailsComponent implements OnInit {
     this.usersManagementService.getUser(this.userID).subscribe(
       (resp: User) => {
         this.user = resp;
-        console.log(this.currentDate)
-
-        console.log(this.user.subscription)
+  
         this.difDate =  moment(new Date(this.user.subscription)).diff(moment(new Date(this.currentDate)), 'days');
         if (this.difDate < 0){
 

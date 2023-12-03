@@ -179,7 +179,6 @@ export class UsersListComponent implements OnInit {
     };
 
     this.refreshUsers.emit(this.usersParams);
-    console.log(this.refreshUsers.emit(this.usersParams));
   }
 
   onDestroy(): void {

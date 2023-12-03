@@ -1,27 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  copyArrayItem,
-} from '@angular/cdk/drag-drop';
-import { UserRoutine } from 'src/app/models/user';
-import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
-import { UserService } from 'src/app/services/user.service';
-import { Routine } from '../../../../models/user';
-import { element } from 'protractor';
+import { CdkDragDrop, copyArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { REQ_STATUS } from 'src/app/constants/general';
+import { Routine, User, UserRoutine } from 'src/app/models/user';
+import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
+import { UsersManagementService } from 'src/app/modules/users-management/services/users-management.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-calendar-list',
-  templateUrl: './calendar-list.component.html',
-  styleUrls: ['./calendar-list.component.scss'],
+  selector: 'app-routine-list',
+  templateUrl: './routine-list.component.html',
+  styleUrls: ['./routine-list.component.scss']
 })
+export class RoutineListComponent implements OnInit {
 
-export class CalendarListComponent implements OnInit {
+  initUser: User ;
 
-  userID: string;
-  userRoutine: UserRoutine;
+  // @Input() users
+  private _user: User | any;
+  @Input() set user(value: User | any) {
+    this._user= value;
+    this.initUser = this.user;
+  }
+  get user(): User | any {
+    return this._user;
+  }
+
+  userID : string;
+  userRoutine: UserRoutine = {
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
+    saturday: []
+  };
   userRoutineSave: UserRoutine;
   routineMonday:Item[] = [];
   routineTuesday:Item[]= [];
@@ -30,6 +43,7 @@ export class CalendarListComponent implements OnInit {
   routineFriday:Item[]= [];
   routineSaturday:Item[]= [];
   status: number = REQ_STATUS.INITIAL;
+  routinesStatus: number = REQ_STATUS.INITIAL;
   errorMsg: string;
 
   monday: Routine[] = [];
@@ -59,36 +73,78 @@ export class CalendarListComponent implements OnInit {
                   {value: "triceps", label: "Tríceps"}, {value: "abs", label: "Abdominales"},
                   {value: "legs", label: "Piernas"}, {value: "gemelos", label: "Gemelos"},];
 
-  constructor( private userService: UserService, private snackService: SnackBarService, private router: Router) { }
+  constructor( private userService: UserService, private snackService: SnackBarService, private router: Router, private usersManagementService: UsersManagementService, private route: ActivatedRoute,) { 
+    
+  }
 
   ngOnInit(): void {
-    this.userID = !!window.localStorage.getItem('user_id')
-    ? JSON.parse(window.localStorage.getItem('user_id'))
-    : null;
-    this.initGoals();
+    this.clearVariables()
+    this.route.queryParams.subscribe((params) => {
+      if (!!params.id) {
+        this.userID = params.id;
+      } else {
+        console.error(
+          '[user-details.component]: not user id provided as query param in the route'
+        );
+        this.errorMsg = 'No fue posible encontrar el id del usuario.';
+      }
+    });
+
+    this.getUser();
+
+
+
+  }
+
+
+  async getUser() {
+    this.routinesStatus = REQ_STATUS.LOADING
+    this.usersManagementService.getUser(this.userID).subscribe(
+      (resp: User) => {
+
+
+        this.user = resp
+
+  
+        this.routinesStatus = REQ_STATUS.SUCCESS
+
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+    this.user = await this.usersManagementService.getUser(this.userID).toPromise();
+
+
     this.initRoutines();
+
+
+        
     if (this.routineMonday.length === 0 && this.routineTuesday.length === 0 &&
-        this.routineWednesday.length === 0 && this.routineThursday.length === 0 &&
-        this.routineFriday.length === 0 && this.routineSaturday.length === 0){
-          
-      this.isClear = true
-    }
+      this.routineWednesday.length === 0 && this.routineThursday.length === 0 &&
+      this.routineFriday.length === 0 && this.routineSaturday.length === 0){
+        
+    this.isClear = true
   }
-  initGoals(){
-    this.userRoutine = !!window.localStorage.getItem('userRoutine')
-    ? JSON.parse(window.localStorage.getItem('userRoutine'))
-    : null;
+
   }
+
+
 
   toListExercises(): void{
     this.router.navigate(['/dashboard/exercises']);
   }
 
   initRoutines(){
+
+    this.userRoutine = this.user.userRoutine
+
+
     for (let index = 0; index < this.userRoutine.monday.length; index++) {
       const item = {value: this.userRoutine.monday[index], disabled: true}
       this.routineMonday.push(item)
     }
+
     for (let index = 0; index < this.userRoutine.tuesday.length; index++) {
       const item = {value: this.userRoutine.tuesday[index], disabled: true}
       this.routineTuesday.push(item)
@@ -116,7 +172,7 @@ export class CalendarListComponent implements OnInit {
     this.oGroutineThursday = this.routineThursday;
     this.oGroutineFriday = this.routineFriday;
     this.oGroutineSaturday= this.routineSaturday;
-  
+
   }
 
 
@@ -202,7 +258,7 @@ export class CalendarListComponent implements OnInit {
   
 
 
-      this.userService.saveRoutinesUser(this.userID, this.userRoutineSave).subscribe(
+      this.userService.saveRoutinesUser(this.initUser.id, this.userRoutineSave).subscribe(
         () => {
           this.snackService.loadSnackBar(
             'Rutina guardada con exito',
@@ -211,10 +267,6 @@ export class CalendarListComponent implements OnInit {
             7000
           );
 
-          window.localStorage.setItem(
-            'userRoutine',
-            JSON.stringify(this.userRoutineSave)
-          );
         },
         (error) => {
           const errorRef = error?.error?.message ? error.error.message : error;
@@ -229,6 +281,8 @@ export class CalendarListComponent implements OnInit {
           console.error(`[calendar-list.component]: ${errorRef}`);
         }
       );
+
+
     
   }
 
@@ -300,9 +354,17 @@ export class CalendarListComponent implements OnInit {
       this.routineSaturday[index].disabled = true;
     }
   }
-}
 
+  ngOnDestroy() {
+
+  }
+
+}
 export interface Item {
   value: Routine;
   disabled: boolean;
 }
+function firstValueFrom(arg0: any) {
+  throw new Error('Function not implemented.');
+}
+

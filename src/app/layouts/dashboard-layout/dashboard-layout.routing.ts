@@ -8,6 +8,8 @@ import { RoutinesComponent } from 'src/app/modules/routines/routines.component';
 import { AddAdminComponent } from 'src/app/modules/add-admin/add-admin.component';
 import { AddAdminModule } from '../../modules/add-admin/add-admin.module';
 import { ExercisesComponent } from 'src/app/modules/exercises/exercises.component';
+import { RoutineManagementComponent } from 'src/app/modules/routine-management/routine-management.component';
+import { RoutineManagementModule } from '../../modules/routine-management/routine-management.module';
 
 export const DashboardLayoutRoutes: Routes = [
   {
@@ -45,6 +47,12 @@ export const DashboardLayoutRoutes: Routes = [
     component: RoutinesComponent,
     loadChildren: () =>
       import('src/app/modules/routines/routines.module').then((m) => m.RoutinesModule),
+  },
+  {
+    path: 'routine-management',
+    component: RoutineManagementComponent,
+    loadChildren: () =>
+      import('src/app/modules/routine-management/routine-management.module').then((m) => m.RoutineManagementModule),
   },
   {
     path: 'register',

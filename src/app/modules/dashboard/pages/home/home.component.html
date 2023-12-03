@@ -32,7 +32,7 @@
       </div>
 
       <!-- work calendar -->
-      <div class="col-12 col-lg-6 mb-3">
+      <div class="col-12 col-lg-6 mb-3"  *ngIf="user.user_role == 'user'">
         <mat-card>
           <div class="d-flex flex-column">
             <div class="d-flex align-items-center mb-3">
@@ -47,7 +47,8 @@
               <div class="placeholder-box mt-2">
                 <h3 *ngIf="difDate > 0" >Tu subscripción vence el {{user.subscription | date:'fullDate' }}</h3>
                 <h3 *ngIf="difDate === 0" >Tu subscripción vence hoy</h3>
-                <h3 *ngIf="difDate < 0" class="red">Tu subscripción venció el {{user.subscription | date:'fullDate' }}</h3>
+                <!-- <h3 *ngIf="difDate < 0" class="red">Tu subscripción venció el {{user.subscription | date:'fullDate' }}</h3> -->
+                <h3 *ngIf="difDate < 0" class="red">Realiza el pago de tu subscripción con un administrador del gimnasio para tener acceso a todos los modulos que tenemos para ti.</h3>
               </div>
               
             </div>
@@ -80,11 +81,31 @@
           </div>
         </mat-card>
       </div>
+
+      <div class="col-12 col-lg-6 mb-3" *ngIf="user.user_role == 'admin'">
+        <mat-card>
+          <div class="d-flex flex-column">
+            <div class="d-flex align-items-center mb-3">
+              <div class="icon-container mr-2">
+                <mat-icon>
+                  <i class="fas fa-calendar-alt sm purple"></i>
+                </mat-icon>
+              </div>
+              <h3 class="mb-0">Administrador</h3>
+            </div>
+            <mat-card-content >
+              <p>
+                Con el rol administrador tienes acceso a visualizar y editar la información de los usuarios registrados, actualizar la fecha de subscripción, asignar y editar la rutina de cada usuario.
+              </p>
+            </mat-card-content>
+          </div>
+        </mat-card>
+      </div>
     </div>
 
     <div class="row mt-5">
 
-      <div class="col-12 col-lg-12 mb-3">
+      <div class="col-12 col-lg-12 mb-3" *ngIf="user.user_role == 'user'">
         <mat-card>
           <div class="d-flex flex-column">
             <div class="d-flex align-items-center mb-3">

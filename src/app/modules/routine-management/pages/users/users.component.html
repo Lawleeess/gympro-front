@@ -1,0 +1,10 @@
+<div class="container">
+    <br>
+    <app-users-list
+        [users]="users"
+        [usersTotal]="usersTotal"
+        [status]="usersReqStatus"
+        (refreshUsers)="getUsers($event)">
+    </app-users-list>
+</div>
+

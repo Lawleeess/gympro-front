@@ -1,3 +1,8 @@
+
+<br><div class="container mb-3">
+  <app-redirect-button redirectRoute="/dashboard"></app-redirect-button>
+</div>
+
 <div class="container">
   <img class="center" [src]="imagePath">
   <h1 id="userName">
@@ -34,6 +39,10 @@
   <div class="text-center" *ngIf="reqStatus==0 || reqStatus==2"> 
     <input class="form-control" type="file" 
             (change)="onFileChanged($event)"> 
+    <div class="leftSmall">
+      <label class="asterisk">* </label>
+      <small class="label"> Selecciona una imagen con formato .jpg o .png para actualizar tu foto de perfil</small>
+    </div>
   
     <button (click)="onUpload()" 
             mat-flat-button
@@ -45,7 +54,7 @@
     </button> 
   </div> 
   
-  
+
 <div>
   <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
     <!--Flag variable is used here-->

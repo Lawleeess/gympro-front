@@ -94,9 +94,7 @@ export class ModulesListComponent implements OnInit {
               type: MODULES[i.name]['type'],
               parsedRole: ROLES[i.role].name,
               icon: MODULES[i.name].icon,
-              editableForActiveUser: allowModulesIDForActiveUser.includes(
-                i.name
-              ),
+              editableForActiveUser: true,
             };
             return moduleData;
           }

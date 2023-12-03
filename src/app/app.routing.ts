@@ -7,6 +7,7 @@ import { DashboardLayoutComponent } from './layouts/dashboard-layout/dashboard-l
 import { LoginGuard } from './login.guard';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { PrivacyComponent } from './pages/privacy/privacy.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -53,6 +54,8 @@ const routes: Routes = [
     ],
   },
   { path: '404', component: PageNotFoundComponent },
+  { path: 'privacy', component: PrivacyComponent },
+
   { path: '**', redirectTo: '/404' },
 ];
 

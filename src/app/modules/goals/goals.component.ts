@@ -162,12 +162,6 @@ export class GoalsComponent implements OnInit {
     }
   }
 
-  selectPartialCheckbox()
-{
-   console.log(this.form.controls['gender'].value)
-   console.log(this.form.controls['age'].value)
-   console.log(this.form.controls['activity'].value)
-   console.log(this.form.controls['goal'].value)
-}
+
 }
 

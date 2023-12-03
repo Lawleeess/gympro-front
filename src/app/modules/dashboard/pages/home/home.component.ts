@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initUser();
     this.getCustomers();
     this.user.userRoutine = !!window.localStorage.getItem('userRoutine')
     ? JSON.parse(window.localStorage.getItem('userRoutine'))
@@ -92,6 +93,7 @@ export class HomeComponent implements OnInit {
         this.haveRoutine = false;
     }
     this.status = REQ_STATUS.SUCCESS
+
   } 
 
   initUser():void{
@@ -121,6 +123,9 @@ export class HomeComponent implements OnInit {
     : null;
     this.user.userRoutine = !!window.localStorage.getItem('userRoutine')
     ? JSON.parse(window.localStorage.getItem('userRoutine'))
+    : null;
+    this.user.user_role = !!window.localStorage.getItem('user_role')
+    ? JSON.parse(window.localStorage.getItem('user_role'))
     : null;
   }
 

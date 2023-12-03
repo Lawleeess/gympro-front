@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   );
   passwordControl = new FormControl(
     null,
-    Validators.compose([Validators.minLength(3), Validators.required])
+    Validators.compose([Validators.minLength(6), Validators.required])
   );
 
   reqStatus = 0;

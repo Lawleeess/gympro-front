@@ -17,6 +17,14 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+  <div class="leftSmall" *ngIf="selectedMuscle != null">
+    <label class="asterisk">* </label>
+    <small class="label">Arrastra el ejercicio hacia tu calendario para agregarlo a tu rutina , no olvides darle al boton de guardar al terminar.</small>
+  </div>
+  <div class="leftSmall" *ngIf="selectedMuscle == null">
+    <label class="asterisk">* </label>
+    <small class="label">Selecciona un grupo muscular para ver el listado a detalle de los ejercicios.</small>
+  </div>
 
   <div cdkDropListGroup>
 
@@ -59,7 +67,7 @@
         color="primary"
         class="right"
         (click)="saveRoutine()"
-        [disabled]="!(this.routines != null)">
+        >
         Guardar
       </button>
       <button
