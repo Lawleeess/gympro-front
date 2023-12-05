@@ -38,6 +38,26 @@ export class UsersManagementService {
     return this.http.get(`${this.baseUrl}?${queryParams}`);
   }
 
+  getUsersActive(
+    offset: number = 0,
+    limit: number = 50,
+    roles?: string,
+    filter?: string
+  ): Observable<Object> {
+    let queryParams = `offset=${offset}&limit=${limit}`;
+
+    if (!!roles) {
+      queryParams = `${queryParams}&user_role=${encodeURIComponent(
+        roles
+      )}`;
+    }
+
+    if (!!filter) {
+      queryParams = `${queryParams}&filter=${encodeURIComponent(filter)}`;
+    }
+    return this.http.get(`${this.baseUrl}/active?${queryParams}`);
+  }
+
   getUser(userID: string): Observable<Object> {
     if (!userID) {
       throw new Error('[users-management.service]: not userID provided');

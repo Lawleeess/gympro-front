@@ -24,7 +24,7 @@ export class UsersComponent implements OnInit {
     this.usersReqStatus = REQ_STATUS.LOADING;
 
     this.userManagementService
-      .getUsers(
+      .getUsersActive(
         requestParams?.offset,
         requestParams?.limit,
         "user",

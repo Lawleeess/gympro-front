@@ -50,7 +50,14 @@
                   {{ user.phone_number }}
                 </span>
               </li>
-              <li class="text-muted mt-3">
+              <li class="text-muted mt-3" *ngIf="user['user_role'] != 'admin'">
+                <!-- new subscriptor -->
+                <i *ngIf="flagNoSubscriber" class="fas fa-calendar mr-2 naranja"></i>
+                <span *ngIf="flagNoSubscriber" class="naranja">
+                  Este usuario no cuenta con una subscripción.
+                </span>
+
+           
                 <!-- Subscription active -->
                 <i *ngIf="difDate > 6"  class="fas fa-calendar mr-2 verde"></i>
                 <span *ngIf="difDate > 6" class="verde">
@@ -105,14 +112,14 @@
               </li> -->
               <li
                 class="text-muted mt-3 text-primary"
-                *ngIf="user['clientsRole'] == 'admin'"
+                *ngIf="user['user_role'] == 'admin'"
               >
                 <i class="fas fa-certificate mr-2"></i>
                 <span>Admin Global</span>
                 <br />
                 <small class="mt-1 text-success"
                   >Este usuario tiene acceso a
-                  <u><b>todos los clientes</b></u></small
+                  <u><b>todos los módulos de administrador.</b></u></small
                 >
               </li>
             </ul>
@@ -150,6 +157,11 @@
                 <span>Eliminar usuario</span>
               </div>
             </button>
+              <div *ngIf="user['user_role'] != 'admin'">
+                <i><small class="asterisk">* </small></i>
+                <small class="label">Da click en editar usuario para expandir la fecha de subscripción.</small>
+                <br>
+              </div>
           </ng-container>
 
           <ng-container *ngIf="userReqStatus === 3">
@@ -190,6 +202,7 @@
             <div *ngIf="showNewModuleForm" class="mb-3">
               <app-module-form
                 [allowedModules]="modulesToAdd"
+                [userRole] = "user.user_role"
                 [isLoading]="updateReqStatus === 1"
                 (formModuleChange)="addNewModule($event)"
                 (closeFormModule)="showNewModuleForm = false"

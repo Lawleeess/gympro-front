@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MODULES, ROLES } from 'src/app/constants/modules';
 import { ModuleData } from 'src/app/models/general';
 import { Module } from 'src/app/models/user';
+import { MODULES_TYPES } from '../../../../constants/modules';
 
 @Component({
   selector: 'app-module-form',
@@ -26,6 +27,8 @@ export class ModuleFormComponent implements OnInit {
     return this._allowedModules;
   }
   @Input() isLoading: boolean = false;
+
+  @Input() userRole: string;
 
   @Output() formModuleChange = new EventEmitter<Module>();
   @Output() closeFormModule = new EventEmitter<boolean>();
@@ -44,10 +47,22 @@ export class ModuleFormComponent implements OnInit {
       name: ['', Validators.required],
       role: ['', Validators.required],
     });
+
+    console.log("allowedModules form: ",this.allowedModules)
   }
 
   getModuleOptions(): void {
-    const modulesOptions: ModuleData[] = Object.values({ ...MODULES });
+    let modulesOptions: ModuleData[] = []
+    console.log(this.userRole)
+    if (this.userRole == "user"){
+      modulesOptions.push(MODULES.personalGoals);
+      modulesOptions.push(MODULES.routinesCalendar);
+    }else if (this.userRole == "admin"){
+      modulesOptions.push(MODULES.userManagement);
+      modulesOptions.push(MODULES.routinesManagement);
+    }
+
+     
     this.modules = modulesOptions;
   }
 

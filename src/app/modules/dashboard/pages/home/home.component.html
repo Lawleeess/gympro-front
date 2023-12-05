@@ -48,7 +48,7 @@
                 <h3 *ngIf="difDate > 0" >Tu subscripción vence el {{user.subscription | date:'fullDate' }}</h3>
                 <h3 *ngIf="difDate === 0" >Tu subscripción vence hoy</h3>
                 <!-- <h3 *ngIf="difDate < 0" class="red">Tu subscripción venció el {{user.subscription | date:'fullDate' }}</h3> -->
-                <h3 *ngIf="difDate < 0" class="red">Realiza el pago de tu subscripción con un administrador del gimnasio para tener acceso a todos los modulos que tenemos para ti.</h3>
+                <h3 *ngIf="difDate < 0 || flagNoSubscriber" class="red">Realiza el pago de tu subscripción con un administrador del gimnasio para tener acceso a los módulos.</h3>
               </div>
               
             </div>
@@ -123,7 +123,7 @@
               </div>
             </div>
 
-            <div *ngIf="difDate < 0" class="placeholder-container large">
+            <div *ngIf="difDate < 0 || flagNoSubscriber" class="placeholder-container large">
               <div class="placeholder-box large mt-2">
                 <span class="text-muted">Realiza el pago de tu subscripción para seguir disfrutando de los beneficios que tenemos para ti.</span>
               </div>

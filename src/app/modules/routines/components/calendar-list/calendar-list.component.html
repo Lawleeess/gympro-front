@@ -29,8 +29,8 @@
   <div cdkDropListGroup>
 
     <!-- List muscle group -->
+      <h3>{{this.muscleGroup}}</h3>
       <div *ngIf="(showListExercises === false && this.routines?.length > 0)" cdkDropList class="example-list2" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineByMuscle">
-        <h3>{{this.muscleGroup}}</h3>
         <div class="example-box2" *ngFor="let item of routineByMuscle" cdkDrag >
             {{item.value.name}}
             <img [src]="item.value.url_image" [alt]="item">

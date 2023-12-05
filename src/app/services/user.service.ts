@@ -78,9 +78,14 @@ export class UserService {
     this.user.phone_number = !!window.localStorage.getItem('phone_number')
     ? JSON.parse(window.localStorage.getItem('phone_number'))
     : null;
-    this.user.subscription = !!window.localStorage.getItem('subscription')
-    ? JSON.parse(window.localStorage.getItem('subscription'))
-    : null;
+    try {
+      this.user.subscription = !!window.localStorage.getItem('subscription')
+      ? JSON.parse(window.localStorage.getItem('subscription'))
+      : null;
+    } catch (err) {
+      // 👇️ This runs
+      this.user.subscription = ""
+    }
     this.user.userRoutine = !!window.localStorage.getItem('userRoutine')
     ? JSON.parse(window.localStorage.getItem('userRoutine'))
     : null;

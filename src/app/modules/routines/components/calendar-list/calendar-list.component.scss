@@ -33,18 +33,14 @@
   background: white;
   text-align: center;
   color: #000000a9;
-  width: 20%;
+  width: 80%;
   margin: auto;
   margin-top: 5px;
-
-}
-
-mat-form-field{
-  margin-top: 10px;
+  display: flex;
 }
 
 .example-box2 {
-  padding: 10px 10px;
+  padding: 15px 15px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
@@ -52,9 +48,13 @@ mat-form-field{
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  cursor: move;
+  cursor: copy;
   background: white;
   font-size: 13px;
+}
+
+mat-form-field{
+  margin-top: 10px;
 }
 
 .right{
@@ -100,7 +100,7 @@ img{
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  cursor: move;
+  cursor: no-drop;
   background: white;
   font-size: 13px;
 }

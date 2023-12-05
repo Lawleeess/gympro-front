@@ -51,7 +51,7 @@ export class UserDetailsComponent implements OnInit {
   difDate: number;
   currentDate: string;
   clientsModuleVisible: boolean = false;
-
+  flagNoSubscriber : boolean = false;
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -93,32 +93,40 @@ export class UserDetailsComponent implements OnInit {
         this.user = resp;
   
         this.difDate =  moment(new Date(this.user.subscription)).diff(moment(new Date(this.currentDate)), 'days');
-        if (this.difDate < 0){
-
+        if (Number.isNaN(this.difDate)){
+          this.flagNoSubscriber = true
         }
+        console.log("modulesWp",this.user.modulesWithPermission)
         this.modulesToAdd = this.getEnableModulesToAdd(
           this.user.modulesWithPermission
         );
+        console.log("modulesToAdd", this.modulesToAdd)
         this.userReqStatus = REQ_STATUS.SUCCESS;
-        const moduleNames = this.user.modulesWithPermission.map((i) => {
-          return MODULES[i.name].id;
-        });
-        const mappedTools = Object.values(MODULES).filter(
-          (i) => i.type == MODULES_TYPES.Tool && !moduleNames.includes(i.id)
-        );
-        if (
-          isEmpty(
-            this.user.modulesWithPermission.filter(
-              (i) => MODULES[i.name]['type'] == MODULES_TYPES.Tool
-            )
-          ) &&
-          this.loggedInUserRole == ROLES.admin.id
-        ) {
-          this.toolsToAdd = mappedTools.map((i) => {
-            return { name: i.id, role: ROLES.admin.id };
+
+        if (this.user.modulesWithPermission != null){
+          const moduleNames = this.user.modulesWithPermission.map((i) => {
+            return MODULES[i.name].id;
           });
+          const mappedTools = Object.values(MODULES).filter(
+            (i) => i.type == MODULES_TYPES.Tool && !moduleNames.includes(i.id)
+          );
+          if (
+            isEmpty(
+              this.user.modulesWithPermission.filter(
+                (i) => MODULES[i.name]['type'] == MODULES_TYPES.Tool
+              )
+            ) &&
+            this.loggedInUserRole == ROLES.admin.id
+          ) {
+            this.toolsToAdd = mappedTools.map((i) => {
+              return { name: i.id, role: ROLES.admin.id };
+            });
+          }
+          this.showNewToolForm = !isEmpty(mappedTools);
         }
-        this.showNewToolForm = !isEmpty(mappedTools);
+        
+        
+
       },
       (error) => {
         delete this.user;
@@ -138,6 +146,7 @@ export class UserDetailsComponent implements OnInit {
     const allAllowedModules = allModulesForAdmin.filter(
       ({ name: id1 }) => !allModulesForUser.some(({ name: id2 }) => id2 === id1)
     );
+    console.log("allowedModules", allAllowedModules)
     return allAllowedModules;
   }
   // function to display or hide the tool form module, received from tools list module
@@ -248,6 +257,12 @@ export class UserDetailsComponent implements OnInit {
           this.showEditUser = false;
           this.userReqStatus = REQ_STATUS.SUCCESS;
           this.getUser()
+          this.difDate =  moment(new Date(this.user.subscription)).diff(moment(new Date(this.currentDate)), 'days');
+          if (Number.isNaN(this.difDate)){
+            this.flagNoSubscriber = true
+          }else {
+            this.flagNoSubscriber = false
+          }
         },
         (error) => {
           this.userReqStatus = REQ_STATUS.ERROR;

@@ -1,31 +1,5 @@
 <ng-container>
   <div class="row">
-    <!-- filters -->
-    <!-- <div class="col-12 col-lg-4 offset-lg-8 mb-3">
-      <div class="d-flex justify-content-end">
-        <mat-form-field appearance="outline">
-          <mat-label>Buscar</mat-label>
-          <input
-            matInput
-            type="text"
-            autocomplete="off"
-            [(ngModel)]="filter"
-            (keyup)="applyFilter()"
-            [disabled]="status !== 2"
-          />
-          <button
-            *ngIf="filter"
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="filter = ''; applyFilter()"
-            my="0"
-          >
-            <i class="fas fa-times"></i>
-          </button>
-        </mat-form-field>
-      </div>
-    </div> -->
 
     <!-- table -->
     <div class="col-12">
@@ -91,7 +65,7 @@
                 </button>
                 <mat-menu #menu="matMenu">
                   <!-- update role -->
-                  <button
+                  <!-- <button
                     mat-menu-item
                     *ngIf="module.editableForActiveUser"
                     [disabled]="disableActions || updateReqStatus === 1"
@@ -104,7 +78,7 @@
                     <span *ngIf="module.role === ROLES.viewer.id">
                       Cambiar rol a {{ ROLES.admin.name }}
                     </span>
-                  </button>
+                  </button> -->
                   <!-- remove module -->
                   <button
                     mat-menu-item

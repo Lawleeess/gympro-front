@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
   todayRoutine: Routine[];
   status: number = REQ_STATUS.INITIAL;
   currentDate: string;
+  flagNoSubscriber: boolean = false;
   // campaigns: any[] = [
   //   {
   //     id: 1,
@@ -42,7 +43,11 @@ export class HomeComponent implements OnInit {
     this.user = this.userService.user;
     this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'es');
     this.difDate =  moment(new Date(this.user.subscription)).diff(moment(new Date(this.currentDate)), 'days');
-
+    if (Number.isNaN(this.difDate)){
+      this.flagNoSubscriber = true
+    }else {
+      this.flagNoSubscriber = false
+    }
   }
 
   ngOnInit(): void {
@@ -118,9 +123,14 @@ export class HomeComponent implements OnInit {
     this.user.phone_number = !!window.localStorage.getItem('phone_number')
     ? JSON.parse(window.localStorage.getItem('phone_number'))
     : null;
-    this.user.subscription = !!window.localStorage.getItem('subscription')
-    ? JSON.parse(window.localStorage.getItem('subscription'))
-    : null;
+    try {
+      this.user.subscription = !!window.localStorage.getItem('subscription')
+      ? JSON.parse(window.localStorage.getItem('subscription'))
+      : null;
+    } catch (err) {
+      // 👇️ This runs
+      this.user.subscription = ""
+    }
     this.user.userRoutine = !!window.localStorage.getItem('userRoutine')
     ? JSON.parse(window.localStorage.getItem('userRoutine'))
     : null;

@@ -44,12 +44,23 @@ export class UserEditComponent implements OnInit {
       subscription: ['', Validators.required],
     });
 
+   
+
     this.form.setValue({
       name: this.user.name,
       lastname: this.user.lastname,
       phone_number: this.user.phone_number,
-      subscription: this.user.subscription,
+      subscription: this.isNull(),
    });
+  }
+
+  isNull(): string{
+    if (this.user.subscription == "" || this.user.subscription === undefined){
+      this.user.subscription = formatDate(new Date(), 'yyyy-MM-dd', 'en')
+    }
+    console.log(this.user.subscription)
+
+    return this.user.subscription
   }
 
   formChange(): void {

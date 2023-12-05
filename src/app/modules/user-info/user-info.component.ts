@@ -33,6 +33,7 @@ export class UserInfoComponent implements OnInit {
 
   loading: boolean = false; // Flag variable 
   selectedFile: File = null; // Variable to store file 
+  userRole: string;
 
   constructor(
     private userService: UserService,
@@ -109,6 +110,9 @@ export class UserInfoComponent implements OnInit {
     : null;
     this.subscription = !!window.localStorage.getItem('subscription')
     ? JSON.parse(window.localStorage.getItem('subscription'))
+    : null;
+    this.userRole = !!window.localStorage.getItem('user_role')
+    ? JSON.parse(window.localStorage.getItem('user_role'))
     : null;
 
     document.getElementById("userName").textContent = this.userName + " " + this.userLastName;

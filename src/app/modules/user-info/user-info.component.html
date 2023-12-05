@@ -27,10 +27,11 @@
       id="userPhone">
       Phone number
   </h4>  
-  <h5>
+  <h5 *ngIf="userRole != 'admin'">
     Vencimiento de subscripcion
   </h5>
   <h4 
+      *ngIf="userRole != 'admin'"
       id="userSubscription">
       {{ subscription | date:'fullDate' }}
   </h4>   

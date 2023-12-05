@@ -1,5 +1,5 @@
 <div class="container mb-3">
-  <app-redirect-button redirectRoute="/dashboard"></app-redirect-button>
+  <app-redirect-button redirectRoute="/dashboard/routine-management"></app-redirect-button>
 </div>
 
 <div class="container">
@@ -23,7 +23,7 @@
     </mat-form-field>
     <div class="leftSmall" *ngIf="selectedMuscle != null">
       <label class="asterisk">* </label>
-      <small class="label">Arrastra el ejercicio hacia tu calendario para agregarlo a tu rutina , no olvides darle al boton de guardar al terminar.</small>
+      <small class="label">Arrastra el ejercicio hacia el calendario para agregarlo a la rutina , no olvides darle al boton de guardar al terminar.</small>
     </div>
     <div class="leftSmall" *ngIf="selectedMuscle == null">
       <label class="asterisk">* </label>
@@ -33,8 +33,8 @@
     <div cdkDropListGroup *ngIf="routinesStatus === 2">
   
       <!-- List muscle group -->
+        <h3>{{this.muscleGroup}}</h3>
         <div *ngIf="(showListExercises === false && this.routines?.length > 0)" cdkDropList class="example-list2" (cdkDropListDropped)="drop($event)" [cdkDropListData]="routineByMuscle">
-          <h3>{{this.muscleGroup}}</h3>
           <div class="example-box2" *ngFor="let item of routineByMuscle" cdkDrag >
               {{item.value.name}}
               <img [src]="item.value.url_image" [alt]="item">
@@ -153,7 +153,6 @@
           </div>
         </div>
       </div>
-      
       <!-- table -->
       <ng-container>
         <div *ngIf="showListExercises">
