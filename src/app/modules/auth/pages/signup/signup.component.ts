@@ -72,7 +72,7 @@ export class SignupComponent implements OnInit {
         () => {
           this.reqStatus = 2;
           this.snackService.loadSnackBar(
-            'Registro exitoso. Espera a que un administrador te de acceso a algún módulo.',
+            'Registro exitoso. Valida tu email antes de continuar.',
             null,
             null,
             7000
@@ -80,7 +80,7 @@ export class SignupComponent implements OnInit {
           this.router.navigate(['/auth/login']);
         },
         (error) => {
-          const errorRef = error?.error?.message ? error.error.message : error;
+          const errorRef = error.error.Message
           const errorMsg = this.parseSignUpError(errorRef);
           this.snackService.loadSnackBar(
             `Error al registrar. ${
@@ -102,13 +102,14 @@ export class SignupComponent implements OnInit {
     }
 
     const errorStr: string = error.toLowerCase().replace('.', '');
+    console.log("errorStr", errorStr)
     switch (errorStr) {
       case 'an email already exists':
         return 'Ya existe un usuario registrado con este correo.';
 
-      case 'email address must be part of the epa domain':
-        return 'El correo debe de tener el dominio @epa.digital.';
-
+      case 'email_exists':
+        return 'Existe un usuario registrado con este email.';
+      
       case 'invalid email address':
         return 'El correo es inválido.';
 

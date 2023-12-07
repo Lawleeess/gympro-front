@@ -130,6 +130,10 @@ export class UserService {
               JSON.stringify(this.user.id)
             );
             window.localStorage.setItem(
+              'password',
+              JSON.stringify(this.user.password)
+            );
+            window.localStorage.setItem(
               'user_email',
               JSON.stringify(this.user.email)
             );

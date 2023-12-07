@@ -32,7 +32,8 @@ export class UserDetailsComponent implements OnInit {
     birthday: '',
     subscription: '',
     url_image: '',
-    user_role: ''
+    user_role: '',
+    password: ''
   };
   userReqStatus: number = REQ_STATUS.INITIAL;
   updateReqStatus: number = REQ_STATUS.INITIAL;
