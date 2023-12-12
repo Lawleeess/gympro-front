@@ -72,12 +72,15 @@ export class SignupComponent implements OnInit {
         () => {
           this.reqStatus = 2;
           this.snackService.loadSnackBar(
-            'Registro exitoso. Valida tu email antes de continuar.',
+            'Se ha enviado un email al correo ingresado. Sigue los pasos para continuar con tu registro.',
             null,
             null,
             7000
           );
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(
+            ['/auth/verify'],
+            { queryParams: { email: register.email} }
+          );
         },
         (error) => {
           const errorRef = error.error.Message

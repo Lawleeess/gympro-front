@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { VerifyComponent } from './pages/verify/verify.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
     AuthComponent,
     LoginComponent,
     SignupComponent,
+    VerifyComponent,
     ForgotPasswordComponent
   ],
   imports: [

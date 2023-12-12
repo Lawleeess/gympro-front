@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
             : error?.message;
           console.error(`[login.component]: ${errorMsg}`);
           this.snackService.loadSnackBar(
-            'Error al iniciar sesión. Intente más tarde',
+            errorMsg,
             'Cerrar'
           );
           this.reqStatus = 3;

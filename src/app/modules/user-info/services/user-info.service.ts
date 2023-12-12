@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Configuration } from 'src/app/app.constants';
 
 @Injectable({
@@ -9,7 +10,7 @@ export class UserInfoService {
   private baseUrl: string;
 
   constructor(private config: Configuration, private http: HttpClient) {
-    this.baseUrl = this.config.endpoint;
+    this.baseUrl = `${this.config.endpoint}/user-management/users`;
   }
 
   getCustomers() {
@@ -43,5 +44,12 @@ export class UserInfoService {
       `${this.baseUrl}/modules/client-management/clients/${customer.id}`,
       customer
     );
+  }
+
+  getUser(userID: string): Observable<Object> {
+    if (!userID) {
+      throw new Error('[users-management.service]: not userID provided');
+    }
+    return this.http.get(`${this.baseUrl}/${userID}`);
   }
 }

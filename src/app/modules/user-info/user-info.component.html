@@ -4,7 +4,7 @@
 </div>
 
 <div class="container">
-  <img class="center" [src]="imagePath">
+  <img class="center" [src]="user.url_image">
   <h1 id="userName">
     Nombre(s) Apellidos
   </h1>   
@@ -27,11 +27,12 @@
       id="userPhone">
       Phone number
   </h4>  
-  <h5 *ngIf="userRole != 'admin'">
+  <h5 *ngIf="user.userRole != 'admin' && user.subscription != ''">
     Vencimiento de subscripcion
   </h5>
+
   <h4 
-      *ngIf="userRole != 'admin'"
+      *ngIf="user.userRole != 'admin' && user.subscription != ''"
       id="userSubscription">
       {{ subscription | date:'fullDate' }}
   </h4>   

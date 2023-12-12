@@ -225,6 +225,13 @@ export class UserService {
     return this.http.post(`${this.baseUrl}/auth/signup`, signupInfo);
   }
 
+  verifyCode(userData : VerifyUser): Observable<object>{
+    if (!userData){
+      return throwError('[user.service]: not user data provided');
+    }
+    return this.http.post(`${this.baseUrl}/auth/verify`, userData);
+  }
+
   getRoutines(muscleGroup: string): Observable<object> {
     if (!muscleGroup) {
       return throwError('[user.service]: not muscleGroup provided');
@@ -334,6 +341,11 @@ export interface SignupInfo {
   email: string;
   password: string;
   user_role?: string;
+}
+
+export interface VerifyUser {
+  email  : string 
+	oobCode : string 
 }
 
 export interface GoalsInfo {

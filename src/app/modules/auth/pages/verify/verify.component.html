@@ -1,0 +1,44 @@
+<div>
+    <form [formGroup]="form" (ngSubmit)="verify()">
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Código de verificación</mat-label>
+              <mat-icon matPrefix><i class="fas fa-lock"></i></mat-icon>
+              <input
+                id="oobCode"
+                [(ngModel)]="oobCode"
+                matInput
+                type="text"
+                placeholder="Código"
+                formControlName="code"
+                autocomplete="off"/>
+            </mat-form-field>
+            <small
+            id="invalid-validate-password-legend-signup"
+            class="text-danger"
+            *ngIf="
+              form.get('code').invalid"
+          >
+            *El código debe tener 6 digitos númericos.
+          </small>
+        </div>
+
+
+        <div class="text-right">
+            <button
+                mat-flat-button
+                id="register-button-signup"
+                type="submit"
+                color="primary"
+                class="fit-content"
+                [disabled]="
+                !form.valid ||
+                reqStatus === 1" 
+                >
+                Verificar
+            </button>
+        </div>
+
+        <a id="login-link-signup" routerLink="/auth/login">Iniciar sesión</a>
+    </form>
+</div>

@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { SnackBarService } from 'src/app/modules/shared/services/snack-bar.service';
 import { SignupInfo, UserService } from 'src/app/services/user.service';
 import localeEs from '@angular/common/locales/es'
+import { UserInfoService } from './services/user-info.service';
+import { REQ_STATUS } from 'src/app/constants/general';
+import { User } from 'src/app/models/user';
 
 registerLocaleData(localeEs,'es');
 
@@ -17,7 +20,7 @@ registerLocaleData(localeEs,'es');
 export class UserInfoComponent implements OnInit {
 
   form: FormGroup;
-
+  infoReqStatus
   reqStatus = 0;
   showPassword: boolean = false;
   showValidatePassword: boolean = false;
@@ -31,20 +34,41 @@ export class UserInfoComponent implements OnInit {
   subscription: string;
   userEmail: string;
 
+  user: User | any = {};
+
   loading: boolean = false; // Flag variable 
   selectedFile: File = null; // Variable to store file 
   userRole: string;
 
   constructor(
     private userService: UserService,
-    private snackService: SnackBarService
+    private snackService: SnackBarService,
+    private userInfoService: UserInfoService,
   ) {
   }
 
 
   ngOnInit(): void {
-    this.setUserValues();
+    this.getUser()    
   }
+
+  async getUser() {
+    this.userID = !!window.localStorage.getItem('user_id')
+    ? JSON.parse(window.localStorage.getItem('user_id'))
+    : null;
+
+
+    this.infoReqStatus = REQ_STATUS.LOADING;
+
+    this.user = await this.userInfoService.getUser(this.userID).toPromise();
+    this.infoReqStatus = REQ_STATUS.SUCCESS;
+
+    document.getElementById("userName").textContent = this.user.name + " " + this.user.lastname;
+    document.getElementById("userEmail").textContent = this.user.email;
+    document.getElementById("userBirthday").textContent = this.user.birthday;
+    document.getElementById("userPhone").textContent = this.user.phone_number;
+  }
+
 
 
   onFileChanged(event: any) {
@@ -84,40 +108,6 @@ export class UserInfoComponent implements OnInit {
             this.reqStatus = 3;
           }
         );
-  }
-
-  setUserValues():void{
-    this.userID = !!window.localStorage.getItem('user_id')
-    ? JSON.parse(window.localStorage.getItem('user_id'))
-    : null;
-    this.imagePath = !!window.localStorage.getItem('url_image')
-    ? JSON.parse(window.localStorage.getItem('url_image'))
-    : null;
-    this.userName = !!window.localStorage.getItem('user_name')
-    ? JSON.parse(window.localStorage.getItem('user_name'))
-    : null;
-    this.userLastName = !!window.localStorage.getItem('user_lastname')
-    ? JSON.parse(window.localStorage.getItem('user_lastname'))
-    : null;
-    this.userEmail = !!window.localStorage.getItem('user_email')
-    ? JSON.parse(window.localStorage.getItem('user_email'))
-    : null;
-    this.birthday = !!window.localStorage.getItem('birthday')
-    ? JSON.parse(window.localStorage.getItem('birthday'))
-    : null;
-    this.phoneNumber = !!window.localStorage.getItem('phone_number')
-    ? JSON.parse(window.localStorage.getItem('phone_number'))
-    : null;
-    this.subscription = !!window.localStorage.getItem('subscription')
-    ? JSON.parse(window.localStorage.getItem('subscription'))
-    : null;
-    this.userRole = !!window.localStorage.getItem('user_role')
-    ? JSON.parse(window.localStorage.getItem('user_role'))
-    : null;
-
-    document.getElementById("userName").textContent = this.userName + " " + this.userLastName;
-    document.getElementById("userEmail").textContent = this.userEmail;
-    document.getElementById("userPhone").textContent = this.phoneNumber;
   }
 
 
