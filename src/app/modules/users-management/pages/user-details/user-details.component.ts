@@ -43,6 +43,7 @@ export class UserDetailsComponent implements OnInit {
   toolsToAdd: Module[];
   showNewModuleForm: boolean = false;
   showEditUser: boolean = false;
+  showEditSubs: boolean = false;
   showNewToolForm: boolean = false;
   errorMsg: string;
   toolUpdating: Module;
@@ -247,6 +248,9 @@ export class UserDetailsComponent implements OnInit {
     userEdit.userProgress = this.user.userProgress;
     userEdit.userGoals = this.user.userGoals;
     userEdit.userRoutine = this.user.userRoutine;
+    userEdit.oobCode = this.user.oobCode;
+    userEdit.isVerified = this.user.isVerified;
+    userEdit.password = this.user.password;
 
     this.usersManagementService
       .updateUserData(userEdit, this.userID)
@@ -256,6 +260,52 @@ export class UserDetailsComponent implements OnInit {
             `Se actualizó
             correctamente el usuario.`          );
           this.showEditUser = false;
+          this.userReqStatus = REQ_STATUS.SUCCESS;
+          this.getUser()
+          this.difDate =  moment(new Date(this.user.subscription)).diff(moment(new Date(this.currentDate)), 'days');
+          if (Number.isNaN(this.difDate)){
+            this.flagNoSubscriber = true
+          }else {
+            this.flagNoSubscriber = false
+          }
+        },
+        (error) => {
+          this.userReqStatus = REQ_STATUS.ERROR;
+          this.snackService.loadSnackBar(
+            `Ocurrió un error al actualizar el usuario. Por favor, intente nuevamente.`,
+            'Cerrar'
+          );
+          console.error(error);
+        }
+      );
+
+  }
+
+  editUserSubs(userEdit: User): void {
+
+    userEdit.name = this.user.name;
+    userEdit.lastname = this.user.lastname;
+    userEdit.phone_number = this.user.phone_number;
+    userEdit.email = this.user.email;
+    userEdit.modulesWithPermission = this.user.modulesWithPermission;
+    userEdit.birthday = this.user.birthday;
+    userEdit.url_image = this.user.url_image;
+    userEdit.user_role = this.user.user_role;
+    userEdit.userProgress = this.user.userProgress;
+    userEdit.userGoals = this.user.userGoals;
+    userEdit.userRoutine = this.user.userRoutine;
+    userEdit.oobCode = this.user.oobCode;
+    userEdit.isVerified = this.user.isVerified;
+    userEdit.password = this.user.password;
+
+    this.usersManagementService
+      .updateUserData(userEdit, this.userID)
+      .subscribe(
+        () => {
+          this.snackService.loadSnackBar(
+            `Se actualizó
+            correctamente la subscripción.`          );
+          this.showEditSubs = false;
           this.userReqStatus = REQ_STATUS.SUCCESS;
           this.getUser()
           this.difDate =  moment(new Date(this.user.subscription)).diff(moment(new Date(this.currentDate)), 'days');

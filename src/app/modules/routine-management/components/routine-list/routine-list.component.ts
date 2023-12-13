@@ -140,6 +140,24 @@ export class RoutineListComponent implements OnInit {
     this.userRoutine = this.user.userRoutine
 
 
+    if (this.userRoutine.monday == null){
+      this.userRoutine.monday = []
+    }
+    if (this.userRoutine.tuesday == null){
+      this.userRoutine.tuesday = []
+    }
+    if (this.userRoutine.wednesday == null){
+      this.userRoutine.wednesday = []
+    }
+    if (this.userRoutine.thursday == null){
+      this.userRoutine.thursday = []
+    }
+    if (this.userRoutine.friday == null){
+      this.userRoutine.friday = []
+    }
+    if (this.userRoutine.saturday == null){
+      this.userRoutine.saturday = []
+    }
     for (let index = 0; index < this.userRoutine.monday.length; index++) {
       const item = {value: this.userRoutine.monday[index], disabled: true}
       this.routineMonday.push(item)

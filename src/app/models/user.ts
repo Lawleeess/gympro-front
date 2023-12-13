@@ -16,6 +16,9 @@ export class User {
   userGoals?: UserGoals; 
   userRoutine?: UserRoutine; 
 
+  isVerified?: boolean;
+  oobCode?: string;
+
 }
 
 export class UserRoutine{

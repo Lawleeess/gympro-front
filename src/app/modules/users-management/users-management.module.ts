@@ -17,6 +17,7 @@ import { ToolsFormComponent } from './components/tools-form/tools-form.component
 import { CustomersListComponent } from './components/customers-list/customers-list.component';
 import { CustomersFormComponent } from './components/customers-form/customers-form.component';
 import { UserEditComponent } from './components/user-edit/user-edit.component';
+import { SubscriptionEditComponent } from './components/subscription-edit/subscription-edit.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { UserEditComponent } from './components/user-edit/user-edit.component';
     CustomersListComponent,
     CustomersFormComponent,
     UserEditComponent,
+    SubscriptionEditComponent,
   ],
   imports: [
     CommonModule,

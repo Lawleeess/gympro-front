@@ -124,6 +124,23 @@
               </li>
             </ul>
             <button
+            mat-stroked-button
+            *ngIf="loggedInUserRole === 'admin' && loggedInUser.id !== userID"
+            class="mt-3"
+            color="accent"
+            [disabled]="deleteReqStatus === 1 || updateReqStatus === 1"
+            (click)="showEditSubs = true"
+          >
+            <div class="d-flex align-items-center">
+              <mat-spinner
+                diameter="18"
+                class="mr-2"
+                *ngIf="deleteReqStatus === 1"
+              ></mat-spinner>
+              <span>Editar subscripción</span>
+            </div>
+          </button>
+            <button
               mat-stroked-button
               *ngIf="loggedInUserRole === 'admin' && loggedInUser.id !== userID"
               class="mt-3"
@@ -157,11 +174,7 @@
                 <span>Eliminar usuario</span>
               </div>
             </button>
-              <div *ngIf="user['user_role'] != 'admin'">
-                <i><small class="asterisk">* </small></i>
-                <small class="label">Da click en editar usuario para expandir la fecha de subscripción.</small>
-                <br>
-              </div>
+
           </ng-container>
 
           <ng-container *ngIf="userReqStatus === 3">
@@ -210,6 +223,22 @@
             </div>
           </div>
         </ng-container>
+        <div *ngIf="showEditSubs" class="mb-3 top">
+          <app-subscription-edit
+            [isLoading]="updateReqStatus === 1"
+            [user]="user"
+            (formModuleChange)="editUserSubs($event)"
+            (closeFormModule)="showEditSubs = false"
+          ></app-subscription-edit>
+        </div>
+        <div *ngIf="showEditUser" class="mb-3 top">
+          <app-user-edit
+            [isLoading]="updateReqStatus === 1"
+            [user]="user"
+            (formModuleChange)="editUser($event)"
+            (closeFormModule)="showEditUser = false"
+          ></app-user-edit>
+        </div>
       </div>
       <!-- Customers form -->
       <div class="col-12 col-lg-9 mb-4 offset-lg-3">
@@ -241,12 +270,5 @@
       </div>
     </ng-container>
   </div>
-  <div *ngIf="showEditUser" class="mb-3">
-    <app-user-edit
-      [isLoading]="updateReqStatus === 1"
-      [user]="user"
-      (formModuleChange)="editUser($event)"
-      (closeFormModule)="showEditUser = false"
-    ></app-user-edit>
-  </div>
+
 </div>
